@@ -1,0 +1,139 @@
+{
+  "courses": [
+    {
+      "id": "python",
+      "title": "Python",
+      "description": "Master the most versatile language: from scripting to data automation.",
+      "icon": "CODE",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg",
+      "logoSize": 80,
+      "level": "Beginner",
+      "duration": "12 weeks",
+      "instructor": "Isaac",
+      "content": [
+        {
+          "id": "py-1",
+          "title": "1. Hello World",
+          "description": "Your first line of code",
+          "instructions": "Python uses the print() function to display text on the screen.",
+          "challenge": "Print to the screen: Hello Python",
+          "initialCode": "# Your code here\n",
+          "solution": "print('Hello Python')"
+        },
+        {
+          "id": "py-2",
+          "title": "2. Numerical Variables",
+          "description": "Assigning values",
+          "instructions": "You can store numbers in variables simply by using the equals sign (=).",
+          "challenge": "Create a variable 'points' with the value 100.",
+          "initialCode": "# Define the variable\n",
+          "solution": "points = 100"
+        },
+        {
+          "id": "py-3",
+          "title": "3. Hello World",
+          "description": "Your first line of code",
+          "instructions": "Python uses the print() function to display text on the screen.",
+          "challenge": "Print to the screen: Hello Python",
+          "initialCode": "# Your code here\n",
+          "solution": "print('Hello Python')"
+        }       
+      ]
+    },
+    {
+      "id": "react",
+      "title": "React",
+      "description": "Build modern interfaces with components and hooks.",
+      "icon": "CONNECT_O",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg",
+      "logoSize": 90,
+      "level": "Intermediate",
+      "duration": "8 weeks",
+      "instructor": "Isaac",
+      "content": [
+        {
+          "id": "re-1",
+          "title": "1. Basic Components",
+          "description": "JSX and Returns",
+          "instructions": "A React component must always return a JSX element.",
+          "challenge": "Make the component return an <h1> element with the text 'Welcome'.",
+          "initialCode": "export default function App() {\n  return (\n    // Code here\n  );\n}",
+          "solution": "<h1>Welcome</h1>"
+        },
+        {
+          "id": "re-2",
+          "title": "2. Text Props",
+          "description": "Passing data",
+          "instructions": "Props allow you to pass information to components.",
+          "challenge": "Return a paragraph <p> containing the 'name' prop.",
+          "initialCode": "function Greet({ name }) {\n  return (\n    // Code here\n  );\n}",
+          "solution": "<p>{name}</p>"
+        }
+      ]
+    },
+    {
+      "id": "machine-learning",
+      "title": "Machine Learning",
+      "description": "Explore predictive models and AI.",
+      "icon": "CLUSTER",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/0/05/Scikit_learn_logo_small.svg",
+      "logoSize": 110,
+      "level": "Advanced",
+      "duration": "16 weeks",
+      "instructor": "Isaac",
+      "content": [
+        {
+          "id": "ml-1",
+          "title": "1. Definition of ML",
+          "description": "Concepts",
+          "instructions": "ML is the study of algorithms that learn from data.",
+          "challenge": "Create a variable 'learning' with value 'active'.",
+          "initialCode": "# Start here\n",
+          "solution": "learning = 'active'"
+        }
+      ]
+    },
+    {
+      "id": "springboot",
+      "title": "Spring",
+      "description": "Backend with scalable Java.",
+      "icon": "DATABASE",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/4/44/Spring_Framework_Logo_2018.svg",
+      "logoSize": 100,
+      "level": "Intermediate",
+      "duration": "10 weeks",
+      "instructor": "Isaac",
+      "content": [
+        {
+          "id": "sp-1",
+          "title": "1. Annotations",
+          "description": "Controllers",
+          "instructions": "We use @RestController to define APIs.",
+          "challenge": "Write the main Spring Boot annotation.",
+          "initialCode": "",
+          "solution": "@SpringBootApplication"
+        }
+      ]
+    }
+  ],
+  "students": [
+    {
+      "id": "std-01",
+      "name": "Marc",
+      "code": "1",
+      "email": "Marc@example.com"
+    },
+    {
+      "id": "std-02",
+      "name": "Jordi",
+      "code": "2",
+      "email": "Jordi@example.com"
+    },
+    {
+      "id": "std-03",
+      "name": "Miquel",
+      "code": "3",
+      "email": "Miquel@example.com"
+    }
+  ]
+}

@@ -1,0 +1,109 @@
+import { 
+  Card as MuiCard, 
+  CardHeader as MuiCardHeader, 
+  CardContent as MuiCardContent, 
+  Typography,
+  CardProps,
+  CardHeaderProps,
+  CardContentProps,
+  TypographyProps
+} from '@mui/material';
+
+export function Card({ children, sx, ...props }: CardProps) {
+  return (
+    <MuiCard 
+      sx={{ 
+        borderRadius: 5, 
+        backdropFilter: 'blur(24px)', 
+        bgcolor: 'rgba(255, 255, 255, 0.02)', 
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        backgroundImage: 'none',
+        boxShadow: '0 12px 40px -12px rgba(0, 0, 0, 0.5)',
+        transition: 'all 0.3s ease',
+        '&:hover': {
+          bgcolor: 'rgba(255, 255, 255, 0.04)',
+          borderColor: 'rgba(255, 255, 255, 0.15)',
+        },
+        ...sx 
+      }} 
+      {...props}
+    >
+      {children}
+    </MuiCard>
+  );
+}
+
+export function CardHeader({ sx, ...props }: CardHeaderProps) {
+  return (
+    <MuiCardHeader 
+      sx={{ 
+        p: 3, 
+        pb: 2,
+        '& .MuiCardHeader-title': { 
+          fontSize: '1.25rem', 
+          fontWeight: 800, 
+          letterSpacing: '-0.02em'
+        },
+        '& .MuiCardHeader-subheader': { 
+          fontSize: '0.875rem', 
+          color: 'rgba(255,255,255,0.4)',
+          mt: 0.5
+        },
+        ...sx 
+      }} 
+      {...props} 
+    />
+  );
+}
+
+export function CardTitle({ children, sx, ...props }: TypographyProps) {
+  return (
+    <Typography 
+      variant="h6" 
+      sx={{ 
+        fontSize: '1.25rem', 
+        fontWeight: 800, 
+        lineHeight: 1.2, 
+        color: 'white', 
+        letterSpacing: '-0.02em',
+        ...sx 
+      }} 
+      {...props}
+    >
+      {children}
+    </Typography>
+  );
+}
+
+export function CardDescription({ children, sx, ...props }: TypographyProps) {
+  return (
+    <Typography 
+      variant="body2" 
+      sx={{ 
+        fontSize: '0.9rem', 
+        color: 'rgba(255,255,255,0.4)', 
+        lineHeight: 1.6,
+        ...sx 
+      }} 
+      {...props}
+    >
+      {children}
+    </Typography>
+  );
+}
+
+export function CardContent({ children, sx, ...props }: CardContentProps) {
+  return (
+    <MuiCardContent 
+      sx={{ 
+        p: 3, 
+        pt: 0, 
+        '&:last-child': { pb: 3 }, 
+        ...sx 
+      }} 
+      {...props}
+    >
+      {children}
+    </MuiCardContent>
+  );
+}
