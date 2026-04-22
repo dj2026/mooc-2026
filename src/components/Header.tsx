@@ -5,45 +5,61 @@ import { Rocket, GraduationCap } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { AppBar, Toolbar, Box, Typography, Button, IconButton, Stack, useTheme } from '@mui/material';
 import { authService } from '../services/authService';
-<<<<<<< HEAD
-import { useTranslation } from 'react-i18next'; // Importem el hook de traducció
-
-export function Header() {
-  const { t, i18n } = useTranslation(); // Inicialitzem traduccions
-=======
 import { useTranslation } from 'react-i18next';
 import { ThemeToggleButton } from './ThemeToggleButton';
 
 export function Header() {
   const { t, i18n } = useTranslation();
   const theme = useTheme();
->>>>>>> d735607 (THEME + LANGUAGE)
   const [mounted, setMounted] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Aquesta funció és el "cervell" que decideix si som loguejats o no
   const checkAuth = () => {
     const token = localStorage.getItem('token');
     const currentStudent = localStorage.getItem('currentStudent');
+    // Si existeix el token o les dades de l'estudiant, posem isLoggedIn a true
     setIsLoggedIn(!!token || !!currentStudent);
   };
 
   useEffect(() => {
     setMounted(true); 
-    checkAuth();
-  }, [location]);
+    checkAuth(); // Comprovem en carregar
+
+    // ESCOLTADORS D'EVENTS:
+    // 1. Escolta si el localStorage canvia des d'una altra pestanya
+    window.addEventListener('storage', checkAuth);
+    // 2. Escolta el nostre event personalitzat que llançarem des del Login
+    window.addEventListener('auth-state-change', checkAuth);
+
+    return () => {
+      window.removeEventListener('storage', checkAuth);
+      window.removeEventListener('auth-state-change', checkAuth);
+    };
+  }, [location]); // També re-comprova quan l'usuari navega entre pàgines
 
   const handleLogout = async () => {
-    localStorage.removeItem('currentStudent');
-    await authService.logout();
-    setIsLoggedIn(false);
-    navigate('/');
+    try {
+      await authService.logout();
+    } catch (error) {
+      console.error("Error durant el logout:", error);
+    } finally {
+      // Netegem el magatzem de dades
+      localStorage.removeItem('token');
+      localStorage.removeItem('currentStudent');
+      
+      // Actualitzem l'estat per forçar el canvi de botó a la vista
+      setIsLoggedIn(false);
+      
+      // Enviem l'usuari a la pàgina principal
+      navigate('/');
+    }
   };
 
   if (!mounted) return null;
 
-  // Obtenim l'idioma actual (els primers dos caràcters per si és 'ca-ES', etc.)
   const currentLanguage = i18n.language.split('-')[0];
 
   return (
@@ -51,17 +67,10 @@ export function Header() {
       position="sticky" 
       sx={{ 
         width: '100vw', left: 0, right: 0, 
-<<<<<<< HEAD
-        bgcolor: 'rgba(18, 18, 18, 0.8)', 
-        backdropFilter: 'blur(20px)', 
-        boxShadow: 'none', 
-        borderBottom: '1px solid rgba(255, 255, 255, 0.05)', 
-=======
         bgcolor: theme.palette.mode === 'dark' ? 'rgba(18, 18, 18, 0.8)' : 'rgba(255, 255, 255, 0.8)',
         backdropFilter: 'blur(20px)', 
         boxShadow: 'none', 
         borderBottom: `1px solid ${theme.palette.divider}`, 
->>>>>>> d735607 (THEME + LANGUAGE)
         zIndex: 1100, 
         height: '80px', 
         justifyContent: 'center'
@@ -69,7 +78,7 @@ export function Header() {
     >
       <Toolbar sx={{ px: { xs: 2, md: 8 }, display: 'flex', justifyContent: 'space-between' }}>
         
-        {/* LOGO AMB COET */}
+        {/* SECCIÓ LOGO */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <motion.div
             whileHover={{ scale: 1.05, rotate: -5 }}
@@ -87,46 +96,22 @@ export function Header() {
           
           <RouterLink to="/" style={{ textDecoration: 'none' }}>
             <Stack direction="row" sx={{ alignItems: 'baseline' }}>
-<<<<<<< HEAD
-              <Typography variant="h5" sx={{ fontWeight: 900, color: 'white', letterSpacing: '-1.5px' }}>
-                MOOC
-              </Typography>
-              <Typography variant="h5" sx={{ fontWeight: 900, color: '#a855f7', ml: 1, letterSpacing: '-1px' }}>
-=======
               <Typography variant="h5" sx={{ fontWeight: 900, color: 'text.primary', letterSpacing: '-1.5px' }}>
                 MOOC
               </Typography>
               <Typography variant="h5" sx={{ fontWeight: 900, color: 'primary.main', ml: 1, letterSpacing: '-1px' }}>
->>>>>>> d735607 (THEME + LANGUAGE)
                 2026
               </Typography>
             </Stack>
           </RouterLink>
         </Box>
 
+        {/* ACCIONS DRETA */}
         <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 3 }}>
           
-<<<<<<< HEAD
-          {/* SELECTOR D'IDIOMES INTEGRAT */}
-          <Stack direction="row" sx={{ bgcolor: 'rgba(255,255,255,0.05)', borderRadius: '12px', p: 0.5 }}>
-            {['ca', 'es', 'en'].map((lng) => (
-              <Button 
-                key={lng} 
-                onClick={() => i18n.changeLanguage(lng)}
-                sx={{ 
-                  minWidth: '35px', px: 1, fontSize: '0.7rem', fontWeight: 800,
-                  color: i18n.language === lng ? '#fff' : 'rgba(255,255,255,0.4)',
-                  bgcolor: i18n.language === lng ? 'rgba(168, 85, 247, 0.2)' : 'transparent',
-                  '&:hover': { bgcolor: 'rgba(168, 85, 247, 0.1)' }
-                }}
-              >
-                {lng.toUpperCase()}
-              </Button>
-            ))}
-=======
           <ThemeToggleButton />
 
-          {/* SELECTOR D'IDIOMA AMB INDICADOR LILA */}
+          {/* SELECTOR D'IDIOMA */}
           <Stack direction="row" sx={{ bgcolor: 'action.hover', borderRadius: '12px', p: 0.5, gap: 0.5 }}>
             {['ca', 'es', 'en'].map((lng) => {
               const isActive = currentLanguage === lng;
@@ -135,20 +120,14 @@ export function Header() {
                   key={lng} 
                   onClick={() => i18n.changeLanguage(lng)}
                   sx={{ 
-                    minWidth: '40px', 
-                    px: 1.5, 
-                    fontSize: '0.75rem', 
-                    fontWeight: 800,
+                    minWidth: '40px', px: 1.5, fontSize: '0.75rem', fontWeight: 800,
                     borderRadius: '10px',
-                    // Color del text: Blanc si està actiu, si no, el secundari del tema
                     color: isActive ? '#fff' : 'text.secondary',
-                    // Fons: Lila si està actiu, si no, transparent
                     bgcolor: isActive ? 'primary.main' : 'transparent',
                     boxShadow: isActive ? `0 4px 10px ${theme.palette.primary.main}4D` : 'none',
                     transition: 'all 0.2s ease',
                     '&:hover': { 
                       bgcolor: isActive ? 'primary.main' : 'primary.main' + '1A',
-                      color: isActive ? '#fff' : 'primary.main'
                     }
                   }}
                 >
@@ -156,9 +135,9 @@ export function Header() {
                 </Button>
               );
             })}
->>>>>>> d735607 (THEME + LANGUAGE)
           </Stack>
 
+          {/* BOTONS CONDICIONALS */}
           {isLoggedIn ? (
             <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
               <Button 
@@ -166,15 +145,6 @@ export function Header() {
                 to="/dashboards/student"
                 startIcon={<GraduationCap size={18} />}
                 sx={{ 
-<<<<<<< HEAD
-                  fontSize: '0.9rem', fontWeight: 800, color: 'white', textTransform: 'none',
-                  px: 3, py: 1, bgcolor: 'rgba(255, 255, 255, 0.05)', borderRadius: '12px',
-                  border: '1px solid rgba(168, 85, 247, 0.3)',
-                  '&:hover': { bgcolor: 'rgba(168, 85, 247, 0.1)', borderColor: '#a855f7' },
-                }}
-              >
-                {t('dashboard.my_progress')} {/* Text traduït */}
-=======
                   fontSize: '0.9rem', fontWeight: 800, color: 'text.primary', textTransform: 'none',
                   px: 3, py: 1, bgcolor: 'action.hover', borderRadius: '12px',
                   border: '1px solid',
@@ -183,7 +153,6 @@ export function Header() {
                 }}
               >
                 {t('dashboard.my_progress')}
->>>>>>> d735607 (THEME + LANGUAGE)
               </Button>
               
               <IconButton 
@@ -201,15 +170,6 @@ export function Header() {
               onClick={() => navigate('/dashboards/student')}
               variant="contained"
               sx={{
-<<<<<<< HEAD
-                background: 'linear-gradient(90deg, #a855f7 0%, #6366f1 100%)',
-                fontWeight: 800, textTransform: 'none', px: 3, py: 1, fontSize: '1rem',
-                borderRadius: '12px', boxShadow: '0 4px 15px rgba(168, 85, 247, 0.4)',
-                '&:hover': { opacity: 0.9, boxShadow: '0 6px 20px rgba(168, 85, 247, 0.6)' }
-              }}
-            >
-              {t('Accedir')}
-=======
                 background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, #6366f1 100%)`,
                 fontWeight: 800, textTransform: 'none', px: 3, py: 1, fontSize: '1rem',
                 borderRadius: '12px', boxShadow: `0 4px 15px ${theme.palette.primary.main}66`,
@@ -217,12 +177,10 @@ export function Header() {
               }}
             >
               {t('auth.access')}
->>>>>>> d735607 (THEME + LANGUAGE)
             </Button>
           )}
         </Box>
 
-        {/* MOBILE TOGGLE */}
         <IconButton sx={{ display: { md: 'none' }, color: 'text.primary' }}>
           <MenuIcon />
         </IconButton>

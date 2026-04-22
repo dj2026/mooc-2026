@@ -1,19 +1,11 @@
-<<<<<<< HEAD
-export const ca = {
-=======
-export default {
->>>>>>> d735607 (THEME + LANGUAGE)
+export default{
   auth: {
     login: "Iniciar Sessió",
     logout: "Sortir",
     start: "Inici",
     login_students: "Accés Alumnes",
-<<<<<<< HEAD
-    incorrect_pin: "PIN incorrecte"
-=======
     incorrect_pin: "PIN incorrecte",
     access: "Accedir"
->>>>>>> d735607 (THEME + LANGUAGE)
   },
   dashboard: {
     title: "Panell de l'Alumne",
@@ -52,12 +44,6 @@ export default {
       cert_desc: "Obtén un certificat digital al finalitzar els teus projectes."
     }
   },
-<<<<<<< HEAD
-  common: {
-    error_loading: "Error en carregar les dades"
-  }
-};
-=======
   hero: {
     subtitle: "Uneix-te als alumnes que ja estan dominant les tecnologies de 2026 amb projectes reals.",
     build_apps: "Build Real-World Apps",
@@ -91,4 +77,3 @@ export default {
     error_loading: "Error en carregar les dades"
   }
 };
->>>>>>> d735607 (THEME + LANGUAGE)

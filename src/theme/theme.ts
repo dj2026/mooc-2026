@@ -3,9 +3,9 @@ import { createTheme, ThemeOptions } from '@mui/material/styles';
 type ThemeMode = 'light' | 'dark';
 
 const primaryPalette = {
-  main: '#a855f7',
+  main: '#8400ff',
   light: '#c084fc',
-  dark: '#9333ea',
+  dark: '#8400ff',
   contrastText: '#ffffff',
 };
 
@@ -22,12 +22,12 @@ const getBaseTheme = (mode: ThemeMode): ThemeOptions => ({
           },
           text: {
             primary: '#ffffff',
-            secondary: 'rgba(255, 255, 255, 0.7)',
+            secondary: '#ffffff',
           },
         }
       : {
           background: {
-            default: '#f5f5f5',
+            default: '#ffffff',
             paper: '#ffffff',
           },
           text: {

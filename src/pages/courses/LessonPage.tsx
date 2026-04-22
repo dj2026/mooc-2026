@@ -6,11 +6,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { AnimatePresence, motion } from 'framer-motion';
-<<<<<<< HEAD
-import { Box, Typography, Button, IconButton, alpha, CircularProgress } from '@mui/material';
-=======
 import { Box, Typography, Button, IconButton, alpha, CircularProgress, useTheme } from '@mui/material';
->>>>>>> d735607 (THEME + LANGUAGE)
 import { api } from '../../services/api';
 
 interface Lesson {
@@ -169,11 +165,7 @@ export default function LessonPage() {
   // Pantalla de càrrega
   if (loading) {
     return (
-<<<<<<< HEAD
-      <Box sx={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: '#050505' }}>
-=======
       <Box sx={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'background.default' }}>
->>>>>>> d735607 (THEME + LANGUAGE)
         <CircularProgress color="secondary" />
       </Box>
     );
@@ -214,14 +206,7 @@ return (
         </Button>
       </Box>
 
-<<<<<<< HEAD
       {/* BODY */}
-      <Box sx={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
-        
-        {/* ESQUERRA: INSTRUCCIONS */}
-        <Box sx={{ width: '25%', borderRight: '1px solid rgba(255,255,255,0.05)', p: 4, display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
-          <Typography sx={{ color: 'rgba(255,255,255,0.7)', mb: 4, lineHeight: 1.6 }}>{baseLesson.instructions}</Typography>
-=======
       <Box sx={{ flex: 1, display: 'flex', overflow: 'hidden', pt: 2 }}>
         <Box sx={{ width: '25%', borderRight: '1px solid', borderColor: 'divider', p: 4, display: 'flex', flexDirection: 'column', overflowY: 'auto', bgcolor: 'background.paper' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
@@ -232,7 +217,6 @@ return (
             </Box>
           </Box>
           <Typography sx={{ color: 'text.secondary', mb: 4, lineHeight: 1.6 }}>{baseLesson.instructions}</Typography>
->>>>>>> d735607 (THEME + LANGUAGE)
           
           <Box sx={{ bgcolor: alpha(theme.palette.primary.main, 0.05), p: 3, borderRadius: 3, border: '1px solid', borderColor: alpha(theme.palette.primary.main, 0.2), position: 'relative', mb: 3 }}>
             <Code2 size={20} style={{ position: 'absolute', top: 12, right: 12, opacity: 0.2 }} />
@@ -257,15 +241,9 @@ return (
             </Box>
           )}
 
-<<<<<<< HEAD
-          <Box sx={{ mt: 'auto', p: 3, bgcolor: 'rgba(251,191,36,0.05)', border: '1px solid #fbbf24', borderRadius: 3, textAlign: 'center' }}>
-            <Trophy size={32} color="#fbbf24" style={{ margin: '0 auto 8px' }} />
-            <Typography sx={{ fontSize: 10, color: '#fbbf24', fontWeight: 900, mb: 1 }}>
-=======
           <Box sx={{ mt: 'auto', p: 3, bgcolor: alpha('#fbbf24', 0.05), border: '1px solid #fbbf24', borderRadius: 3, textAlign: 'center' }}>
             <Trophy size={32} color={theme.palette.mode === 'dark' ? '#fbbf24' : '#f59e0b'} style={{ margin: '0 auto 8px' }} />
             <Typography sx={{ fontSize: 10, color: theme.palette.mode === 'dark' ? '#fbbf24' : '#f59e0b', fontWeight: 900, mb: 1 }}>
->>>>>>> d735607 (THEME + LANGUAGE)
               {currentMode === 'hackathon' ? 'HACKATHON BONUS' : 'ESTAT DE PUNTS'}
             </Typography>
             <Typography sx={{ fontSize: 32, fontWeight: 900 }}>

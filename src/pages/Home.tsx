@@ -63,9 +63,9 @@ export default function Home() {
           >
             <Box sx={{ textAlign: 'center', mb: 10 }}>
               <Typography
-                variant="h2"
+                variant="h5"
                 sx={{ 
-                  fontSize: { xs: '2.5rem', md: '3.5rem' }, 
+                  fontSize: { xs: '1.7rem', md: '3.5rem' }, 
                   fontWeight: 900, 
                   background: 'linear-gradient(to right, ' + theme.palette.text.primary + ', ' + theme.palette.primary.main + ')',
                   WebkitBackgroundClip: 'text',
@@ -76,7 +76,22 @@ export default function Home() {
               >
                 {t('home.featured_title')}
               </Typography>
-              <Typography variant="h5" sx={{ color: 'text.secondary', maxWidth: '40rem', mx: 'auto', fontWeight: 400 }}>
+              <Typography 
+                variant="h6" 
+                sx={{ 
+                  color: 'text.secondary', 
+                  maxWidth: '80rem', 
+                  mx: 'auto', 
+                  fontWeight: 400,
+                  fontSize: { 
+                    xs: '0.9rem',   
+                    sm: '1.1rem',   
+                    md: '1.8rem'  
+                  },
+                  lineHeight: { xs: 1.5, md: 1.6 },
+                  px: { xs: 2, md: 0 }
+                }}
+              >
                 {t('home.featured_subtitle')}
               </Typography>
             </Box>
@@ -111,24 +126,37 @@ export default function Home() {
         component="section" 
         id="features" 
         sx={{ 
-          py: 16, 
+          py: { xs: 8, md: 16 }, // Menys padding vertical en mòbil
           bgcolor: 'action.hover',
           position: 'relative',
           zIndex: 2 
         }}
       >
         <Container maxWidth="lg">
-          <Box sx={{ textAlign: 'center', mb: 10 }}>
-            <Typography variant="h2" sx={{ fontSize: '2.5rem', fontWeight: 900, mb: 3 }}>
+          <Box sx={{ textAlign: 'center', mb: { xs: 6, md: 10 } }}>
+            <Typography 
+              variant="h2" 
+              sx={{ 
+                // Títol adaptatiu: 1.8rem a mòbil, 2.5rem a desktop
+                fontSize: { xs: '1.8rem', md: '2.5rem' }, 
+                fontWeight: 900, 
+                mb: 3,
+                px: { xs: 2, md: 0 }
+              }}
+            >
               {t('home.why_choose_title')}
             </Typography>
           </Box>
           
-          <Grid container spacing={4}>
+          <Grid container spacing={4} sx={{ justifyContent: 'center' }}>
             {features.map((feature, index) => (
-              <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
+              <Grid size={{ xs: 10.5, sm: 6, md: 4 }} key={index}> 
                 <Box sx={{
-                  p: 4, height: '100%', borderRadius: 6,
+                  p: { xs: 2.5, md: 3 }, // Una mica més de padding intern en mòbil
+                  height: '100%', 
+                  borderRadius: 6,
+                  // Centrem la card: eliminem ml: 3 i usem mx: auto
+                  mx: 'auto',
                   bgcolor: 'background.paper',
                   border: '1px solid',
                   borderColor: 'divider',
@@ -136,19 +164,41 @@ export default function Home() {
                   '&:hover': { 
                     bgcolor: 'action.hover',
                     borderColor: 'primary.main', 
-                    transform: 'translateY(-10px)' 
+                    transform: { md: 'translateY(-10px)' } 
                   }
                 }}>
-                  <Box sx={{ fontSize: '2.5rem', mb: 2 }}>{feature.icon}</Box>
-                  <Typography variant="h6" sx={{ fontWeight: 800, mb: 1 }}>{feature.title}</Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.7 }}>{feature.desc}</Typography>
+                  <Box sx={{ 
+                    fontSize: { xs: '2rem', md: '2.5rem' }, 
+                    mb: 2 
+                  }}>
+                    {feature.icon}
+                  </Box>
+                  <Typography 
+                    variant="h6" 
+                    sx={{ 
+                      fontWeight: 800, 
+                      mb: 1,
+                      fontSize: { xs: '1.1rem', md: '1.25rem' } 
+                    }}
+                  >
+                    {feature.title}
+                  </Typography>
+                  <Typography 
+                    variant="body2" 
+                    sx={{ 
+                      color: 'text.secondary', 
+                      lineHeight: 1.7,
+                      fontSize: { xs: '0.85rem', md: '0.875rem' } 
+                    }}
+                  >
+                    {feature.desc}
+                  </Typography>
                 </Box>
               </Grid>
             ))}
           </Grid>
         </Container>
       </Box>
-
       <Footer />
     </Box>
   );
