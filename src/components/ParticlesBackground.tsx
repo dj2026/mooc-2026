@@ -1,10 +1,13 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
+import { useTheme } from '@mui/material';
 
 interface Mouse {
   x: number;
   y: number;
   radius: number;
 }
+
+
 
 class Particle {
   x: number;
@@ -15,21 +18,22 @@ class Particle {
   density: number;
   vx: number; 
   vy: number;
+  particleColor: string;
 
-  constructor(x: number, y: number) {
+  constructor(x: number, y: number, color: string) {
     this.x = x;
     this.y = y;
     this.baseX = x;
     this.baseY = y;
     this.density = (Math.random() * 30) + 1;
-    // Partícules més visibles
     this.size = (Math.random() * 2.5) + 1.2; 
     this.vx = (Math.random() - 0.5) * 0.4;
     this.vy = (Math.random() - 0.5) * 0.4;
+    this.particleColor = color;
   }
 
   draw(ctx: CanvasRenderingContext2D) {
-    ctx.fillStyle = 'rgba(168, 85, 247, 0.85)'; 
+    ctx.fillStyle = this.particleColor; 
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
     ctx.closePath();
@@ -72,6 +76,13 @@ class Particle {
 
 export default function ParticlesBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+
+  const { backgroundColor, particleColor } = useMemo(() => ({
+    backgroundColor: isDark ? '#0a0a0a' : '#f5f5f5',
+    particleColor: isDark ? 'rgba(255, 255, 255, 0.85)' : 'rgba(0, 0, 0, 0.85)',
+  }), [isDark]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -94,13 +105,12 @@ export default function ParticlesBackground() {
       canvas.height = window.innerHeight;
       particlesArray = [];
       
-      // Augmentem la quantitat de partícules
       const numberOfParticles = (canvas.width * canvas.height) / 7500;
 
       for (let i = 0; i < numberOfParticles; i++) {
         const x = Math.random() * canvas.width;
         const y = Math.random() * canvas.height;
-        particlesArray.push(new Particle(x, y));
+        particlesArray.push(new Particle(x, y, particleColor));
       }
     };
 
@@ -111,10 +121,12 @@ export default function ParticlesBackground() {
           const dy = particlesArray[a].y - particlesArray[b].y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          // Connexions més llargues i visibles
           if (distance < 180) {
             const opacityValue = 1 - (distance / 180);
-            context.strokeStyle = `rgba(168, 85, 247, ${opacityValue * 0.4})`; 
+            const linkColor = isDark 
+              ? `rgba(255, 255, 255, ${opacityValue * 0.4})`
+              : `rgba(0, 0, 0, ${opacityValue * 0.4})`;
+            context.strokeStyle = linkColor; 
             context.lineWidth = 0.8;
             context.beginPath();
             context.moveTo(particlesArray[a].x, particlesArray[a].y);
@@ -126,7 +138,7 @@ export default function ParticlesBackground() {
     };
 
     const animate = () => {
-      ctx.fillStyle = '#050505';
+      ctx.fillStyle = backgroundColor;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
       for (let i = 0; i < particlesArray.length; i++) {
@@ -155,7 +167,7 @@ export default function ParticlesBackground() {
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [backgroundColor, particleColor, isDark]);
 
   return (
     <canvas 
@@ -165,7 +177,7 @@ export default function ParticlesBackground() {
         inset: 0,
         zIndex: -1,
         pointerEvents: 'none',
-        background: '#050505'
+        backgroundColor,
       }}
     />
   );

@@ -1,12 +1,40 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme, ThemeOptions } from '@mui/material/styles';
 
-const theme = createTheme({
+type ThemeMode = 'light' | 'dark';
+
+const primaryPalette = {
+  main: '#a855f7',
+  light: '#c084fc',
+  dark: '#9333ea',
+  contrastText: '#ffffff',
+};
+
+const getBaseTheme = (mode: ThemeMode): ThemeOptions => ({
   palette: {
-    mode: 'dark',
-    primary: { main: '#a855f7', light: '#c084fc', dark: '#9333ea' },
+    mode,
+    primary: primaryPalette,
     secondary: { main: '#ec4899' },
-    background: { default: '#0f0a1e', paper: 'rgba(255,255,255,0.05)' },
-    text: { primary: '#ffffff', secondary: 'rgba(255,255,255,0.7)' },
+    ...(mode === 'dark'
+      ? {
+          background: {
+            default: '#0a0a0a',
+            paper: '#141414',
+          },
+          text: {
+            primary: '#ffffff',
+            secondary: 'rgba(255, 255, 255, 0.7)',
+          },
+        }
+      : {
+          background: {
+            default: '#f5f5f5',
+            paper: '#ffffff',
+          },
+          text: {
+            primary: '#1a1a1a',
+            secondary: 'rgba(26, 26, 26, 0.7)',
+          },
+        }),
   },
   typography: {
     fontFamily: '"Inter", "Roboto", sans-serif',
@@ -17,9 +45,8 @@ const theme = createTheme({
     MuiCssBaseline: {
       styleOverrides: {
         body: {
-          backgroundColor: "#0f0a1e",
+          transition: 'background-color 0.3s ease, color 0.3s ease',
           margin: 0,
-          color: 'white',
           WebkitFontSmoothing: 'antialiased',
         },
       },
@@ -29,12 +56,24 @@ const theme = createTheme({
         root: {
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
-          border: '1px solid rgba(255,255,255,0.1)',
           backgroundImage: 'none',
+          ...(mode === 'dark'
+            ? {
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                bgcolor: 'rgba(255, 255, 255, 0.05)',
+              }
+            : {
+                border: '1px solid rgba(0, 0, 0, 0.08)',
+                bgcolor: '#ffffff',
+              }),
         },
       },
     },
   },
 });
 
-export default theme;
+export function getTheme(mode: ThemeMode) {
+  return createTheme(getBaseTheme(mode));
+}
+
+export default getTheme('dark');

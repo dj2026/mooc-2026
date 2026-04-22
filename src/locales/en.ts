@@ -1,10 +1,19 @@
+<<<<<<< HEAD
 export const en = {
+=======
+export default {
+>>>>>>> d735607 (THEME + LANGUAGE)
   auth: {
     login: "Login",
     logout: "Logout",
     start: "Home",
     login_students: "Student Access",
+<<<<<<< HEAD
     incorrect_pin: "Incorrect PIN"
+=======
+    incorrect_pin: "Incorrect PIN",
+    access: "Login"
+>>>>>>> d735607 (THEME + LANGUAGE)
   },
   dashboard: {
     title: "Student Dashboard",
@@ -43,7 +52,43 @@ export const en = {
       cert_desc: "Get a digital certificate upon completing your projects."
     }
   },
+<<<<<<< HEAD
   common: {
     error_loading: "Error loading data"
   }
 };
+=======
+  hero: {
+    subtitle: "Join the students who are already mastering 2026 technologies with real-world projects.",
+    build_apps: "Build Real-World Apps",
+    stats: {
+      students: "Students",
+      courses: "Courses",
+      support: "Support"
+    },
+    scroll_down: "Scroll Down"
+  },
+  footer: {
+    brand_name: "MOOC REACT",
+    brand_tagline: "The reference platform for the new generation of Frontend developers.",
+    explore: "Explore",
+    community: "Community",
+    connect: "Connect",
+    courses: "Courses",
+    challenges: "Challenges",
+    paths: "Paths",
+    discord: "Discord",
+    blog: "Blog",
+    events: "Events",
+    copyright: "MOOC REACT • BARCELONA",
+    systems_operational: "SYSTEMS OPERATIONAL"
+  },
+  course: {
+    by: "by",
+    enroll: "ENROLL COURSE"
+  },
+  common: {
+    error_loading: "Error loading data"
+  }
+};
+>>>>>>> d735607 (THEME + LANGUAGE)

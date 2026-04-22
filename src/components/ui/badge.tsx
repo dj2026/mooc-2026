@@ -24,21 +24,21 @@ export function Badge({ children, mode = 'standard', className, sx }: BadgeProps
         border: '1px solid',
         
         ...(mode === 'standard' ? {
-          bgcolor: 'rgba(168, 85, 247, 0.1)',
-          color: '#a855f7',
-          borderColor: 'rgba(168, 85, 247, 0.2)',
+          bgcolor: 'primary.main' + '1A',
+          color: 'primary.main',
+          borderColor: 'primary.main' + '33',
           '&:hover': {
-            bgcolor: 'rgba(168, 85, 247, 0.2)',
-            borderColor: '#a855f7',
+            bgcolor: 'primary.main' + '33',
+            borderColor: 'primary.main',
             transform: 'translateY(-1px)',
           },
         } : {
           bgcolor: 'transparent',
-          color: 'rgba(255, 255, 255, 0.5)',
-          borderColor: 'rgba(255, 255, 255, 0.1)',
+          color: 'text.secondary',
+          borderColor: 'divider',
           '&:hover': {
-            borderColor: 'rgba(255, 255, 255, 0.4)',
-            color: '#fff',
+            borderColor: 'text.primary',
+            color: 'text.primary',
             transform: 'translateY(-1px)',
           },
         }),

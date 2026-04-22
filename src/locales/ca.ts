@@ -1,10 +1,19 @@
+<<<<<<< HEAD
 export const ca = {
+=======
+export default {
+>>>>>>> d735607 (THEME + LANGUAGE)
   auth: {
     login: "Iniciar Sessió",
     logout: "Sortir",
     start: "Inici",
     login_students: "Accés Alumnes",
+<<<<<<< HEAD
     incorrect_pin: "PIN incorrecte"
+=======
+    incorrect_pin: "PIN incorrecte",
+    access: "Accedir"
+>>>>>>> d735607 (THEME + LANGUAGE)
   },
   dashboard: {
     title: "Panell de l'Alumne",
@@ -43,7 +52,43 @@ export const ca = {
       cert_desc: "Obtén un certificat digital al finalitzar els teus projectes."
     }
   },
+<<<<<<< HEAD
   common: {
     error_loading: "Error en carregar les dades"
   }
 };
+=======
+  hero: {
+    subtitle: "Uneix-te als alumnes que ja estan dominant les tecnologies de 2026 amb projectes reals.",
+    build_apps: "Build Real-World Apps",
+    stats: {
+      students: "Students",
+      courses: "Courses",
+      support: "Support"
+    },
+    scroll_down: "Scroll Down"
+  },
+  footer: {
+    brand_name: "MOOC REACT",
+    brand_tagline: "La plataforma de referència per a la nova generació de desenvolupadors Frontend.",
+    explore: "Explora",
+    community: "Comunitat",
+    connect: "Connecta",
+    courses: "Cursos",
+    challenges: "Reptes",
+    paths: "Rutes",
+    discord: "Discord",
+    blog: "Blog",
+    events: "Events",
+    copyright: "MOOC REACT • BARCELONA",
+    systems_operational: "SYSTEMS OPERATIONAL"
+  },
+  course: {
+    by: "by",
+    enroll: "ENROLL COURSE"
+  },
+  common: {
+    error_loading: "Error en carregar les dades"
+  }
+};
+>>>>>>> d735607 (THEME + LANGUAGE)

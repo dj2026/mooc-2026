@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ParticlesBackground from './ParticlesBackground';
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Container, Typography, useTheme } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 // --- Props del Typewriter ---
 interface TypewriterProps {
@@ -38,14 +39,15 @@ const Typewriter = ({ words }: TypewriterProps) => {
 
   return (
     <Box component="span" sx={{ 
-      color: 'white',
-      borderRight: '5px solid #8400ff',
+      color: 'text.primary',
+      borderRight: '5px solid',
+      borderColor: 'primary.main',
       paddingRight: '4px',
       display: 'inline-block',
       lineHeight: 1,
       animation: 'blink 1s step-end infinite',
       '@keyframes blink': {
-        '0%, 100%': { borderColor: '#8400ff' },
+        '0%, 100%': { borderColor: 'primary.main' },
         '50%': { borderColor: 'transparent' },
       }
     }}>
@@ -55,6 +57,8 @@ const Typewriter = ({ words }: TypewriterProps) => {
 };
 
 export default function Hero() {
+  const { t } = useTranslation();
+  const theme = useTheme();
   const [apiStats, setApiStats] = useState<{students: number, courses: number}>({ 
     students: 0, 
     courses: 0 
@@ -81,9 +85,9 @@ export default function Hero() {
   }, []);
 
   const stats = [
-    { label: 'Students', value: apiStats.students, color: '#a855f7', delay: 0 },
-    { label: 'Courses', value: apiStats.courses, color: '#10b981', delay: 0.2 },
-    { label: 'Support', value: '24/7', color: '#f59e0b', delay: 0.4 },
+    { label: t('hero.stats.students'), value: apiStats.students, delay: 0 },
+    { label: t('hero.stats.courses'), value: apiStats.courses, delay: 0.2 },
+    { label: t('hero.stats.support'), value: '24/7', delay: 0.4 },
   ];
 
   const techStack: string[] = ['React', 'Python', 'SpringBoot', 'Machine Learning'];
@@ -97,7 +101,7 @@ export default function Hero() {
       justifyContent: 'center', 
       zIndex: 1, 
       overflow: 'hidden', 
-      bgcolor: '#050505' 
+      bgcolor: 'background.default' 
     }}>
       
       <Box sx={{ position: 'absolute', inset: 0, zIndex: -1 }}>
@@ -119,7 +123,7 @@ export default function Hero() {
             <Typography variant="h1" sx={{ 
               fontSize: { xs: '2.5rem', md: '4rem', lg: '5rem' }, 
               fontWeight: 900, 
-              color: 'white',
+              color: 'text.primary',
               mt: -5,
               mb: 2,
               display: 'flex',
@@ -139,19 +143,19 @@ export default function Hero() {
               WebkitTextFillColor: 'transparent', 
               mb: 4
             }}>
-              Build Real-World Apps
+              {t('hero.build_apps')}
             </Typography>
           </Box>
 
           <Typography component={motion.p} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} sx={{ 
             fontSize: { xs: '1.1rem', md: '1.4rem' }, 
-            color: 'rgba(255,255,255,0.6)', 
+            color: 'text.secondary', 
             mb: 8, 
             maxWidth: '800px', 
             mx: 'auto',
             fontWeight: 500 
           }}>
-            Uneix-te als alumnes que ja estan dominant les tecnologies de 2026 amb projectes reals.
+            {t('hero.subtitle')}
           </Typography>
 
           <Box sx={{ 
@@ -161,14 +165,17 @@ export default function Hero() {
             width: '100%', 
             mt: 4 
           }}>
-            {stats.map((stat, i) => (
+            {stats.map((stat, i) => {
+              const statColors = [theme.palette.primary.main, theme.palette.success?.main || '#10b981', theme.palette.warning?.main || '#f59e0b'];
+              const statColor = statColors[i];
+              return (
               <Box key={i} component={motion.div} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 + stat.delay }} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <Typography sx={{ 
                   fontSize: { xs: '2.2rem', md: '3.2rem' }, 
                   fontWeight: 900, 
-                  color: stat.color, 
+                  color: statColor, 
                   mb: 1, 
-                  textShadow: `0 0 30px ${stat.color}33`,
+                  textShadow: `0 0 30px ${statColor}33`,
                   fontFamily: 'monospace'
                 }}>
                   <AnimatePresence mode="wait">
@@ -187,12 +194,13 @@ export default function Hero() {
                   textTransform: 'uppercase', 
                   letterSpacing: '0.5em', 
                   fontWeight: 800, 
-                  color: 'white' 
+                  color: 'text.secondary' 
                 }}>
                   {stat.label}
                 </Typography>
               </Box>
-            ))}
+              );
+            })}
           </Box>
         </Box>
       </Container>
@@ -211,10 +219,10 @@ export default function Hero() {
           fontSize: '0.80rem', 
           fontWeight: 900, 
           letterSpacing: '1em', 
-          color: 'white', 
+          color: 'text.primary', 
           textTransform: 'uppercase' 
         }}>
-          Scroll Down
+          {t('hero.scroll_down')}
         </Typography>
         <Box sx={{ 
           width: '2px', 
@@ -229,8 +237,8 @@ export default function Hero() {
             sx={{ 
               width: '100%', 
               height: '20px', 
-              bgcolor: '#fff', 
-              boxShadow: '0 0 10px #fff' 
+              bgcolor: 'primary.main', 
+              boxShadow: '0 0 10px ' + theme.palette.primary.main 
             }} 
           />
         </Box>

@@ -1,24 +1,50 @@
+<<<<<<< HEAD
 import { Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme/theme';
+=======
+import { Routes, Route, useLocation } from 'react-router-dom';
+import { Box, useTheme } from '@mui/material';
+import { useEffect } from 'react';
+>>>>>>> d735607 (THEME + LANGUAGE)
 import Home from './pages/Home';
 import CourseLessons from './pages/courses/CourseLessons';
 import LessonPage from './pages/courses/LessonPage';
 import StudentDashboard from './pages/dashboards/StudentDashboard';
+import { Header } from './components/Header';
+
+const globalRoutes = ['/courses/', '/dashboards/student'];
 
 function App() {
+  const theme = useTheme();
+  const location = useLocation();
+  const isGlobalRoute = globalRoutes.some(route => location.pathname.startsWith(route));
+
+  useEffect(() => {
+    document.body.style.backgroundColor = theme.palette.background.default;
+  }, [theme, theme.palette.mode]);
+
   return (
+<<<<<<< HEAD
     <ThemeProvider theme={theme}>
       <CssBaseline />
       
+=======
+    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
+      {isGlobalRoute && (
+        <Box sx={{ position: 'relative', zIndex: 1100 }}>
+          <Header />
+        </Box>
+      )}
+>>>>>>> d735607 (THEME + LANGUAGE)
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/courses/:courseId" element={<CourseLessons />} />
         <Route path="/courses/:courseId/:lessonId" element={<LessonPage />} />
         <Route path="/dashboards/student" element={<StudentDashboard />} />
       </Routes>
-    </ThemeProvider>
+    </Box>
   );
 }
 

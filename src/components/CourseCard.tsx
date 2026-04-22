@@ -1,9 +1,10 @@
-import { Box, Typography, Divider } from '@mui/material';
+import { Box, Typography, Divider, useTheme } from '@mui/material';
 import { Card, CardContent, CardTitle, CardDescription } from './ui/Card'; 
 import { Badge } from './ui/badge';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface Course {
   id: string;
@@ -24,6 +25,8 @@ interface CourseCardProps {
 }
 
 export function CourseCard({ course, index }: CourseCardProps) {
+  const { t } = useTranslation();
+  const theme = useTheme();
   const logoW = course.logoWidth || course.logoSize || 100;
   const logoH = course.logoHeight || course.logoSize || 100;
 
@@ -45,9 +48,9 @@ export function CourseCard({ course, index }: CourseCardProps) {
             overflow: 'hidden',
             '&:hover': {
               transform: 'translateY(-12px)', 
-              boxShadow: '0 24px 48px -12px rgba(168, 85, 247, 0.25)',
-              borderColor: 'rgba(168, 85, 247, 0.4)',
-              bgcolor: 'rgba(255, 255, 255, 0.03)',
+              boxShadow: '0 24px 48px -12px ' + theme.palette.primary.main + '40',
+              borderColor: 'primary.main' + '66',
+              bgcolor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
             },
           }}
         >
@@ -60,11 +63,12 @@ export function CourseCard({ course, index }: CourseCardProps) {
                 width: '100%',
                 borderRadius: 4,
                 overflow: 'hidden',
-                background: 'linear-gradient(135deg, rgba(168,85,247,0.15) 0%, rgba(79,70,229,0.2) 100%)',
+                background: 'linear-gradient(135deg, ' + theme.palette.primary.main + '26 0%, ' + theme.palette.secondary?.main + '33 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                border: '1px solid rgba(255,255,255,0.05)',
+                border: '1px solid',
+                borderColor: 'divider',
               }}
             >
               <motion.div
@@ -105,7 +109,7 @@ export function CourseCard({ course, index }: CourseCardProps) {
               <CardTitle sx={{ 
                 mb: 1.5, 
                 transition: 'color 0.3s',
-                '.MuiCard-root:hover &': { color: '#a855f7' } 
+                '.MuiCard-root:hover &': { color: 'primary.main' } 
               }}>
                 {course.title}
               </CardTitle>
@@ -118,9 +122,9 @@ export function CourseCard({ course, index }: CourseCardProps) {
             {/* Secció inferior (Instructor i Acció) */}
             <Box>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
-                <Divider sx={{ width: 24, borderColor: 'rgba(168,85,247,0.3)', borderBottomWidth: 2 }} />
-                <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  by {course.instructor}
+                <Divider sx={{ width: 24, borderColor: 'primary.main' + '4D', borderBottomWidth: 2 }} />
+                <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  {t('course.by')} {course.instructor}
                 </Typography>
               </Box>
               
@@ -129,10 +133,11 @@ export function CourseCard({ course, index }: CourseCardProps) {
                 alignItems: 'center', 
                 justifyContent: 'space-between', 
                 pt: 2.5, 
-                borderTop: '1px solid rgba(255,255,255,0.06)' 
+                borderTop: '1px solid', 
+                borderColor: 'divider' 
               }}>
-                <Typography sx={{ fontSize: '0.7rem', fontWeight: 900, letterSpacing: '0.15em', color: '#a855f7' }}>
-                  ENROLL COURSE
+                <Typography sx={{ fontSize: '0.7rem', fontWeight: 900, letterSpacing: '0.15em', color: 'primary.main' }}>
+                  {t('course.enroll')}
                 </Typography>
                 
                 <Box
@@ -140,7 +145,7 @@ export function CourseCard({ course, index }: CourseCardProps) {
                   animate={{ x: [0, 6, 0] }} 
                   transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                 >
-                  <ArrowRight size={20} color="#a855f7" strokeWidth={2.5} />
+                  <ArrowRight size={20} color={theme.palette.primary.main} strokeWidth={2.5} />
                 </Box>
               </Box>
             </Box>

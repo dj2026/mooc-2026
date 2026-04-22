@@ -6,23 +6,28 @@ import {
   CardProps,
   CardHeaderProps,
   CardContentProps,
-  TypographyProps
+  TypographyProps,
+  useTheme
 } from '@mui/material';
 
 export function Card({ children, sx, ...props }: CardProps) {
+  const theme = useTheme();
   return (
     <MuiCard 
       sx={{ 
         borderRadius: 5, 
         backdropFilter: 'blur(24px)', 
-        bgcolor: 'rgba(255, 255, 255, 0.02)', 
-        border: '1px solid rgba(255, 255, 255, 0.08)',
+        bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.02)',
+        border: '1px solid',
+        borderColor: 'divider',
         backgroundImage: 'none',
-        boxShadow: '0 12px 40px -12px rgba(0, 0, 0, 0.5)',
+        boxShadow: theme.palette.mode === 'dark' 
+          ? '0 12px 40px -12px rgba(0, 0, 0, 0.5)'
+          : '0 12px 40px -12px rgba(0, 0, 0, 0.1)',
         transition: 'all 0.3s ease',
         '&:hover': {
-          bgcolor: 'rgba(255, 255, 255, 0.04)',
-          borderColor: 'rgba(255, 255, 255, 0.15)',
+          bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.04)',
+          borderColor: 'primary.main' + '26',
         },
         ...sx 
       }} 
@@ -46,7 +51,7 @@ export function CardHeader({ sx, ...props }: CardHeaderProps) {
         },
         '& .MuiCardHeader-subheader': { 
           fontSize: '0.875rem', 
-          color: 'rgba(255,255,255,0.4)',
+          color: 'text.secondary',
           mt: 0.5
         },
         ...sx 
@@ -64,7 +69,7 @@ export function CardTitle({ children, sx, ...props }: TypographyProps) {
         fontSize: '1.25rem', 
         fontWeight: 800, 
         lineHeight: 1.2, 
-        color: 'white', 
+        color: 'text.primary', 
         letterSpacing: '-0.02em',
         ...sx 
       }} 
@@ -81,7 +86,7 @@ export function CardDescription({ children, sx, ...props }: TypographyProps) {
       variant="body2" 
       sx={{ 
         fontSize: '0.9rem', 
-        color: 'rgba(255,255,255,0.4)', 
+        color: 'text.secondary', 
         lineHeight: 1.6,
         ...sx 
       }} 
