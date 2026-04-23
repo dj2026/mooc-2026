@@ -209,7 +209,7 @@ export default function Hero() {
       {/* INDICADOR DE SCROLL - CHEVRONS A BANDA I BANDA */}
       <Box sx={{ 
         position: 'absolute', 
-        bottom: { xs: 120, md: 100 }, 
+        bottom: { xs: 140, md: 100 }, 
         display: 'flex', 
         flexDirection: 'row', 
         alignItems: 'center', 
