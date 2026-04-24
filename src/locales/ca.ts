@@ -13,8 +13,8 @@ export default{
     my_progress: "El meu Progrés",
     my_courses: "Els meus cursos",
     completed: "completat",
-    average: "Mitjana Global",
-    ranking_title: "Rànquing de la Classe",
+    average: "punts totals",
+    ranking_title: "Rànquing",
     you: "Tu",
     create_user_title: "Nou Alumne",
     name_label: "Nom complet",
@@ -22,7 +22,8 @@ export default{
     pin_label: "PIN (4 dígits)",
     register_btn: "Registrar Alumne",
     reset_course_confirm: "Estàs segur que vols reiniciar el progrés d'aquest curs?",
-    reset_course_tooltip: "Reiniciar curs"
+    reset_course_tooltip: "Reiniciar curs",
+    progress_detail: "Detall del Progrés"
   },
   home: {
     featured_title: "Cursos Destacats",

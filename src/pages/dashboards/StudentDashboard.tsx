@@ -3,23 +3,24 @@ import { useNavigate } from 'react-router-dom';
 import { 
   PlayCircle, ChevronRight, CheckCircle2, Loader2, Lock, 
   Code2, Cpu, Globe, Database, Terminal, Layers, Trophy, RotateCcw, 
-  UserPlus, Trash2, X, Check 
+  UserPlus, Trash2, X, Check
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Box, Container, Typography, Card, TextField, Button, Avatar, 
   LinearProgress, Stack, Alert, Tabs, Tab, IconButton, Tooltip, useTheme
 } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import LogoutIcon from '@mui/icons-material/Logout';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { api } from '../../services/api';
 import localData from '../../../public/data.json';
 import { useTranslation } from 'react-i18next';
 
-// --- INTERFACES ---
 interface Lesson { id: string; title: string; }
 interface Course { id: string; title: string; content?: Lesson[]; }
 interface Student { id: string; name: string; code: string; email: string; average?: number; }
 
-// --- COMPONENT STUDENT CARD ---
 function StudentCard({ student, onLogin, onDelete, error }: { 
   student: Student, onLogin: (s: Student, code: string) => void, onDelete: (id: string, pin: string) => boolean, error: boolean 
 }) {
@@ -40,7 +41,7 @@ function StudentCard({ student, onLogin, onDelete, error }: {
 
   return (
     <motion.div style={{ position: 'relative' }} whileHover={{ y: -5 }} animate={error ? { x: [-10, 10, -10, 10, 0] } : {}} transition={{ duration: 0.4 }}>
-      <Box sx={{ position: 'absolute', top: 15, right: 15, zIndex: 10 }}>
+      <Box sx={{ position: 'absolute', top: 1.5, right: 1.5, zIndex: 10 }}>
         {!isDeleting ? (
           <IconButton onClick={(e) => { e.stopPropagation(); setIsDeleting(true); }} size="small" sx={{ color: 'text.secondary', '&:hover': { color: 'error.main' } }}>
             <Trash2 size={18} />
@@ -54,9 +55,9 @@ function StudentCard({ student, onLogin, onDelete, error }: {
         )}
       </Box>
 
-      <Card sx={{ p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', borderRadius: 40, border: '2px solid', borderColor: error ? 'error.main' : 'divider', bgcolor: 'background.paper', backdropFilter: 'blur(20px)', height: '100%', transition: 'all 0.3s ease', '&:hover': { borderColor: 'primary.main' } }}>
-        <Avatar sx={{ width: 80, height: 80, mb: 2, bgcolor: 'primary.main', fontSize: '2.2rem', fontWeight: 900, border: '3px solid', borderColor: 'divider' }}>{student.name.charAt(0)}</Avatar>
-        <Typography variant="h5" sx={{ fontWeight: 900, mb: 3 }}>{student.name}</Typography>
+      <Card sx={{ p: { xs: 2, md: 4 }, display: 'flex', flexDirection: 'column', alignItems: 'center', borderRadius: { xs: 3, md: 10 }, border: '2px solid', borderColor: error ? 'error.main' : 'divider', bgcolor: 'background.paper', backdropFilter: 'blur(20px)', minWidth: 0, height: '100%', transition: 'all 0.3s ease', '&:hover': { borderColor: 'primary.main' } }}>
+        <Avatar sx={{ width: { xs: 60, md: 80 }, height: { xs: 60, md: 80 }, mb: 2, bgcolor: 'primary.main', fontSize: { xs: '1.5rem', md: '2.2rem' }, fontWeight: 900, border: '3px solid', borderColor: 'divider' }}>{student.name.charAt(0)}</Avatar>
+        <Typography variant="h6" sx={{ fontWeight: 900, mb: 3, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%', textAlign: 'center' }}>{student.name}</Typography>
         <Stack spacing={2} sx={{ width: '100%' }}>
           <TextField fullWidth type="password" placeholder="PIN" value={pin} onChange={(e) => setPin(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && onLogin(student, pin)} autoComplete="off" sx={{ '& .MuiOutlinedInput-root': { borderRadius: 20 } }} />
           <Button variant="contained" fullWidth size="large" onClick={() => onLogin(student, pin)} startIcon={<Lock size={18} />} sx={{ borderRadius: 20, py: 1.5, fontWeight: 900 }}>{t('auth.login')}</Button>
@@ -158,10 +159,7 @@ export default function StudentDashboard() {
     if (code === student.code) {
       setSelectedStudent(student);
       localStorage.setItem('currentStudent', JSON.stringify(student));
-      
-      // AVISAR AL HEADER QUE S'HA FET LOGIN
       window.dispatchEvent(new Event('auth-state-change'));
-
       await fetchProgress(student.id);
     } else { setErrorId(student.id); setTimeout(() => setErrorId(null), 500); }
   };
@@ -171,8 +169,6 @@ export default function StudentDashboard() {
     localStorage.removeItem('mooc_global_progress');
     setSelectedStudent(null);
     setDbProgress({});
-    
-    // AVISAR AL HEADER QUE S'HA FET LOGOUT
     window.dispatchEvent(new Event('auth-state-change'));
   };
 
@@ -205,123 +201,242 @@ export default function StudentDashboard() {
     return [...students].sort((a, b) => getCourseProgress(currentCourse, b.id) - getCourseProgress(currentCourse, a.id));
   }, [students, allCourses, rankingTab, getCourseProgress]);
 
-  if (loading) return <Box sx={{ minHeight: '100vh', display: 'flex', bgcolor: 'background.default', alignItems: 'center', justifyContent: 'center' }}><Loader2 className="animate-spin" color={theme.palette.primary.main} size={48} /></Box>;
+  if (loading) return <Box sx={{ display: 'flex', bgcolor: 'background.default', alignItems: 'center', justifyContent: 'center' }}><Loader2 className="animate-spin" color={theme.palette.primary.main} size={48} /></Box>;
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', color: 'text.primary', pb: 8 }}>
-      <Container maxWidth="xl" sx={{ pt: 6 }}>
-        {globalError && <Alert severity="error" sx={{ mb: 4, borderRadius: '1rem' }}>{globalError}</Alert>}
-        
-        <AnimatePresence mode="wait">
-          {!selectedStudent ? (
-            <motion.div key="login" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-              <Typography variant="h3" align="center" sx={{ fontWeight: 900, mb: 1 }}>{t('dashboard.title')}</Typography>
-              <Typography align="center" sx={{ opacity: 0.6, mb: 6 }}>{t('dashboard.subtitle')}</Typography>
-              
-              <Box sx={{ display: 'grid', gap: 5, gridTemplateColumns: { xs: '1fr', lg: '350px 1fr' } }}>
-                <Card sx={{ p: 4, borderRadius: '2.5rem', bgcolor: 'background.paper', border: '2px dashed', borderColor: 'primary.main' + '4D', height: 'fit-content' }}>
-                  <Stack spacing={3} component="form" onSubmit={handleCreateStudent}>
-                    <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
-                      <UserPlus color={theme.palette.primary.main} />
-                      <Typography variant="h6" sx={{ fontWeight: 900 }}>{t('dashboard.create_user_title')}</Typography>
-                    </Stack>
-                    <TextField fullWidth label={t('dashboard.name_label')} variant="filled" value={newName} onChange={e => setNewName(e.target.value)} sx={{ bgcolor: 'action.hover', borderRadius: '12px' }} />
-                    <TextField fullWidth label={t('dashboard.email_label')} variant="filled" value={newEmail} onChange={e => setNewEmail(e.target.value)} sx={{ bgcolor: 'action.hover', borderRadius: '12px' }} />
-                    <TextField fullWidth label={t('dashboard.pin_label')} variant="filled" type="password" value={newPin} onChange={e => setNewPin(e.target.value)} slotProps={{ htmlInput: { maxLength: 4 } }} sx={{ bgcolor: 'action.hover', borderRadius: '12px' }} />
-                    <Button type="submit" variant="outlined" fullWidth sx={{ borderRadius: '12px', py: 1.5, borderColor: 'primary.main', color: 'primary.main', fontWeight: 800 }}>{t('dashboard.register_btn')}</Button>
-                  </Stack>
-                </Card>
-
-                <Box sx={{ display: 'grid', gap: 3, gridTemplateColumns: { xs: '1fr', md: 'repeat(auto-fill, minmax(280px, 1fr))' } }}>
-                  {students.map(s => <StudentCard key={s.id} student={s} onLogin={handleLogin} onDelete={handleDeleteStudent} error={errorId === s.id} />)}
-                </Box>
-              </Box>
-            </motion.div>
-          ) : (
-            <motion.div key="dash" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }}>
-              <Box sx={{ display: 'grid', gap: 5, gridTemplateColumns: { xs: '1fr', md: '320px 1fr' } }}>
-                <Stack spacing={3}>
-                  <Card sx={{ p: 4, borderRadius: '2.5rem', textAlign: 'center', bgcolor: 'background.paper', position: 'relative', border: '1px solid', borderColor: 'primary.main' + '33' }}>
-                    {actionLoading && <LinearProgress sx={{ position: 'absolute', top: 0, left: 0, right: 0 }} color="secondary" />}
-                    <Avatar sx={{ width: 80, height: 80, mx: 'auto', mb: 2, bgcolor: 'primary.main', fontWeight: 900, fontSize: '2rem' }}>{selectedStudent.name.charAt(0)}</Avatar>
-                    <Typography variant="h6" sx={{ fontWeight: 900 }}>{selectedStudent.name}</Typography>
-                    <Box sx={{ mt: 3, p: 2, bgcolor: 'action.hover', borderRadius: '1.2rem' }}>
-                      <Typography variant="caption" sx={{ opacity: 0.5, fontWeight: 800 }}>{t('dashboard.average')}</Typography>
-                      <Typography variant="h4" sx={{ fontWeight: 900, color: 'primary.main' }}>
-                        {allCourses.length > 0 ? Math.floor(allCourses.reduce((acc, c) => acc + getCourseProgress(c, selectedStudent.id), 0) / allCourses.length) : 0}%
-                      </Typography>
-                    </Box>
-                  </Card>
-                </Stack>
-
-                <Box>
-                  <Typography variant="h6" sx={{ fontWeight: 900, mb: 3 }}>{t('dashboard.my_courses')}</Typography>
-                  <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2, mb: 6 }}>
-                    {allCourses.map(course => (
-                      <Box key={course.id} sx={{ position: 'relative' }}>
-                        <Card onClick={() => setExpandedCourse(expandedCourse === course.id ? null : course.id)} sx={{ p: 2.5, cursor: 'pointer', borderRadius: '1.5rem', display: 'flex', alignItems: 'center', gap: 2, bgcolor: 'background.paper', border: '2px solid', borderColor: expandedCourse === course.id ? 'primary.main' : 'transparent', transition: '0.2s' }}>
-                          <Box sx={{ p: 1.5, bgcolor: 'primary.main' + '1A', borderRadius: '12px' }}><CourseIcon title={course.title} /></Box>
-                          <Box sx={{ flex: 1 }}>
-                            <Typography sx={{ fontWeight: 900 }}>{course.title}</Typography>
-                            <Typography variant="caption" sx={{ opacity: 0.6 }}>{getCourseProgress(course, selectedStudent.id)}% {t('dashboard.completed')}</Typography>
-                          </Box>
-                          <Stack direction="row" spacing={0.5} sx={{ alignItems: "center" }}>
-                            <Tooltip title={t('dashboard.reset_course_tooltip')}>
-                              <IconButton onClick={(e) => handleResetCourse(e, course.id)} size="small" sx={{ color: 'text.secondary', '&:hover': { color: 'error.main' } }}><RotateCcw size={16} /></IconButton>
-                            </Tooltip>
-                            <ChevronRight size={18} style={{ transform: expandedCourse === course.id ? 'rotate(90deg)' : 'none', transition: '0.3s', opacity: 0.5 }} />
-                          </Stack>
-                        </Card>
-                        
-                        <AnimatePresence>
-                          {expandedCourse === course.id && (
-                            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 50, marginTop: '8px' }}>
-                              <Box sx={{ p: 1.5, bgcolor: 'background.paper', borderRadius: '1.2rem', border: '1px solid', borderColor: 'primary.main' + '4D', maxHeight: '200px', overflowY: 'auto' }}>
-                                {course.content?.map(lesson => (
-                                  <Box key={lesson.id} onClick={() => navigate(`/courses/${course.id}/${lesson.id}`)} sx={{ p: 1.2, borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', '&:hover': { bgcolor: 'action.hover' } }}>
-                                    <Typography variant="caption">{lesson.title}</Typography>
-                                    {dbProgress[`${course.id}_${lesson.id}`] ? <CheckCircle2 size={18} color={theme.palette.success.main} /> : <PlayCircle size={18} color={theme.palette.primary.main} />}
-                                  </Box>
-                                ))}
-                              </Box>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </Box>
-                    ))}
-                  </Box>
-
-                  <Stack direction="row" spacing={1} sx={{ mb: 2, alignItems: 'center' }}>
-                    <Trophy size={22} color="#ffb700" />
-                    <Typography variant="h6" sx={{ fontWeight: 900 }}>{t('dashboard.ranking_title')}</Typography>
-                  </Stack>
-                  <Card sx={{ borderRadius: '2rem', bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', overflow: 'hidden' }}>
-                    <Tabs value={rankingTab} onChange={(_, val) => setRankingTab(val)} variant="scrollable" sx={{ bgcolor: 'action.hover', '& .MuiTabs-indicator': { bgcolor: 'primary.main' } }}>
-                      {allCourses.map(c => <Tab key={c.id} label={c.title} sx={{ fontWeight: 800, textTransform: 'none' }} />)}
-                    </Tabs>
-                    <Box sx={{ p: 4, maxHeight: '300px', overflowY: 'auto' }}>
-                      <Stack spacing={2.5}>
-                        {rankedStudentsByCourse.map((s, idx) => {
-                          const isMe = s.id === selectedStudent?.id;
-                          return (
-                            <Box key={s.id} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                              <Typography sx={{ width: 25, fontWeight: 900, color: idx < 3 ? '#ffb700' : 'text.secondary' }}>{idx + 1}</Typography>
-                              <Avatar sx={{ width: 32, height: 32, bgcolor: isMe ? 'primary.main' : 'action.disabled' }}>{s.name.charAt(0)}</Avatar>
-                              <Typography sx={{ flex: 1, fontWeight: isMe ? 900 : 400, color: isMe ? 'primary.main' : 'text.primary' }}>
-                                {s.name} {isMe && `(${t('dashboard.you')})`}
-                              </Typography>
-                              <Typography sx={{ fontWeight: 900, color: 'primary.main' }}>{getCourseProgress(allCourses[rankingTab], s.id)}%</Typography>
-                            </Box>
-                          );
-                        })}
+    <Box sx={{ bgcolor: 'background.default', color: 'text.primary', pb: 8, width: '100%', maxWidth: '100vw', overflowX: 'hidden' }}>
+      <Container maxWidth="xl" sx={{ pt: { xs: 2, md: 6 }, px: { xs: 3, sm: 1.5, md: 8, lg: 8 } }}>
+        <Box sx={{ width: '100%', overflow: 'hidden' }}>
+          {globalError && <Alert severity="error" sx={{ mb: 3, borderRadius: '1rem' }}>{globalError}</Alert>}
+          
+          <AnimatePresence mode="wait">
+            {!selectedStudent ? (
+              <motion.div key="login" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+                <Typography variant="h4" align="center" sx={{ fontWeight: 900, mb: 1 }}>{t('dashboard.title')}</Typography>
+                <Typography align="center" sx={{ opacity: 0.6, mb: { xs: 3, md: 6 } }}>{t('dashboard.subtitle')}</Typography>
+                
+                <Grid container spacing={2}>
+                  <Grid size={{ xs: 12, lg: 3 }}>
+                    <Card sx={{ p: { xs: 2, md: 4 }, borderRadius: { xs: 2, md: 2.5 }, bgcolor: 'background.paper', border: '2px dashed', borderColor: 'primary.main' + '4D', height: 'fit-content' }}>
+                      <Stack spacing={{ xs: 2, md: 3 }} component="form" onSubmit={handleCreateStudent}>
+                        <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+                          <UserPlus color={theme.palette.primary.main} />
+                          <Typography variant="h6" sx={{ fontWeight: 900 }}>{t('dashboard.create_user_title')}</Typography>
+                        </Stack>
+                        <TextField fullWidth label={t('dashboard.name_label')} variant="filled" value={newName} onChange={e => setNewName(e.target.value)} sx={{ bgcolor: 'action.hover', borderRadius: '12px' }} />
+                        <TextField fullWidth label={t('dashboard.email_label')} variant="filled" value={newEmail} onChange={e => setNewEmail(e.target.value)} sx={{ bgcolor: 'action.hover', borderRadius: '12px' }} />
+                        <TextField fullWidth label={t('dashboard.pin_label')} variant="filled" type="password" value={newPin} onChange={e => setNewPin(e.target.value)} slotProps={{ htmlInput: { maxLength: 4 } }} sx={{ bgcolor: 'action.hover', borderRadius: '12px' }} />
+                        <Button type="submit" variant="outlined" fullWidth sx={{ borderRadius: '12px', py: 1.5, borderColor: 'primary.main', color: 'primary.main', fontWeight: 800 }}>{t('dashboard.register_btn')}</Button>
                       </Stack>
+                    </Card>
+                  </Grid>
+
+                  <Grid size={{ xs: 12, lg: 9 }}>
+                    <Grid container spacing={2}>
+                      {students.map(s => (
+                        <Grid key={s.id} size={{ xs: 12, sm: 6, md: 4 }}>
+                          <StudentCard student={s} onLogin={handleLogin} onDelete={handleDeleteStudent} error={errorId === s.id} />
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </motion.div>
+            ) : (
+              <motion.div key="dash" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }}>
+                <Grid container spacing={{ xs: 2, md: 6 }}>
+                  <Grid size={{ xs: 12, md: 3 }}>
+                    <Stack spacing={2} sx={{ alignItems: 'center' }}>
+                      <Card sx={{ p: { xs: 2, md: 4 }, borderRadius: { xs: 2, md: 2 }, textAlign: 'center', bgcolor: 'background.paper', position: 'relative', border: '1px solid', borderColor: 'primary.main' + '33', minWidth: 0, maxWidth: '280px', width: '100%', mt: { xs: '20px', md: '30px !important' }}}>
+                        {actionLoading && <LinearProgress sx={{ position: 'absolute', top: 0, left: 0, right: 0 }} color="secondary" />}
+                        <Avatar sx={{ width: { xs: 40, md: 80 }, height: { xs: 40, md: 80 }, mx: 'auto', mb: 1, bgcolor: 'primary.main', fontWeight: 900, fontSize: { xs: '1rem', md: '2rem' } }}>{selectedStudent.name.charAt(0)}</Avatar>
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5, minWidth: 0, flexWrap: 'wrap' }}>
+                          <Typography variant="body2" sx={{ fontWeight: 900, minWidth: 0, wordBreak: 'break-word', fontSize: { xs: '0.85rem', md: '1.25rem' } }}>{selectedStudent.name}</Typography>
+                          <IconButton size="small" onClick={handleLogoutAction} sx={{ color: 'text.secondary', '&:hover': { color: 'error.main', bgcolor: 'action.hover' }, flexShrink: 0 }}>
+                            <LogoutIcon fontSize="small" />
+                          </IconButton>
+                        </Box>
+                        <Box sx={{ mt: { xs: 1, md: 3 }, p: 1, bgcolor: 'action.hover', borderRadius: '1rem' }}>
+                          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                            <Typography variant="caption" sx={{ opacity: 0.5, fontWeight: 800, fontSize: { xs: '0.75rem', md: '0.875rem' } }}>{t('dashboard.average')}</Typography>
+                            <Typography variant="body2" sx={{ fontWeight: 900, color: 'primary.main', fontSize: { xs: '1rem', md: '1rem' } }}>
+                              {allCourses.length > 0 ? Math.floor(allCourses.reduce((acc, c) => acc + getCourseProgress(c, selectedStudent.id), 0) / allCourses.length) : 0} punts
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </Card>
+                       
+                      <Box sx={{ height: { md: '250px' }, width: '100%', display: { xs: 'none', md: 'block' } }} />
+                      
+                      <Card sx={{ p: { xs: 2, md: 3 }, borderRadius: { xs: 2, md: 2.5 }, bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', display: { xs: 'none', md: 'block' }, maxWidth: '280px', width: '100%', mt: { xs: 0, md: '-169px !important' } }}>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 900, mb: 2 }}>{t('dashboard.progress_detail')}</Typography>
+                        <Stack spacing={2}>
+                          {allCourses.map(course => (
+                            <Box key={course.id}>
+                              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                                <Typography variant="caption" sx={{ fontWeight: 600 }}>{course.title}</Typography>
+                                <Typography variant="caption" sx={{ fontWeight: 800, color: 'primary.main' }}>{getCourseProgress(course, selectedStudent.id)}%</Typography>
+                              </Box>
+                              <LinearProgress 
+                                variant="determinate" 
+                                value={getCourseProgress(course, selectedStudent.id)} 
+                                sx={{ height: 8, borderRadius: 4, bgcolor: 'action.hover' }} 
+                              />
+                            </Box>
+                          ))}
+                        </Stack>
+                      </Card>
+                    </Stack>
+                  </Grid>
+
+                  <Grid size={{ xs: 12, md: 9}} sx={{ mt: { xs: '20px', md: '60px' } }}>
+                    <AnimatePresence>
+                      {expandedCourse && (
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          onClick={() => setExpandedCourse(null)}
+                          style={{ position: 'fixed', inset: 0, zIndex: 40, backgroundColor: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(10px)' }}
+                        />
+                      )}
+                    </AnimatePresence>
+                    
+                    <Typography variant="h6" sx={{ fontWeight: 900, mb: { xs: 2, md: 3 } }}>{t('dashboard.my_courses')}</Typography>
+                    <Grid container spacing={{ xs: 2, md: 2 }}>
+                      {allCourses.map(course => (
+                        <Grid key={course.id} size={{ xs: 12, md: 3 }}>
+                          <Box sx={{ position: 'relative' }}>
+                            <Card onClick={() => setExpandedCourse(expandedCourse === course.id ? null : course.id)} sx={{ p: { xs: 0.75, md: 3 }, cursor: 'pointer', borderRadius: { xs: 1.5, md: 2 }, bgcolor: 'background.paper', border: '2px solid', borderColor: expandedCourse === course.id ? 'primary.main' : 'transparent', transition: '0.2s', minWidth: 0, minHeight: { xs: 60, md: 100 }, position: 'relative', zIndex: expandedCourse === course.id ? 50 : 0, width: '100%' }}>
+                              <Stack spacing={{ xs: 0.75, md: 2 }}>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, flexWrap: 'nowrap' }}>
+                                  <Typography variant="body2" sx={{ fontWeight: 900, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>{course.title}</Typography>
+                                  <Box sx={{ p: 0.5, bgcolor: 'primary.main' + '1A', borderRadius: '4px', flexShrink: 0 }}><CourseIcon title={course.title} /></Box>
+                                </Box>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                  <Typography variant="caption" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.65rem' }}>{getCourseProgress(course, selectedStudent.id)} punts</Typography>
+                                  <Stack direction="row" spacing={0.25} sx={{ alignItems: "center", flexShrink: 0 }}>
+                                    <Tooltip title={t('dashboard.reset_course_tooltip')}>
+                                      <IconButton onClick={(e) => handleResetCourse(e, course.id)} size="small" sx={{ color: 'text.secondary', '&:hover': { color: 'error.main' } }}><RotateCcw size={12} /></IconButton>
+                                    </Tooltip>
+                                    <ChevronRight size={12} style={{ transform: expandedCourse === course.id ? 'rotate(90deg)' : 'none', transition: '0.3s', opacity: 0.5 }} />
+                                  </Stack>
+                                </Box>
+                              </Stack>
+                            </Card>
+                            
+                            <AnimatePresence>
+                              {expandedCourse === course.id && (
+                                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 50, marginTop: '8px' }} onClick={(e) => e.stopPropagation()}>
+                                  <Box sx={{ p: 1.5, bgcolor: 'background.paper', borderRadius: { xs: 1, md: 1.2 }, border: '1px solid', borderColor: 'primary.main' + '4D', maxHeight: '200px', overflowY: 'auto' }}>
+                                    <Stack spacing={0}>
+                                      {course.content?.map(lesson => (
+                                        <Box key={lesson.id} onClick={() => navigate(`/courses/${course.id}/${lesson.id}`)} sx={{ p: 1.2, borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', '&:hover': { bgcolor: 'action.hover' }, minWidth: 0 }}>
+                                          <Typography variant="caption" sx={{ minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{lesson.title}</Typography>
+                                          {dbProgress[`${course.id}_${lesson.id}`] ? <CheckCircle2 size={18} color={theme.palette.success.main} /> : <PlayCircle size={18} color={theme.palette.primary.main} />}
+                                        </Box>
+                                      ))}
+                                    </Stack>
+                                  </Box>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </Box>
+                        </Grid>
+                      ))}
+                    </Grid>
+
+                    <Box sx={{ 
+                      display: { xs: 'flex', md: 'none' }, 
+                      flexDirection: 'row', 
+                      alignItems: 'center', 
+                      justifyContent: 'center', 
+                      gap: 2,
+                      zIndex: 11,
+                      width: '100%',
+                      my: 4
+                    }}>
+                    
+                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '20px', justifyContent: 'center' }}>
+                      {[0, 1, 2].map((i) => (
+                        <Box
+                          key={`left-${i}`}
+                          component={motion.div}
+                          animate={{ opacity: [0, 1, 0], y: [0, 5, 10] }}
+                          transition={{ duration: 2, repeat: Infinity, delay: i * 0.3, ease: "easeInOut" }}
+                          sx={{ 
+                            mt: i === 0 ? -2 : -3, 
+                            display: 'flex',
+                            color: 'text.primary'
+                          }}
+                        >
+                          <KeyboardArrowDownIcon sx={{ fontSize: '1.2rem' }} />
+                        </Box>
+                      ))}
                     </Box>
-                  </Card>
-                </Box>
-              </Box>
-            </motion.div>
-          )}
-        </AnimatePresence>
+
+                    <Typography sx={{ 
+                      fontSize: '0.6rem', 
+                      fontWeight: 900, 
+                      letterSpacing: '0.25em', 
+                      color: 'text.primary', 
+                      textTransform: 'uppercase',
+                      mx: 1
+                    }}>
+                      LEADERBOARD
+                    </Typography>
+
+                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '20px', justifyContent: 'center' }}>
+                      {[0, 1, 2].map((i) => (
+                        <Box
+                          key={`right-${i}`}
+                          component={motion.div}
+                          animate={{ opacity: [0, 1, 0], y: [0, 5, 10] }}
+                          transition={{ duration: 2, repeat: Infinity, delay: i * 0.3, ease: "easeInOut" }}
+                          sx={{ 
+                            mt: i === 0 ? -2 : -3, 
+                            display: 'flex',
+                            color: 'text.primary'
+                          }}
+                        >
+                          <KeyboardArrowDownIcon sx={{ fontSize: '1.2rem' }} />
+                        </Box>
+                      ))}
+                    </Box>
+                  </Box>
+                    
+                    <Stack direction="row" spacing={1} sx={{ mb: { xs: 2, md: 2 }, alignItems: 'center', mt: { xs: 10, md: 19.4 }}}>
+                      <Trophy size={22} color="#ffb700" />
+                      <Typography variant="h6" sx={{ fontWeight: 900 }}>{t('dashboard.ranking_title')}</Typography>
+                    </Stack>
+                    <Card sx={{ borderRadius: { xs: 1, md: 2 }, bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', overflow: 'hidden', minWidth: 0, width: '100%' }}>
+                      <Tabs value={rankingTab} onChange={(_, val) => setRankingTab(val)} variant="scrollable" sx={{ bgcolor: 'action.hover', '& .MuiTabs-indicator': { bgcolor: 'primary.main' } }}>
+                        {allCourses.map(c => <Tab key={c.id} label={c.title} sx={{ fontWeight: 800, textTransform: 'none', minWidth: 0, whiteSpace: 'nowrap', fontSize: { xs: '0.7rem', md: '0.875rem' } } } />)}
+                      </Tabs>
+                      <Box sx={{ p: { xs: 0.5, md: 4 }, maxHeight: '300px', overflowY: 'auto' }}>
+                        <Stack spacing={{ xs: 0.5, md: 2 }}>
+                          {rankedStudentsByCourse.map((s, idx) => {
+                            const isMe = s.id === selectedStudent?.id;
+                            return (
+                              <Box key={s.id} sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0, py: { xs: 0.5, md: 0 } }}>
+                                <Typography sx={{ width: 18, fontWeight: 900, color: idx < 3 ? '#ffb700' : 'text.secondary', flexShrink: 0, fontSize: '0.7rem' }}>{idx + 1}</Typography>
+                                <Avatar sx={{ width: { xs: 20, md: 32 }, height: { xs: 20, md: 32 }, bgcolor: isMe ? 'primary.main' : 'action.disabled', flexShrink: 0, fontSize: { xs: '0.6rem', md: '0.875rem' } }}>{s.name.charAt(0)}</Avatar>
+                                <Typography sx={{ flex: 1, fontWeight: isMe ? 900 : 900, color: isMe ? 'primary.main' : 'text.primary', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: '1rem' }}>
+                                  {s.name} {isMe && `(${t('dashboard.you')})`}
+                                </Typography>
+                                <Typography sx={{ fontWeight: 900, color: 'primary.main', flexShrink: 0, fontSize: '1rem' }}>{getCourseProgress(allCourses[rankingTab], s.id)} punts</Typography>
+                              </Box>
+                            );
+                          })}
+                        </Stack>
+                      </Box>
+                    </Card>
+                  </Grid>
+                </Grid>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </Box>
       </Container>
     </Box>
   );

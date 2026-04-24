@@ -1,7 +1,7 @@
 {
   "courses": [
     {
-      "id": "python",
+      "id": "Python",
       "title": "Python",
       "description": "Master the most versatile language: from scripting to data automation.",
       "icon": "CODE",
@@ -41,7 +41,7 @@
       ]
     },
     {
-      "id": "react",
+      "id": "React",
       "title": "React",
       "description": "Build modern interfaces with components and hooks.",
       "icon": "CONNECT_O",
@@ -72,8 +72,8 @@
       ]
     },
     {
-      "id": "machine-learning",
-      "title": "Machine Learning",
+      "id": "ML",
+      "title": "ML",
       "description": "Explore predictive models and AI.",
       "icon": "CLUSTER",
       "image": "https://upload.wikimedia.org/wikipedia/commons/0/05/Scikit_learn_logo_small.svg",

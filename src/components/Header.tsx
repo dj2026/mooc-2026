@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
-import { Menu as MenuIcon, Logout as LogoutIcon, Close as CloseIcon } from '@mui/icons-material';
+import { Menu as MenuIcon, Close as CloseIcon } from '@mui/icons-material';
 import { Rocket, GraduationCap } from 'lucide-react'; 
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -124,7 +124,6 @@ export function Header() {
                 <Button component={RouterLink} to="/dashboards/student" startIcon={<GraduationCap size={18} />} sx={{ fontWeight: 800, color: 'text.primary', textTransform: 'none', px: 2, bgcolor: 'action.hover', borderRadius: '12px' }}>
                   {t('dashboard.my_progress')}
                 </Button>
-                <IconButton onClick={handleLogout} sx={{ color: 'text.secondary' }}><LogoutIcon fontSize="small" /></IconButton>
               </Stack>
             ) : (
               <Button onClick={() => navigate('/dashboards/student')} sx={commonButtonStyle}>{t('auth.access')}</Button>

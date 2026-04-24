@@ -13,8 +13,8 @@ export default {
     my_progress: "Mi Progreso",
     my_courses: "Mis cursos",
     completed: "completado",
-    average: "Media Global",
-    ranking_title: "Ranking de la Clase",
+    average: "puntos totales",
+    ranking_title: "Ranking",
     you: "Tú",
     create_user_title: "Nuevo Alumno",
     name_label: "Nombre completo",
@@ -22,7 +22,8 @@ export default {
     pin_label: "PIN (4 dígitos)",
     register_btn: "Registrar Alumno",
     reset_course_confirm: "¿Estás seguro de que quieres reiniciar el progreso de este curso?",
-    reset_course_tooltip: "Reiniciar curso"
+    reset_course_tooltip: "Reiniciar curso",
+    progress_detail: "Detalle del Progreso"
   },
   home: {
     featured_title: "Cursos Destacados",
