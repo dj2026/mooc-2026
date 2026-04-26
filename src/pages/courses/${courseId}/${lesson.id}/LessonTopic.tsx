@@ -59,7 +59,6 @@ export default function LessonTopic() {
       });
   }, []);
 
-  // Filtrem per obtenir NOMÉS la lliçó actual de la URL
   const course = useMemo(() => apiData?.courses?.find((c) => c.id === courseId), [apiData, courseId]);
   const lesson = useMemo(() => course?.content?.find((l) => l.id === lessonId), [course, lessonId]);
   const currentIndex = useMemo(() => course?.content?.findIndex((l) => l.id === lessonId) ?? -1, [course, lessonId]);
@@ -70,7 +69,7 @@ export default function LessonTopic() {
   return (
     <Box sx={{
       position: 'fixed', inset: 0,
-      height: isMobile ? '96vh' : '92vh',
+      height: isMobile ? '87.2vh' : '92vh',
       mt: isMobile ? 4 : 10,
       width: '100vw',
       display: 'flex', flexDirection: 'column',
@@ -171,9 +170,8 @@ export default function LessonTopic() {
               <Typography sx={{ 
                 color: 'text.primary', 
                 fontSize: '1.05rem', 
-                lineHeight: 1.8, 
-                whiteSpace: 'pre-line',
-                maxWidth: '900px' 
+                lineHeight: 1.5, 
+                maxWidth: '800px' 
               }}>
                  {getText(lesson.theoryInstructions)}
               </Typography>
@@ -181,12 +179,12 @@ export default function LessonTopic() {
 
             {/* Objectiu / Repte */}
             <Box sx={{ 
-              p: 3, 
+              p: 2, 
               borderRadius: 3, 
               border: '2px solid', 
               borderColor: 'primary.main', 
               bgcolor: alpha(theme.palette.primary.main, 0.03),
-              maxWidth: '800px'
+              maxWidth: '500px'
             }}>
               <Typography sx={{ fontSize: '0.8rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.15em', color: 'primary.main', mb: 1.5 }}>
                 El teu repte
@@ -201,7 +199,7 @@ export default function LessonTopic() {
 
       {/* Footer navegació */}
       <Box sx={{ 
-        height: 64, 
+        height: 60, 
         flexShrink: 0, 
         borderTop: '1px solid', 
         borderColor: 'divider', 
