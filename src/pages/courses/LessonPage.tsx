@@ -170,7 +170,7 @@ export default function LessonPage() {
           </Box>
 
           {/* 3r: PROMPT (Console) */}
-          <Box sx={{ width: '100%', bgcolor: 'background.paper', borderTop: '1px solid', borderColor: 'divider', flexShrink: 0, height: 190, mb:5}}>
+          <Box sx={{ width: '100%', bgcolor: 'background.paper', borderTop: '1px solid', borderColor: 'divider', flexShrink: 0, height: 380}}>
             <Box sx={{ height: 24, px: 1, bgcolor: 'action.hover', display: 'flex', alignItems: 'center' }}>
               <Terminal size={10} style={{opacity: 0.4, marginRight: 4}} />
               <Typography sx={{ fontSize: 8, color: 'text.secondary' }}>CONSOLE</Typography>
@@ -183,7 +183,7 @@ export default function LessonPage() {
         </Box>
 
         {/* Buttons - moved up 5px */}
-        <Box sx={{ height: 70, display: 'flex', gap: 2, p: 2, borderTop: '1px solid', borderColor: 'divider', bgcolor: 'background.paper', position: 'relative', bottom: 40 }}>
+        <Box sx={{ height: 70, display: 'flex', gap: 2, p: 2, borderTop: '1px solid', borderColor: 'divider', bgcolor: 'background.paper', position: 'relative', bottom: 140 }}>
           <Button onClick={handlePrevious} disabled={currentLessonIndex <= 0} fullWidth variant="outlined" sx={{ fontSize: '0.65rem', minHeight: 36 }}><ChevronLeft size={12}/> Ant</Button>
           <Button onClick={handleRunTests} fullWidth variant="contained" sx={{ fontSize: '0.65rem', minHeight: 36 }}>RUN</Button>
           <Button onClick={handleNext} disabled={!course || currentLessonIndex >= course.content.length - 1} fullWidth variant="outlined" sx={{ fontSize: '0.65rem', minHeight: 36 }}>Seg <ChevronRight size={12}/></Button>

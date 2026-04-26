@@ -14,7 +14,7 @@
           "title": "1. El teu primer Component",
           "description": "Primera línia de codi",
           "theoryInstructions": "Python utilitza la funció print('') per mostrar text a la pantalla. Avalua l'expressió dins dels parèntesis i mostra el resultat. Pots imprimir cadenes de text, números, variables i expressions. La funció print() és una de les eines més utilitzades a Python — perfecta per depurar codi i mostrar resultats a l'usuari.",
-          "exerciseInstructions": "Utilitza la funció print('') amb una cadena de text entre cometes. Assegura't d'envoltar el text amb cometes simples o dobles dins dels parèntesis.",
+          "exerciseInstructions": "Assegura't d'envoltar el text amb cometes simples o dobles dins dels parèntesis.",
           "challenge": "Imprimeix a la pantalla: Hola Python",
           "initialCode": "# El teu codi aquí\n",
           "solution": "print('Hola Python')"
