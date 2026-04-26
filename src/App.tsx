@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import Home from './pages/Home';
 import CourseLessons from './pages/courses/CourseLessons';
 import LessonPage from './pages/courses/LessonPage';
+import LessonTopic from './pages/courses/${courseId}/${lesson.id}/LessonTopic';
 import StudentDashboard from './pages/dashboards/StudentDashboard';
 import { Header } from './components/Header';
 
@@ -29,6 +30,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/courses/:courseId" element={<CourseLessons />} />
         <Route path="/courses/:courseId/:lessonId" element={<LessonPage />} />
+        <Route path="/courses/:courseId/:lessonId/topic" element={<LessonTopic />} />
         <Route path="/dashboards/student" element={<StudentDashboard />} />
       </Routes>
     </Box>

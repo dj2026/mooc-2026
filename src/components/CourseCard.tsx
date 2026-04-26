@@ -108,16 +108,7 @@ export function CourseCard({ course, index }: CourseCardProps) {
             }}
           >
             {/* Secció superior del contingut */}
-            <Box>
-              <Box sx={{ display: 'flex', gap: 0.5, mb: { xs: 1, md: 2.5 } }}>
-                <Badge mode="standard" sx={{ fontSize: { xs: '0.6rem', md: '0.55rem' } }}>
-                  {course.level}
-                </Badge>
-                <Badge mode="outline" sx={{ fontSize: { xs: '0.6rem', md: '0.65rem' } }}>
-                  {course.duration}
-                </Badge>
-              </Box>
-              
+            <Box>            
               <CardTitle sx={{ 
                 mb: 1, 
                 fontSize: { xs: '1.05rem', md: '1.4rem' },
@@ -137,22 +128,8 @@ export function CourseCard({ course, index }: CourseCardProps) {
               </CardDescription>
             </Box>
 
-            {/* Secció inferior (Instructor i Acció) - Més compacta a mòbil XS */}
+            {/* Secció inferior (ENROLL) */}
             <Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: { xs: 1.5, md: 3 } }}>
-                <Divider sx={{ width: 16, borderColor: 'primary.main' + '4D', borderBottomWidth: 2 }} />
-                <Typography variant="caption" sx={{ 
-                  color: 'text.secondary', 
-                  fontWeight: 700, 
-                  textTransform: 'uppercase', 
-                  letterSpacing: '0.05em',
-                  // Font de l'instructor més petita en XS
-                  fontSize: { xs: '0.55rem', md: '0.7rem' }
-                }}>
-                  {t('course.by')} {course.instructor}
-                </Typography>
-              </Box>
-              
               <Box sx={{ 
                 display: 'flex', 
                 alignItems: 'center', 
@@ -162,7 +139,6 @@ export function CourseCard({ course, index }: CourseCardProps) {
                 borderColor: 'divider' 
               }}>
                 <Typography sx={{ 
-                  // Mida del text d'acció "Enroll" més petita en XS
                   fontSize: { xs: '0.6rem', md: '0.8rem' }, 
                   fontWeight: 900, 
                   letterSpacing: '0.15em', 

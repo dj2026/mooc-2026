@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Box, Typography, Button, IconButton, alpha, CircularProgress, useTheme, useMediaQuery } from '@mui/material';
 import { api } from '../../services/api';
 
-interface Lesson { id: string; title: string; description: string; instructions: string; challenge: string; initialCode: string; solution: string; }
+interface Lesson { id: string; title: string; description: string; challenge: string; initialCode: string; solution: string; exerciseInstructions?: string; }
 interface Course { id: string; title: string; content: Lesson[]; }
 interface Student { id: string; name: string; }
 interface DataStructure { courses: Course[]; students: Student[]; }
@@ -134,7 +134,7 @@ export default function LessonPage() {
         {progressPercent > 0 && <Box sx={{ height: 4, bgcolor: 'action.hover' }}><Box sx={{ height: '100%', width: `${progressPercent}%`, bgcolor: 'primary.main' }} /></Box>}
         
         {/* Header */}
-        <Box sx={{ height: 48, borderBottom: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', px: 1, justifyContent: 'space-between', bgcolor: 'background.paper' }}>
+        <Box sx={{ height: 48, borderBottom: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', px: 1, justifyContent: 'space-between', mt:5}}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
             <IconButton onClick={() => navigate(-1)} sx={{ color: 'text.secondary' }}><ChevronLeft /></IconButton>
           </Box>
@@ -147,11 +147,11 @@ export default function LessonPage() {
         </Box>
 
         {/* Content - Vertical Stack */}
-        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', width: '100%' }}>
+        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', width: '100%'}}>
           {/* 1r: ENUNCIAT */}
-          <Box sx={{ width: '100%', bgcolor: 'background.paper', p: 3, borderBottom: '1px solid', borderColor: 'divider', flexShrink: 0 }}>
+          <Box sx={{ width: '100%', bgcolor: 'background.paper', p: 3, borderBottom: '1px solid', borderColor: 'divider', flexShrink: 0}}>
             <Typography sx={{ fontSize: '1rem', fontWeight: 700, mb: 0.5, lineHeight: 1.3 }}>{baseLesson.title}</Typography>
-            <Typography sx={{ fontSize: '0.8rem', color: 'text.secondary', lineHeight: 1.4, mb: 1 }}>{baseLesson.instructions}</Typography>
+            <Typography sx={{ fontSize: '0.8rem', color: 'text.secondary', lineHeight: 1.5, mb: 2 }}>{baseLesson.exerciseInstructions || "No hi ha instruccions disponibles."}</Typography>
             <Box sx={{ p: 1, bgcolor: alpha(theme.palette.primary.main, 0.05), borderRadius: 1 }}>
               <Typography sx={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', mb: 0.5 }}>Objectiu</Typography>
               <Typography sx={{ fontFamily: 'monospace', fontSize: '0.75rem' }}>{baseLesson.challenge}</Typography>
@@ -170,7 +170,7 @@ export default function LessonPage() {
           </Box>
 
           {/* 3r: PROMPT (Console) */}
-          <Box sx={{ width: '100%', bgcolor: 'background.paper', borderTop: '1px solid', borderColor: 'divider', flexShrink: 0, height: 150, mb:10}}>
+          <Box sx={{ width: '100%', bgcolor: 'background.paper', borderTop: '1px solid', borderColor: 'divider', flexShrink: 0, height: 190, mb:5}}>
             <Box sx={{ height: 24, px: 1, bgcolor: 'action.hover', display: 'flex', alignItems: 'center' }}>
               <Terminal size={10} style={{opacity: 0.4, marginRight: 4}} />
               <Typography sx={{ fontSize: 8, color: 'text.secondary' }}>CONSOLE</Typography>
@@ -183,7 +183,7 @@ export default function LessonPage() {
         </Box>
 
         {/* Buttons - moved up 5px */}
-        <Box sx={{ height: 70, display: 'flex', gap: 2, p: 2, borderTop: '1px solid', borderColor: 'divider', bgcolor: 'background.paper', position: 'relative', bottom: 85 }}>
+        <Box sx={{ height: 70, display: 'flex', gap: 2, p: 2, borderTop: '1px solid', borderColor: 'divider', bgcolor: 'background.paper', position: 'relative', bottom: 40 }}>
           <Button onClick={handlePrevious} disabled={currentLessonIndex <= 0} fullWidth variant="outlined" sx={{ fontSize: '0.65rem', minHeight: 36 }}><ChevronLeft size={12}/> Ant</Button>
           <Button onClick={handleRunTests} fullWidth variant="contained" sx={{ fontSize: '0.65rem', minHeight: 36 }}>RUN</Button>
           <Button onClick={handleNext} disabled={!course || currentLessonIndex >= course.content.length - 1} fullWidth variant="outlined" sx={{ fontSize: '0.65rem', minHeight: 36 }}>Seg <ChevronRight size={12}/></Button>
@@ -221,12 +221,12 @@ export default function LessonPage() {
       <Box sx={{ flex: 1, display: 'flex', overflow: 'hidden', minHeight: 0 }}>
         {/* COLUMNA 1: Enunciat (18%) */}
         <Box sx={{ width: '20%', borderRight: '1px solid', borderColor: 'divider', display: 'flex', flexDirection: 'column', bgcolor: 'background.paper' }}>
-          <Box sx={{ flex: 1, p: 2, overflowY: 'auto' }}>
-            <Typography sx={{ fontSize: '0.9rem', fontWeight: 700, mb: 1 }}>{baseLesson.title}</Typography>
-            <Typography sx={{ fontSize: '0.8rem', color: 'text.secondary', lineHeight: 1.5, mb: 2 }}>{baseLesson.instructions}</Typography>
-            <Box sx={{ p: 1.5, bgcolor: alpha(theme.palette.primary.main, 0.05), borderRadius: 1.5, border: '1px solid', borderColor: alpha(theme.palette.primary.main, 0.2), mb: 2 }}>
+          <Box sx={{ flex: 1, p: 2, overflowY: 'auto'}}>
+            <Typography sx={{ fontSize: '1rem', fontWeight: 700, mb: 3 , mt:3 }}>{baseLesson.title}</Typography>
+            <Typography sx={{ fontSize: '1rem', color: 'text.secondary', lineHeight: 2, mb: 2 }}>{baseLesson.exerciseInstructions || "No hi ha instruccions disponibles."}</Typography>
+            <Box sx={{ p: 1.5, bgcolor: alpha(theme.palette.primary.main, 0.05), borderRadius: 1, border: '3px solid', borderColor: alpha(theme.palette.primary.main, 0.5), mt:5}}>
               <Typography sx={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', mb: 0.5 }}>Objectiu</Typography>
-              <Typography sx={{ fontFamily: 'monospace', fontSize: '0.75rem' }}>{baseLesson.challenge}</Typography>
+              <Typography sx={{ fontFamily: 'monospace', fontSize: '1rem' }}>{baseLesson.challenge}</Typography>
             </Box>
             {currentMode === 'assist' && <Button fullWidth onClick={() => setHintVisible(!hintVisible)} sx={{ fontSize: '0.75rem', mb: 1.5, minHeight: 32 }}>{hintVisible ? 'Amagar Pista' : 'Necessites Ajuda?'}</Button>}
             <AnimatePresence>{hintVisible && <motion.div initial={{opacity:0}} animate={{opacity:1}}><Box sx={{ p: 1.5, bgcolor: alpha('#3b82f6',0.1), borderRadius: 1.5, fontSize: '0.75rem', color: '#93c5fd' }}>💡 {baseLesson.solution.slice(0,16)}...</Box></motion.div>}</AnimatePresence>

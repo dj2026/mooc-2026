@@ -3,137 +3,129 @@
     {
       "id": "Python",
       "title": "Python",
-      "description": "Master the most versatile language: from scripting to data automation.",
+      "description": "Domina el llenguatge més versàtil: des de scripting fins a automatització de dades.",
       "icon": "CODE",
       "image": "https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg",
       "logoSize": 80,
       "level": "Beginner",
-      "duration": "12 weeks",
-      "instructor": "",
       "content": [
         {
           "id": "py-1",
-          "title": "1. Hello World",
-          "description": "Your first line of code",
-          "instructions": "Python uses the print() function to display text on the screen.",
-          "challenge": "Print to the screen: Hello Python",
-          "initialCode": "# Your code here\n",
-          "solution": "print('Hello Python')"
+          "title": "1. El teu primer Component",
+          "description": "Primera línia de codi",
+          "theoryInstructions": "Python utilitza la funció print('') per mostrar text a la pantalla. Avalua l'expressió dins dels parèntesis i mostra el resultat. Pots imprimir cadenes de text, números, variables i expressions. La funció print() és una de les eines més utilitzades a Python — perfecta per depurar codi i mostrar resultats a l'usuari.",
+          "exerciseInstructions": "Utilitza la funció print('') amb una cadena de text entre cometes. Assegura't d'envoltar el text amb cometes simples o dobles dins dels parèntesis.",
+          "challenge": "Imprimeix a la pantalla: Hola Python",
+          "initialCode": "# El teu codi aquí\n",
+          "solution": "print('Hola Python')"
         },
         {
           "id": "py-2",
-          "title": "2. Numerical Variables",
-          "description": "Assigning values",
-          "instructions": "You can store numbers in variables simply by using the equals sign (=).",
-          "challenge": "Create a variable 'points' with the value 100.",
-          "initialCode": "# Define the variable\n",
-          "solution": "points = 100"
-        },
-        {
-          "id": "py-3",
-          "title": "3. Hello World",
-          "description": "Your first line of code",
-          "instructions": "Python uses the print() function to display text on the screen.",
-          "challenge": "Print to the screen: Hello Python",
-          "initialCode": "# Your code here\n",
-          "solution": "print('Hello Python')"
-        }       
+          "title": "2. Variables Numèriques",
+          "description": "Assignant valors",
+          "theoryInstructions": "A Python, les variables són contenidors per emmagatzemar dades. A diferència d'altres llenguatges, Python no requereix declarar una variable — es crea en el moment que li assignes un valor amb el signe igual (=). Pots emmagatzemar enters, decimals, cadenes de text i molt més. Els noms de les variables distingeixen majúscules i minúscules i haurien de ser descriptius.",
+          "exerciseInstructions": "Crea una variable escrivint el seu nom, seguit de = i el valor que vols assignar. Per a números, no calen cometes. Simplement escriu el nom de la variable i el valor numèric directament.",
+          "challenge": "Crea una variable 'punts' amb el valor 100.",
+          "initialCode": "# Defineix la variable\n",
+          "solution": "punts = 100"
+        }
       ]
     },
     {
       "id": "React",
       "title": "React",
-      "description": "Build modern interfaces with components and hooks.",
+      "description": "Construeix interfícies modernes amb components i hooks.",
       "icon": "CONNECT_O",
       "image": "https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg",
       "logoSize": 90,
       "level": "Intermediate",
-      "duration": "8 weeks",
-      "instructor": "",
       "content": [
         {
           "id": "re-1",
-          "title": "1. Basic Components",
-          "description": "JSX and Returns",
-          "instructions": "A React component must always return a JSX element.",
-          "challenge": "Make the component return an <h1> element with the text 'Welcome'.",
-          "initialCode": "export default function App() {\n  return (\n    // Code here\n  );\n}",
-          "solution": "<h1>Welcome</h1>"
+          "title": "1. Components Bàsics",
+          "description": "JSX i Retorns",
+          "theoryInstructions": "Els components de React són els blocs de construcció de qualsevol aplicació React. Un component és una funció JavaScript que retorna JSX — una sintaxi que sembla HTML però en realitat és JavaScript. Els components et permeten dividir la interfície en peces independents i reutilitzables. Cada component ha de retornar un únic element arrel, i els noms dels components han de començar amb majúscula.",
+          "exerciseInstructions": "Defineix un component de funció que retorni un element JSX. Assegura't que el nom del component comenci amb majúscula. La instrucció return ha de contenir un únic element JSX arrel — embolica múltiples elements en una etiqueta pare si cal.",
+          "challenge": "Fes que el component retorni un element <h1> amb el text 'Benvingut'.",
+          "initialCode": "export default function App() {\n  return (\n    // Codi aquí\n  );\n}",
+          "solution": "<h1>Benvingut</h1>"
         },
         {
           "id": "re-2",
-          "title": "2. Text Props",
-          "description": "Passing data",
-          "instructions": "Props allow you to pass information to components.",
-          "challenge": "Return a paragraph <p> containing the 'name' prop.",
-          "initialCode": "function Greet({ name }) {\n  return (\n    // Code here\n  );\n}",
-          "solution": "<p>{name}</p>"
+          "title": "2. Props de Text",
+          "description": "Passant dades",
+          "theoryInstructions": "Les props (abreviatura de propietats) són la manera de passar dades d'un component pare a un component fill. Són de només lectura i flueixen en una sola direcció — del pare al fill. Les props poden ser qualsevol valor JavaScript: cadenes, números, arrays, objectes o fins i tot funcions. S'accedeix a elles com a paràmetre objecte a la funció del component.",
+          "exerciseInstructions": "Per usar una prop dins d'un component, referencia-la des del paràmetre de la funció usant desestructuració o notació de punt. Dins del JSX, embolica les expressions JavaScript entre claus per renderitzar valors dinàmics.",
+          "challenge": "Retorna un paràgraf <p> que contingui la prop 'nom'.",
+          "initialCode": "function Saluda({ nom }) {\n  return (\n    // Codi aquí\n  );\n}",
+          "solution": "<p>{nom}</p>"
         }
       ]
     },
     {
       "id": "ML",
       "title": "ML",
-      "description": "Explore predictive models and AI.",
+      "description": "Explora models predictius i intel·ligència artificial.",
       "icon": "CLUSTER",
       "image": "https://upload.wikimedia.org/wikipedia/commons/0/05/Scikit_learn_logo_small.svg",
       "logoSize": 110,
-      "level": "Advanced",
-      "duration": "16 weeks",
-      "instructor": "",
       "content": [
         {
           "id": "ml-1",
-          "title": "1. Definition of ML",
-          "description": "Concepts",
-          "instructions": "ML is the study of algorithms that learn from data.",
-          "challenge": "Create a variable 'learning' with value 'active'.",
-          "initialCode": "# Start here\n",
-          "solution": "learning = 'active'"
+          "title": "1. Definició de ML",
+          "description": "Conceptes",
+          "theoryInstructions": "L'aprenentatge automàtic (Machine Learning) és una branca de la intel·ligència artificial on els sistemes aprenen de les dades per millorar el seu rendiment sense ser programats explícitament. En lloc de seguir regles fixes, els models de ML identifiquen patrons en les dades i fan prediccions o decisions. Hi ha tres tipus principals: aprenentatge supervisat, no supervisat i per reforç.",
+          "exerciseInstructions": "Per a aquest exercici, crea una variable Python que representi el tipus d'aprenentatge que s'utilitza. Usa un valor de cadena descriptiu que reflecteixi el concepte que acabes d'estudiar.",
+          "challenge": "Crea una variable 'aprenentatge' amb el valor 'actiu'.",
+          "initialCode": "# Comença aquí\n",
+          "solution": "aprenentatge = 'actiu'"
+        },
+        {
+          "id": "ml-2",
+          "title": "2. Dades d'Entrenament",
+          "description": "Alimentant el model",
+          "theoryInstructions": "Les dades d'entrenament són el conjunt de dades que s'utilitza per ensenyar un model d'aprenentatge automàtic. La qualitat i quantitat de les dades d'entrenament afecten directament el rendiment del model. Les dades es divideixen habitualment en un conjunt d'entrenament (per ensenyar el model) i un conjunt de prova (per avaluar-lo). Les característiques (features) són les variables d'entrada i les etiquetes (labels) són les sortides esperades en l'aprenentatge supervisat.",
+          "exerciseInstructions": "Crea una llista que representi un petit conjunt de dades d'entrenament. Cada element de la llista hauria de ser un número que representi un punt de dades. Això simula alimentar dades en brut a un model abans del processament.",
+          "challenge": "Crea una llista anomenada 'dades_entrenament' amb els valors [1, 2, 3, 4, 5].",
+          "initialCode": "# Defineix les teves dades d'entrenament\n",
+          "solution": "dades_entrenament = [1, 2, 3, 4, 5]"
         }
       ]
     },
     {
       "id": "springboot",
       "title": "Spring",
-      "description": "Backend with scalable Java.",
+      "description": "Backend amb Java escalable.",
       "icon": "DATABASE",
       "image": "https://upload.wikimedia.org/wikipedia/commons/4/44/Spring_Framework_Logo_2018.svg",
       "logoSize": 100,
-      "level": "Intermediate",
-      "duration": "10 weeks",
-      "instructor": "",
       "content": [
         {
           "id": "sp-1",
-          "title": "1. Annotations",
-          "description": "Controllers",
-          "instructions": "We use @RestController to define APIs.",
-          "challenge": "Write the main Spring Boot annotation.",
-          "initialCode": "",
+          "title": "1. Anotacions",
+          "description": "Controladors",
+          "theoryInstructions": "Spring Boot utilitza anotacions per configurar i connectar components de l'aplicació sense XML. Les anotacions són marcadors especials que es col·loquen sobre classes o mètodes i indiquen al framework Spring com gestionar-los. Les més comunes són @SpringBootApplication per inicialitzar l'aplicació, @RestController per definir endpoints d'API, i @RequestMapping per mapejar rutes HTTP.",
+          "exerciseInstructions": "Escriu l'anotació principal de Spring Boot que va sobre la classe principal de l'aplicació. Aquesta anotació combina @Configuration, @EnableAutoConfiguration i @ComponentScan en una sola drecera convenient.",
+          "challenge": "Escriu l'anotació principal de Spring Boot.",
+          "initialCode": "// Escriu l'anotació aquí\n",
           "solution": "@SpringBootApplication"
+        },
+        {
+          "id": "sp-2",
+          "title": "2. Controladors REST",
+          "description": "Construint APIs",
+          "theoryInstructions": "Un controlador REST a Spring Boot gestiona les peticions HTTP i retorna dades directament al client, normalment en format JSON. L'anotació @RestController combina @Controller i @ResponseBody, és a dir, el valor de retorn de cada mètode s'escriu directament a la resposta HTTP. Les peticions HTTP específiques es mapegen usant @GetMapping, @PostMapping i anotacions similars.",
+          "exerciseInstructions": "Anota una classe amb @RestController per definir-la com a controlador d'API REST. Després afegeix un mètode anotat amb @GetMapping per gestionar peticions GET en un camí específic i retornar una resposta de text.",
+          "challenge": "Crea un controlador REST amb un endpoint GET que retorni 'Hola Spring'.",
+          "initialCode": "// Defineix el teu controlador aquí\n",
+          "solution": "@RestController\npublic class HolaControlador {\n  @GetMapping(\"/hola\")\n  public String hola() { return \"Hola Spring\"; }\n}"
         }
       ]
     }
   ],
   "students": [
-    {
-      "id": "std-01",
-      "name": "Marc",
-      "code": "1",
-      "email": "Marc@example.com"
-    },
-    {
-      "id": "std-02",
-      "name": "Jordi",
-      "code": "2",
-      "email": "Jordi@example.com"
-    },
-    {
-      "id": "std-03",
-      "name": "Miquel",
-      "code": "3",
-      "email": "Miquel@example.com"
-    }
+    {"id": "std-01","name": "Marc","code": "1","email": "marc@example.com"},
+    {"id": "std-02","name": "Jordi","code": "2","email": "jordi@example.com"},
+    {"id": "std-03","name": "Miquel","code": "3","email": "miquel@example.com"}
   ]
 }
