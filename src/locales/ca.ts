@@ -1,6 +1,6 @@
 export default{
   auth: {
-    login: "Iniciar Sessió",
+    login: "login",
     logout: "Sortir",
     start: "Inici",
     login_students: "Accés Alumnes",
@@ -16,7 +16,7 @@ export default{
     average: "punts totals",
     ranking_title: "Rànquing",
     you: "Tu",
-    create_user_title: "Nou Alumne",
+    create_user_title: "Registrat",
     name_label: "Nom complet",
     email_label: "Correu electrònic",
     pin_label: "PIN (4 dígits)",

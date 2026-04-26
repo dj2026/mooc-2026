@@ -1,25 +1,18 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { 
-  PlayCircle, ChevronRight, CheckCircle2, Loader2, Lock, 
-  Code2, Cpu, Globe, Database, Terminal, Layers, Trophy, RotateCcw, 
-  UserPlus, Trash2, X, Check
-} from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Box, Container, Typography, Card, TextField, Button, Avatar, 
-  LinearProgress, Stack, Alert, Tabs, Tab, IconButton, Tooltip, useTheme
-} from '@mui/material';
+import {useState, useEffect, useMemo, useCallback} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {PlayCircle, ChevronRight, CheckCircle2, Loader2, Lock, Code2, Cpu, Globe, Database, Terminal, Layers, Trophy, RotateCcw, UserPlus, Trash2, X, Check} from 'lucide-react';
+import {motion, AnimatePresence} from 'framer-motion';
+import {Box, Container, Typography, Card, TextField, Button, Avatar, LinearProgress, Stack, Alert, Tabs, Tab, IconButton, Tooltip, useTheme} from '@mui/material';
 import Grid from '@mui/material/Grid';
 import LogoutIcon from '@mui/icons-material/Logout';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { api } from '../../services/api';
+import {api} from '../../services/api';
 import localData from '../../../public/data.json';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 interface Lesson { id: string; title: string; }
 interface Course { id: string; title: string; content?: Lesson[]; }
-interface Student { id: string; name: string; code: string; email: string; average?: number; }
+interface Student { id: string; name: string; code: string; email: string; average?: number; role?: 'student' | 'teacher'; }
 
 function StudentCard({ student, onLogin, onDelete, error }: { 
   student: Student, onLogin: (s: Student, code: string) => void, onDelete: (id: string, pin: string) => boolean, error: boolean 
@@ -43,8 +36,9 @@ function StudentCard({ student, onLogin, onDelete, error }: {
     <motion.div style={{ position: 'relative' }} whileHover={{ y: -5 }} animate={error ? { x: [-10, 10, -10, 10, 0] } : {}} transition={{ duration: 0.4 }}>
       <Box sx={{ position: 'absolute', top: 1.5, right: 1.5, zIndex: 10 }}>
         {!isDeleting ? (
-          <IconButton onClick={(e) => { e.stopPropagation(); setIsDeleting(true); }} size="small" sx={{ color: 'text.secondary', '&:hover': { color: 'error.main' } }}>
-            <Trash2 size={18} />
+          <IconButton onClick={(e) => { e.stopPropagation(); setIsDeleting(true); }} size="small" sx={{ bgcolor: 'transparent !important', '&:hover': { bgcolor: 'transparent !important' }, '&:hover svg': { color: 'error.main' } }}>
+            <Box sx={{ display: { xs: 'flex', md: 'none' } }}><Trash2 size={14} /></Box>
+            <Box sx={{ display: { xs: 'none', md: 'flex' }, mt:2, ml:-5 }}><Trash2 size={18} /></Box>
           </IconButton>
         ) : (
           <Stack direction="row" spacing={1} sx={{ bgcolor: 'background.paper', p: 0.5, borderRadius: '8px', border: '1px solid', borderColor: 'error.main', alignItems: 'center' }}>
@@ -55,12 +49,12 @@ function StudentCard({ student, onLogin, onDelete, error }: {
         )}
       </Box>
 
-      <Card sx={{ p: { xs: 2, md: 4 }, display: 'flex', flexDirection: 'column', alignItems: 'center', borderRadius: { xs: 3, md: 10 }, border: '2px solid', borderColor: error ? 'error.main' : 'divider', bgcolor: 'background.paper', backdropFilter: 'blur(20px)', minWidth: 0, height: '100%', transition: 'all 0.3s ease', '&:hover': { borderColor: 'primary.main' } }}>
-        <Avatar sx={{ width: { xs: 60, md: 80 }, height: { xs: 60, md: 80 }, mb: 2, bgcolor: 'primary.main', fontSize: { xs: '1.5rem', md: '2.2rem' }, fontWeight: 900, border: '3px solid', borderColor: 'divider' }}>{student.name.charAt(0)}</Avatar>
-        <Typography variant="h6" sx={{ fontWeight: 900, mb: 3, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%', textAlign: 'center' }}>{student.name}</Typography>
-        <Stack spacing={2} sx={{ width: '100%' }}>
-          <TextField fullWidth type="password" placeholder="PIN" value={pin} onChange={(e) => setPin(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && onLogin(student, pin)} autoComplete="off" sx={{ '& .MuiOutlinedInput-root': { borderRadius: 20 } }} />
-          <Button variant="contained" fullWidth size="large" onClick={() => onLogin(student, pin)} startIcon={<Lock size={18} />} sx={{ borderRadius: 20, py: 1.5, fontWeight: 900 }}>{t('auth.login')}</Button>
+      <Card sx={{ p: { xs: 1, md: 3}, display: 'flex', flexDirection: 'column', alignItems: 'center', borderRadius: {md: 10 }, border: '2px solid white', borderColor: error ? 'error.main' : 'divider', minWidth: 0, height: '100%', '&:hover': { borderColor: 'primary.main' } }}>
+        <Avatar sx={{ width: { xs: 30, md: 60 }, height: { xs: 30, md: 60 }, bgcolor: 'primary.main', fontSize: { xs: '1rem', md: '2rem' }, fontWeight: 900, borderColor: 'divider' }}>{student.name.charAt(0)}</Avatar>
+        <Typography variant="h6" sx={{ fontWeight: 900, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%', textAlign: 'center' }}>{student.name}</Typography>
+        <Stack spacing={1} sx={{ width: '100%' }}>
+          <TextField fullWidth type="password" placeholder="PIN" value={pin} onChange={(e) => setPin(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && onLogin(student, pin)} autoComplete="off"/>
+          <Button variant="contained" fullWidth size="large" onClick={() => onLogin(student, pin)} startIcon={<Lock size={18} />}>{t('auth.login')}</Button>
         </Stack>
       </Card>
     </motion.div>
@@ -92,11 +86,11 @@ export default function StudentDashboard() {
   const [errorId, setErrorId] = useState<string | null>(null);
   const [expandedCourse, setExpandedCourse] = useState<string | null>(null);
   const [rankingTab, setRankingTab] = useState(0);
-
+  const [showCreateForm, setShowCreateForm] = useState(false);
   const [newName, setNewName] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [newPin, setNewPin] = useState("");
-
+  const [newRole, setNewRole] = useState<'student' | 'teacher'>('student');
   const fetchProgress = useCallback(async (studentId: string) => {
     try {
       setActionLoading(true);
@@ -111,34 +105,25 @@ export default function StudentDashboard() {
 
   useEffect(() => {
     const initData = async () => {
-      try {
-        setLoading(true);
-        const jsonStudents = localData.students || [];
-        setAllCourses(localData.courses || []);
+      try {setLoading(true);
+        const jsonStudents = localData.students || [];setAllCourses(localData.courses || []);
         const localStudents = JSON.parse(localStorage.getItem('mooc_local_students') || '[]');
         const deletedIds = JSON.parse(localStorage.getItem('mooc_deleted_ids') || '[]');
-        const merged = [...jsonStudents, ...localStudents].filter(s => !deletedIds.includes(s.id));
-        setStudents(merged);
-
+        const merged = [...jsonStudents, ...localStudents].filter(s => !deletedIds.includes(s.id)); setStudents(merged);
         const saved = localStorage.getItem('currentStudent');
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          setSelectedStudent(parsed);
-          await fetchProgress(parsed.id);
-        }
-      } catch (err) { setGlobalError(t('common.error_loading')); } finally { setLoading(false); }
+        if (saved) {const parsed = JSON.parse(saved); setSelectedStudent(parsed); await fetchProgress(parsed.id);}} catch (err) { setGlobalError(t('common.error_loading')); } finally { setLoading(false); }
     };
-    initData();
-  }, [fetchProgress, t]);
+    initData();}, [fetchProgress, t]);
 
   const handleCreateStudent = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newName || !newEmail || !newPin) return;
-    const newStudent = { id: `local-${Date.now()}`, name: newName, email: newEmail, code: newPin };
+    const newStudent = { id: `local-${Date.now()}`, name: newName, email: newEmail, code: newPin, role: newRole };
     const updatedLocal = [...JSON.parse(localStorage.getItem('mooc_local_students') || '[]'), newStudent];
     localStorage.setItem('mooc_local_students', JSON.stringify(updatedLocal));
     setStudents(prev => [...prev, newStudent]);
-    setNewName(""); setNewEmail(""); setNewPin("");
+    setNewName(""); setNewEmail(""); setNewPin(""); setNewRole("student");
+    setShowCreateForm(false);
   };
 
   const handleDeleteStudent = (id: string, pin: string): boolean => {
@@ -149,9 +134,7 @@ export default function StudentDashboard() {
     const localOnly = JSON.parse(localStorage.getItem('mooc_local_students') || '[]');
     localStorage.setItem('mooc_local_students', JSON.stringify(localOnly.filter((s: any) => s.id !== id)));
     setStudents(prev => prev.filter(s => s.id !== id));
-    if (selectedStudent?.id === id) {
-      handleLogoutAction();
-    }
+    if (selectedStudent?.id === id) {handleLogoutAction();}
     return true;
   };
 
@@ -188,12 +171,8 @@ export default function StudentDashboard() {
   const getCourseProgress = useCallback((course: Course, studentId: string): number => {
     if (!course.content || course.content.length === 0) return 0;
     const student = students.find(s => s.id === studentId);
-    if (selectedStudent?.id === studentId) {
-      const done = course.content.filter(l => dbProgress[`${course.id}_${l.id}`]).length;
-      return Math.round((done / course.content.length) * 100);
-    }
-    return student?.average || 0;
-  }, [dbProgress, selectedStudent, students]);
+    if (selectedStudent?.id === studentId) {const done = course.content.filter(l => dbProgress[`${course.id}_${l.id}`]).length; return Math.round((done / course.content.length) * 100);}
+    return student?.average || 0;}, [dbProgress, selectedStudent, students]);
 
   const rankedStudentsByCourse = useMemo(() => {
     const currentCourse = allCourses[rankingTab];
@@ -204,43 +183,75 @@ export default function StudentDashboard() {
   if (loading) return <Box sx={{ display: 'flex', bgcolor: 'background.default', alignItems: 'center', justifyContent: 'center' }}><Loader2 className="animate-spin" color={theme.palette.primary.main} size={48} /></Box>;
 
   return (
-    <Box sx={{ bgcolor: 'background.default', color: 'text.primary', pb: 8, width: '100%', maxWidth: '100vw', overflowX: 'hidden' }}>
-      <Container maxWidth="xl" sx={{ pt: { xs: 2, md: 6 }, px: { xs: 3, sm: 1.5, md: 8, lg: 8 } }}>
-        <Box sx={{ width: '100%', overflow: 'hidden' }}>
+    <Box sx={{ bgcolor: 'background.default', color: 'text.primary', width: '100%', maxWidth: '100vw', height: '90vh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+      <Container maxWidth="xl" sx={{ pt: { xs: 2, md: 6 }, px: { xs: 3, sm: 1.5, md: 8, lg: 8 }, flex: 1, display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
+        <Box sx={{ width: '100%', flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', height: '100%' }}>
           {globalError && <Alert severity="error" sx={{ mb: 3, borderRadius: '1rem' }}>{globalError}</Alert>}
           
           <AnimatePresence mode="wait">
             {!selectedStudent ? (
-              <motion.div key="login" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-                <Typography variant="h4" align="center" sx={{ fontWeight: 900, mb: 1 }}>{t('dashboard.title')}</Typography>
-                <Typography align="center" sx={{ opacity: 0.6, mb: { xs: 3, md: 6 } }}>{t('dashboard.subtitle')}</Typography>
+              <motion.div key="login" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
+                <Typography variant="h6" align="center" sx={{ fontWeight: 900, mb: 3, mt:3 }}>{t('dashboard.title')}</Typography>
                 
-                <Grid container spacing={2}>
-                  <Grid size={{ xs: 12, lg: 3 }}>
-                    <Card sx={{ p: { xs: 2, md: 4 }, borderRadius: { xs: 2, md: 2.5 }, bgcolor: 'background.paper', border: '2px dashed', borderColor: 'primary.main' + '4D', height: 'fit-content' }}>
-                      <Stack spacing={{ xs: 2, md: 3 }} component="form" onSubmit={handleCreateStudent}>
-                        <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
-                          <UserPlus color={theme.palette.primary.main} />
-                          <Typography variant="h6" sx={{ fontWeight: 900 }}>{t('dashboard.create_user_title')}</Typography>
-                        </Stack>
-                        <TextField fullWidth label={t('dashboard.name_label')} variant="filled" value={newName} onChange={e => setNewName(e.target.value)} sx={{ bgcolor: 'action.hover', borderRadius: '12px' }} />
-                        <TextField fullWidth label={t('dashboard.email_label')} variant="filled" value={newEmail} onChange={e => setNewEmail(e.target.value)} sx={{ bgcolor: 'action.hover', borderRadius: '12px' }} />
-                        <TextField fullWidth label={t('dashboard.pin_label')} variant="filled" type="password" value={newPin} onChange={e => setNewPin(e.target.value)} slotProps={{ htmlInput: { maxLength: 4 } }} sx={{ bgcolor: 'action.hover', borderRadius: '12px' }} />
-                        <Button type="submit" variant="outlined" fullWidth sx={{ borderRadius: '12px', py: 1.5, borderColor: 'primary.main', color: 'primary.main', fontWeight: 800 }}>{t('dashboard.register_btn')}</Button>
-                      </Stack>
-                    </Card>
-                  </Grid>
+                {/* Mobile: scroll vertical | Desktop: dos canals (form + cards) */}
+                <Box sx={{flex: 1,overflowY: 'auto',overflowX: 'hidden',pb: 2,}}>
+                <Box sx={{display: 'flex',flexDirection: { xs: 'column', md: 'row' },gap: { xs: 2, md: 4 },alignItems: 'flex-start',}}>
 
-                  <Grid size={{ xs: 12, lg: 9 }}>
-                    <Grid container spacing={2}>
-                      {students.map(s => (
-                        <Grid key={s.id} size={{ xs: 12, sm: 6, md: 4 }}>
-                          <StudentCard student={s} onLogin={handleLogin} onDelete={handleDeleteStudent} error={errorId === s.id} />
-                        </Grid>
-                      ))}
-                    </Grid>
-                  </Grid>
-                </Grid>
+                  {/* ── COLUMNA ESQUERRA: Formulari */}
+                  <Box sx={{ width: { xs: '100%', md: '320px' }, flexShrink: 0, minWidth: 0 }}>
+                    {!showCreateForm ? (
+                      <Card
+                        onClick={() => setShowCreateForm(true)}
+                        sx={{p: { xs: 2, md: 4 },display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',borderRadius: { xs: 3, md: 10 },border: '2px dashed', borderColor: 'divider',bgcolor: 'background.paper',height: '100%', minHeight: { xs: 160, md: 210 },cursor: 'pointer', transition: 'all 0.3s ease','&:hover': { borderColor: 'primary.main', '& *': { color: 'primary.main' } }}}>
+                        <Box sx={{ width: 48, height: 48, borderRadius: '50%', border: '2px dashed', borderColor: 'divider', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
+                          <UserPlus size={20} color={theme.palette.text.secondary} />
+                        </Box>
+                        <Typography variant="body1" sx={{ fontWeight: 900, color: 'text.secondary' }}>
+                          {t('dashboard.create_user_title')}
+                        </Typography>
+                        <Typography variant="caption" sx={{ color: 'text.disabled', mt: 0.5, textAlign: 'center' }}>
+                          Fes clic per fer el login
+                        </Typography>
+                      </Card>
+                    ) : (
+                      <Card sx={{ p: { xs: 2, md: 5 }, borderRadius: { xs: 2, md: 2.5 }, bgcolor: 'background.paper', border: '2px dashed', borderColor: 'primary.main' + '4D', height: 'fit-content' }}>
+                        <Stack spacing={{ xs: 2, md: 3 }} component="form" onSubmit={handleCreateStudent}>
+                          <Stack direction="row" sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
+                            <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+                              <UserPlus size={18} color={theme.palette.primary.main} />
+                              <Typography variant="h6" sx={{ fontWeight: 900 }}>{t('dashboard.create_user_title')}</Typography>
+                            </Stack>
+                            <IconButton size="small" onClick={() => setShowCreateForm(false)} sx={{ color: 'text.secondary', '&:hover': { color: 'error.main' } }}>
+                              <X size={18} />
+                            </IconButton>
+                          </Stack>
+                          <Box sx={{ display: 'flex', bgcolor: 'action.hover', borderRadius: '12px', p: 0.5, position: 'relative' }}>
+                            <Box sx={{ position: 'absolute', top: 4, bottom: 4, left: newRole === 'student' ? 4 : 'calc(50% + 2px)', width: 'calc(50% - 6px)', bgcolor: 'primary.main', borderRadius: '10px', transition: 'left 0.25s ease' }} />
+                            <Button disableRipple onClick={() => setNewRole('student')} sx={{ flex: 1, zIndex: 1, borderRadius: '10px', py: 0.75, fontWeight: 800, fontSize: '0.8rem', textTransform: 'none', color: newRole === 'student' ? '#fff' : 'text.secondary', '&:hover': { bgcolor: 'transparent' } }}>Student</Button>
+                            <Button disableRipple onClick={() => setNewRole('teacher')} sx={{ flex: 1, zIndex: 1, borderRadius: '10px', py: 0.75, fontWeight: 800, fontSize: '0.8rem', textTransform: 'none', color: newRole === 'teacher' ? '#fff' : 'text.secondary', '&:hover': { bgcolor: 'transparent' } }}>Teacher</Button>
+                          </Box>
+                          <TextField fullWidth label={t('dashboard.name_label')} variant="filled" value={newName} onChange={e => setNewName(e.target.value)} sx={{ bgcolor: 'action.hover', borderRadius: '12px' }} />
+                          <TextField fullWidth label={t('dashboard.email_label')} variant="filled" value={newEmail} onChange={e => setNewEmail(e.target.value)} sx={{ bgcolor: 'action.hover', borderRadius: '12px' }} />
+                          <TextField fullWidth label={t('dashboard.pin_label')} variant="filled" type="password" value={newPin} onChange={e => setNewPin(e.target.value)} slotProps={{ htmlInput: { maxLength: 4 } }} sx={{ bgcolor: 'action.hover', borderRadius: '12px' }} />
+                          <Button type="submit" variant="outlined" fullWidth sx={{ borderRadius: '12px', py: 1.5, borderColor: 'primary.main', color: 'primary.main', fontWeight: 800 }}>{newRole === 'teacher' ? 'Registrar Teacher' : 'Registrar Student'}</Button>
+                        </Stack>
+                      </Card>
+                    )}
+                  </Box>
+
+                  {/* ── DIVISOR VERTICAL (només desktop) ── */}
+                  <Box sx={{ display: { xs: 'none', md: 'block' }, width: '2px', height: '100%', minHeight: '500px', bgcolor: 'divider', borderRadius: 1, alignSelf: 'stretch' }} />
+
+                  {/* ── COLUMNA DRETA: Cards ── */}
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                    <Box sx={{display: 'grid',gridTemplateColumns: { xs: 'repeat(2, 1fr)', md: 'repeat(auto-fill, minmax(200px, 1fr))' },gap: 3,alignItems: 'start',mt:2}}>
+                      {students .filter(s => newRole === 'teacher' ? s.role === 'teacher' : (s.role === 'student' || !s.role))
+                        .map(s => (<Box key={s.id} sx={{ minWidth: 0 }}><StudentCard student={s} onLogin={handleLogin} onDelete={handleDeleteStudent} error={errorId === s.id} /></Box>))}
+                    </Box>
+                  </Box>
+
+                </Box>
+                </Box>
               </motion.div>
             ) : (
               <motion.div key="dash" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }}>
@@ -268,7 +279,7 @@ export default function StudentDashboard() {
                        
                       <Box sx={{ height: { md: '250px' }, width: '100%', display: { xs: 'none', md: 'block' } }} />
                       
-                      <Card sx={{ p: { xs: 2, md: 3 }, borderRadius: { xs: 2, md: 2.5 }, bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', display: { xs: 'none', md: 'block' }, maxWidth: '280px', width: '100%', mt: { xs: 0, md: '-169px !important' } }}>
+                      <Card sx={{ p: { xs: 2, md: 3 }, borderRadius: { xs: 2, md: 2.5 }, bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', display: { xs: 'none', md: 'block' }, maxWidth: '280px', width: '100%', mt: { xs: 0, md: '-105px !important' } }}>
                         <Typography variant="subtitle1" sx={{ fontWeight: 900, mb: 2 }}>{t('dashboard.progress_detail')}</Typography>
                         <Stack spacing={2}>
                           {allCourses.map(course => (
@@ -346,17 +357,7 @@ export default function StudentDashboard() {
                       ))}
                     </Grid>
 
-                    <Box sx={{ 
-                      display: { xs: 'flex', md: 'none' }, 
-                      flexDirection: 'row', 
-                      alignItems: 'center', 
-                      justifyContent: 'center', 
-                      gap: 2,
-                      zIndex: 11,
-                      width: '100%',
-                      my: 4
-                    }}>
-                    
+                    <Box sx={{display: { xs: 'flex', md: 'none' }, lexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 2, zIndex: 11,width: '100%',my: 4}}>
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '20px', justifyContent: 'center' }}>
                       {[0, 1, 2].map((i) => (
                         <Box
@@ -374,38 +375,19 @@ export default function StudentDashboard() {
                         </Box>
                       ))}
                     </Box>
-
-                    <Typography sx={{ 
-                      fontSize: '0.6rem', 
-                      fontWeight: 900, 
-                      letterSpacing: '0.25em', 
-                      color: 'text.primary', 
-                      textTransform: 'uppercase',
-                      mx: 1
-                    }}>
-                      LEADERBOARD
-                    </Typography>
+                    {/* MOBILE ── SCROLL DOWN */}
+                    <Typography sx={{fontSize: '0.6rem',fontWeight: 900, letterSpacing: '0.25em',color: 'text.primary', textTransform: 'uppercase', mx: 1}}>LEADERBOARD</Typography>
 
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '20px', justifyContent: 'center' }}>
                       {[0, 1, 2].map((i) => (
-                        <Box
-                          key={`right-${i}`}
-                          component={motion.div}
-                          animate={{ opacity: [0, 1, 0], y: [0, 5, 10] }}
-                          transition={{ duration: 2, repeat: Infinity, delay: i * 0.3, ease: "easeInOut" }}
-                          sx={{ 
-                            mt: i === 0 ? -2 : -3, 
-                            display: 'flex',
-                            color: 'text.primary'
-                          }}
-                        >
+                        <Box key={`right-${i}`} component={motion.div} animate={{ opacity: [0, 1, 0], y: [0, 5, 10] }} transition={{ duration: 2, repeat: Infinity, delay: i * 0.3, ease: "easeInOut" }}sx={{mt: i === 0 ? -2 : -3,display: 'flex', color: 'text.primary'}}>
                           <KeyboardArrowDownIcon sx={{ fontSize: '1.2rem' }} />
                         </Box>
                       ))}
                     </Box>
                   </Box>
                     
-                    <Stack direction="row" spacing={1} sx={{ mb: { xs: 2, md: 2 }, alignItems: 'center', mt: { xs: 10, md: 19.4 }}}>
+                    <Stack direction="row" spacing={1} sx={{ mb: { xs: 2, md: 2 }, alignItems: 'center', mt: { xs: 10, md: 22}}}>
                       <Trophy size={22} color="#ffb700" />
                       <Typography variant="h6" sx={{ fontWeight: 900 }}>{t('dashboard.ranking_title')}</Typography>
                     </Stack>
