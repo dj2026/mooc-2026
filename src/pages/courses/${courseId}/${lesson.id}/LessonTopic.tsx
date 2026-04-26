@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, BookOpen, Terminal } from 'lucide-react';
+import { ChevronLeft, ChevronRight, BookOpen} from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Box, Typography, Button, IconButton, CircularProgress, useTheme, useMediaQuery, alpha } from '@mui/material';
 import { useTranslation } from 'react-i18next';

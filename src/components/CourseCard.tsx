@@ -1,6 +1,6 @@
-import { Box, Typography, Divider, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Card, CardContent, CardTitle, CardDescription } from './ui/Card'; 
-import { Badge } from './ui/badge';
+
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
