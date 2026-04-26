@@ -198,18 +198,7 @@ export default function LessonTopic() {
       </Box>
 
       {/* Footer navegació */}
-      <Box sx={{ 
-        height: 60, 
-        flexShrink: 0, 
-        borderTop: '1px solid', 
-        borderColor: 'divider', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        gap: { xs: 1, md: 2 }, 
-        bgcolor: 'background.paper',
-        px: 2
-      }}>
+      <Box sx={{ height: 60,flexShrink: 0, borderTop: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: { xs: 1, md: 2 }, bgcolor: 'background.paper',px: 2}}>
         <Button 
           onClick={() => goToLesson(currentIndex - 1)} 
           disabled={currentIndex <= 0} 

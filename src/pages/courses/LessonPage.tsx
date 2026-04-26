@@ -121,76 +121,87 @@ export default function LessonPage() {
     }, 800);
   };
 
-  if (loading) return <Box sx={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'background.default' }}><CircularProgress color="secondary" /></Box>;
+  if (loading) return <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'background.default' }}><CircularProgress color="secondary" /></Box>;
   if (!mounted || !course || !baseLesson) return null;
 
   const globalProgress = course?.content?.reduce((acc, lesson) => acc + (JSON.parse(localStorage.getItem('mooc_global_progress') || '{}')[`${courseId}_${lesson.id}`] ? 1 : 0), 0) ?? 0;
   const progressPercent = course?.content?.length ? (globalProgress / course.content.length) * 100 : 0;
 
   // MOBILE LAYOUT - Optimized for xs
-  if (isMobile) {
-    return (
-      <Box sx={{ position: 'fixed', inset: 0, height: '100vh', width: '100vw', display: 'flex', flexDirection: 'column', bgcolor: 'background.default', color: 'text.primary', overflow: 'hidden', overflowX: 'hidden' , mt: 5}}>
-        {progressPercent > 0 && <Box sx={{ height: 4, bgcolor: 'action.hover' }}><Box sx={{ height: '100%', width: `${progressPercent}%`, bgcolor: 'primary.main' }} /></Box>}
-        
-        {/* Header */}
-        <Box sx={{ height: 48, borderBottom: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', px: 1, justifyContent: 'space-between', mt:5}}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-            <IconButton onClick={() => navigate(-1)} sx={{ color: 'text.secondary' }}><ChevronLeft /></IconButton>
-          </Box>
-          <Box sx={{ display: 'flex', bgcolor: 'action.hover', p: 0.25, borderRadius: 1 }}>
-            {(['normal', 'drill', 'assist', 'hackathon'] as Mode[]).map((m) => (
-              <Button key={m} onClick={() => { setCurrentMode(m); setTimer(60); setIsTimerActive(false); }} sx={{ px: 1, py: 0.25, fontSize: 8, minWidth: 28, bgcolor: currentMode === m ? 'primary.main' : 'transparent' }}>{m.toUpperCase()}</Button>
-            ))}
-          </Box>
-          <Button onClick={() => handleSaveProgress(status === 'pass')} disabled={isSaving} sx={{ minWidth: 80, minHeight: 32, fontSize: 9 }}>{isSaving ? '...' : wasSavedInSession ? 'DESAT' : 'PENDENT'}</Button>
+ if (isMobile) {
+  return (
+    <Box sx={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', bgcolor: 'background.default', color: 'text.primary', overflow: 'hidden' }}>
+      {progressPercent > 0 && <Box sx={{ height: 4, bgcolor: 'action.hover' }}><Box sx={{ height: '100%', width: `${progressPercent}%`, bgcolor: 'primary.main' }} /></Box>}
+      
+      {/* Header */}
+      <Box sx={{ height: 48, borderBottom: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', px: 1, justifyContent: 'space-between', flexShrink: 0,mt:10}}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+          <IconButton onClick={() => navigate(-1)} sx={{ color: 'text.secondary' }}><ChevronLeft /></IconButton>
         </Box>
+        <Box sx={{ display: 'flex', bgcolor: 'action.hover', p: 0.25, borderRadius: 1 }}>
+          {(['normal', 'drill', 'assist', 'hackathon'] as Mode[]).map((m) => (
+            <Button key={m} onClick={() => { setCurrentMode(m); setTimer(60); setIsTimerActive(false); }} sx={{ px: 1, py: 0.20, fontSize: 9, minWidth: 28, bgcolor: currentMode === m ? 'primary.main' : 'transparent', color: currentMode === m ? 'white' : 'text.secondary' }}>{m.toUpperCase()}</Button>
+          ))}
+        </Box>
+        <Button onClick={() => handleSaveProgress(status === 'pass')} disabled={isSaving} sx={{ minWidth: 80, fontSize: 9, color: 'primary.main', fontWeight: 700 }}>{isSaving ? '...' : wasSavedInSession ? 'DESAT' : 'GUARDAR'}</Button>
+      </Box>
 
-        {/* Content - Vertical Stack */}
-        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', width: '100%'}}>
-          {/* 1r: ENUNCIAT */}
-          <Box sx={{ width: '100%', bgcolor: 'background.paper', p: 3, borderBottom: '1px solid', borderColor: 'divider', flexShrink: 0}}>
-            <Typography sx={{ fontSize: '1rem', fontWeight: 700, mb: 0.5, lineHeight: 1.3 }}>{baseLesson.title}</Typography>
-            <Typography sx={{ fontSize: '0.8rem', color: 'text.secondary', lineHeight: 1.5, mb: 2 }}>{baseLesson.exerciseInstructions || "No hi ha instruccions disponibles."}</Typography>
-            <Box sx={{ p: 1, bgcolor: alpha(theme.palette.primary.main, 0.05), borderRadius: 1 }}>
-              <Typography sx={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', mb: 0.5 }}>Objectiu</Typography>
-              <Typography sx={{ fontFamily: 'monospace', fontSize: '0.75rem' }}>{baseLesson.challenge}</Typography>
-            </Box>
-          </Box>
+      {/* Content - Vertical Stack */}
+      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', width: '100%' }}>
 
-          {/* 2n: RENDER (Editor) */}
-          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', bgcolor: '#1e1e1e', minHeight: 0, width: '100%' }}>
-            <Box sx={{ height: 32, px: 1, bgcolor: '#000', display: 'flex', alignItems: 'center' }}>
-              <Typography sx={{ fontSize: 10, color: 'white' }}>App.tsx</Typography>
-            </Box>
-            <Box sx={{ flex: 1, p: 1, minHeight: 0 }}>
-              <textarea value={userInput} onChange={(e) => { setUserInput(e.target.value); setIsDirty(true); }} 
-                style={{ width: '100%', height: '100%', background: 'transparent', color: theme.palette.primary.main, fontFamily: "'Fira Code', monospace", border: 'none', resize: 'none', fontSize: '0.8rem' }} />
-            </Box>
-          </Box>
-
-          {/* 3r: PROMPT (Console) */}
-          <Box sx={{ width: '100%', bgcolor: 'background.paper', borderTop: '1px solid', borderColor: 'divider', flexShrink: 0, height: 380}}>
-            <Box sx={{ height: 24, px: 1, bgcolor: 'action.hover', display: 'flex', alignItems: 'center' }}>
-              <Terminal size={10} style={{opacity: 0.4, marginRight: 4}} />
-              <Typography sx={{ fontSize: 8, color: 'text.secondary' }}>CONSOLE</Typography>
-            </Box>
-            <Box sx={{ p: 1, overflowY: 'auto', flex: 1 }}>
-              {consoleOutput.length === 0 && <Typography sx={{ fontSize: 9, color: 'text.disabled' }}>// Executa...</Typography>}
-              {consoleOutput.map((line, i) => <Typography key={i} sx={{ fontSize: 9, mb: 0.25, color: line.includes('✅') ? 'success.main' : line.includes('❌') ? 'error.main' : 'text.secondary' }}>{'>'} {line}</Typography>)}
-            </Box>
+        {/* 1r: ENUNCIAT */}
+        <Box sx={{ width: '100%', bgcolor: 'background.paper', p: 2, borderBottom: '1px solid', borderColor: 'divider', flexShrink: 0}}>
+          <Box sx={{ p: 1.5, bgcolor: alpha(theme.palette.primary.main, 0.05), borderRadius: 1, border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}` }}>
+            <Typography sx={{ fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', mb: 0.5, color: 'primary.main' }}>El teu repte</Typography>
+            <Typography sx={{ fontFamily: 'monospace', fontSize: '0.8rem', fontWeight: 600 }}>{baseLesson.challenge}</Typography>
           </Box>
         </Box>
 
-        {/* Buttons - moved up 5px */}
-        <Box sx={{ height: 70, display: 'flex', gap: 2, p: 2, borderTop: '1px solid', borderColor: 'divider', bgcolor: 'background.paper', position: 'relative', bottom: 140 }}>
-          <Button onClick={handlePrevious} disabled={currentLessonIndex <= 0} fullWidth variant="outlined" sx={{ fontSize: '0.65rem', minHeight: 36 }}><ChevronLeft size={12}/> Ant</Button>
-          <Button onClick={handleRunTests} fullWidth variant="contained" sx={{ fontSize: '0.65rem', minHeight: 36 }}>RUN</Button>
-          <Button onClick={handleNext} disabled={!course || currentLessonIndex >= course.content.length - 1} fullWidth variant="outlined" sx={{ fontSize: '0.65rem', minHeight: 36 }}>Seg <ChevronRight size={12}/></Button>
+        {/* 2n: RENDER (Editor) */}
+        <Box sx={{ height: 170, display: 'flex', flexDirection: 'column', bgcolor: '#1e1e1e', width: '100%', flexShrink: 0 }}>
+        <Box sx={{ height: 28, px: 1.5, bgcolor: '#000', display: 'flex', alignItems: 'center', borderBottom: '1px solid #333' }}>
+          <Typography sx={{ fontSize: 10, color: '#888', fontWeight: 600 }}>App.tsx</Typography>
+        </Box>
+        <Box sx={{ flex: 1, p: 1 }}>
+          <textarea 
+            value={userInput} 
+            onChange={(e) => { setUserInput(e.target.value); setIsDirty(true); }} 
+            style={{ width: '100%', height: '100%', background: 'transparent', color: '#b5e853', fontFamily: "'Fira Code', monospace", border: 'none', resize: 'none', fontSize: '0.85rem', outline: 'none' }} 
+          />
         </Box>
       </Box>
-    );
-  }
+
+        {/* 3r: PROMPT (Console) */}
+        <Box sx={{ height: 170, display: 'flex', flexDirection: 'column', width: '100%', bgcolor: '#000', borderTop: '1px solid', borderBottom: '1px solid', borderColor: 'divider', flexShrink: 0 }}>
+        <Box sx={{ height: 22, px: 1.5, bgcolor: '#111', display: 'flex', alignItems: 'center' }}>
+          <Terminal size={10} style={{ opacity: 0.4, marginRight: 4, color: '#fff' }} />
+          <Typography sx={{ fontSize: 8, color: '#888', fontWeight: 600 }}>CONSOLE</Typography>
+        </Box>
+        <Box sx={{ p: 1, overflowY: 'auto', flex: 1 }}>
+          {consoleOutput.length === 0 && <Typography sx={{ fontSize: 9, color: '#444', fontFamily: 'monospace' }}>// Esperant execució...</Typography>}
+          {consoleOutput.map((line, i) => (
+            <Typography key={i} sx={{ fontSize: 9, mb: 0.2, fontFamily: 'monospace', color: line.includes('✅') ? '#4ade80' : line.includes('❌') ? '#f87171' : '#aaa' }}>
+              {'>'} {line}
+            </Typography>
+          ))}
+        </Box>
+      </Box>
+
+        {/* BOTONS ESTIL */}
+      <Box sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1000, height: 70, flexShrink: 0, borderTop: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, bgcolor: 'background.paper', px: 2 }}>
+        <IconButton onClick={handlePrevious} disabled={currentLessonIndex <= 0} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1.5, p: 1 }}>
+          <ChevronLeft size={20} />
+        </IconButton>
+        <Button onClick={handleRunTests} variant="contained" fullWidth sx={{bgcolor: '#ec4899','&:hover': { bgcolor: '#db2777' }, fontWeight: 800, borderRadius: 2, height: 45, fontSize: '0.9rem', letterSpacing: 1}}>RUN</Button>
+        <IconButton onClick={handleNext} disabled={!course || currentLessonIndex >= course.content.length - 1} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1.5, p: 1 }}>
+          <ChevronRight size={20} />
+        </IconButton>
+      </Box>
+
+      </Box>
+    </Box>
+  );
+}
 
   // DESKTOP LAYOUT - 3 Columns
   return (

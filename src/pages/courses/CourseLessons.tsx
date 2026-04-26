@@ -124,7 +124,7 @@ export default function CourseLessons() {
                       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                         <Typography sx={{ fontSize: '0.65rem', fontWeight: 900, color: 'text.disabled' }}>LAB {index + 1}</Typography>
                         <PlayCircle size={14} color="#db2777" />
-</Box>
+                      </Box>
                       <Typography sx={{ fontWeight: 800, fontSize: '0.9rem', mt: 0.5, lineHeight: 1.2 }}>{lesson.title}</Typography>
                     </CardActionArea>
                   </Card>
