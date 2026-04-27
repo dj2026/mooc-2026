@@ -48,7 +48,6 @@ export function Footer() {
           transform: 'translateX(-50%)', 
           width: { xs: '300px', md: '1000px' }, 
           height: '300px', 
-          bgcolor: 'primary.main', 
           filter: 'blur(120px)', 
           pointerEvents: 'none', 
           borderRadius: '50%',
@@ -112,7 +111,7 @@ export function Footer() {
                       fontSize: '0.8rem',
                       fontWeight: 800, 
                       transition: '0.4s', 
-                      '&:hover': { bgcolor: 'primary.main' + '1A', borderColor: 'primary.main', color: 'primary.main', transform: 'translateY(-5px)' } 
+                      '&:hover': { borderColor: 'primary.main', color: 'primary.main', transform: 'translateY(-5px)' } 
                     }}
                   >
                     {social}
@@ -127,7 +126,6 @@ export function Footer() {
             mt: { xs: 6, md: 10 }, 
             pt: 4, 
             borderTop: '1px solid', 
-            borderColor: theme.palette.mode === 'dark' ? '#ffffff' : '#000000', 
             display: 'flex', 
             flexDirection: { xs: 'column', md: 'row' }, 
             justifyContent: 'space-between', 
