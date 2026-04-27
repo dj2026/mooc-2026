@@ -189,12 +189,12 @@ export default function LessonPage() {
 
         {/* BOTONS ESTIL */}
       <Box sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1000, height: 70, flexShrink: 0, borderTop: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, bgcolor: 'background.paper', px: 2 }}>
-        <IconButton onClick={handlePrevious} disabled={currentLessonIndex <= 0} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1.5, p: 1 }}>
-          <ChevronLeft size={20} />
+        <IconButton onClick={handlePrevious} disabled={currentLessonIndex <= 0} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1, p: 1 }}>
+          <ChevronLeft size={20}/>
         </IconButton>
-        <Button onClick={handleRunTests} variant="contained" fullWidth sx={{bgcolor: '#ec4899','&:hover': { bgcolor: '#db2777' }, fontWeight: 800, borderRadius: 2, height: 45, fontSize: '0.9rem', letterSpacing: 1}}>RUN</Button>
+        <Button onClick={handleRunTests} variant="contained" fullWidth sx={{fontWeight: 900, borderRadius: 1, fontSize: 13 }}>RUN</Button>
         <IconButton onClick={handleNext} disabled={!course || currentLessonIndex >= course.content.length - 1} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1.5, p: 1 }}>
-          <ChevronRight size={20} />
+          <ChevronRight size={20}/>
         </IconButton>
       </Box>
 

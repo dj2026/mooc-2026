@@ -35,7 +35,6 @@ export function Footer() {
     <Box component="footer" sx={{ 
       position: 'relative', 
       overflow: 'hidden', 
-      backgroundColor:'red',
       pt: { xs: 6, md: 10 }, 
       pb: 5
     }}>
