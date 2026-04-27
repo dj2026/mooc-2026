@@ -183,9 +183,9 @@ export default function StudentDashboard() {
   if (loading) return <Box sx={{ display: 'flex', bgcolor: 'background.default', alignItems: 'center', justifyContent: 'center' }}><Loader2 className="animate-spin" color={theme.palette.primary.main} size={48} /></Box>;
 
   return (
-    <Box sx={{ bgcolor: 'background.default', color: 'text.primary', width: '100%', maxWidth: '100vw', height: '90vh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-      <Container maxWidth="xl" sx={{ pt: { xs: 2, md: 6 }, px: { xs: 3, sm: 1.5, md: 8, lg: 8 }, flex: 1, display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
-        <Box sx={{ width: '100%', flex: 1, display: 'flex', flexDirection: 'column', overflow: { xs: 'auto', md: 'hidden' }, height: '100%' }}>
+       <Box sx={{ bgcolor: 'background.default', color: 'text.primary', width: '100%', maxWidth: '100vw', minHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
+       <Container maxWidth="xl" sx={{ pt: { xs: 2, md: 6 }, px: { xs: 3, sm: 1.5, md: 8, lg: 8 }, display: 'flex', flexDirection: 'column' }}>
+         <Box sx={{ width: '100%', flex: 1, display: 'flex', flexDirection: 'column', overflow: { xs: 'visible', md: 'hidden' } }}>
           {globalError && <Alert severity="error" sx={{ mb: 3, borderRadius: '1rem' }}>{globalError}</Alert>}
           
           <AnimatePresence mode="wait">
@@ -357,7 +357,7 @@ export default function StudentDashboard() {
                       ))}
                     </Grid>
 
-                    <Box sx={{display: { xs: 'flex', md: 'none' }, lexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 2, zIndex: 11,width: '100%',my: 4}}>
+                    <Box sx={{display: { xs: 'flex', md: 'none' }, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 2, zIndex: 11,width: '100%',my: 4}}>
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '20px', justifyContent: 'center' }}>
                       {[0, 1, 2].map((i) => (
                         <Box
@@ -395,7 +395,7 @@ export default function StudentDashboard() {
                       <Tabs value={rankingTab} onChange={(_, val) => setRankingTab(val)} variant="scrollable" sx={{ bgcolor: 'action.hover', '& .MuiTabs-indicator': { bgcolor: 'primary.main' } }}>
                         {allCourses.map(c => <Tab key={c.id} label={c.title} sx={{ fontWeight: 800, textTransform: 'none', minWidth: 0, whiteSpace: 'nowrap', fontSize: { xs: '0.7rem', md: '0.875rem' } } } />)}
                       </Tabs>
-                      <Box sx={{ p: { xs: 0.5, md: 4 }, height: { xs: 'calc(40vh - 300px)', md: '200px' }, overflowY: 'auto', overflowX: 'hidden' }}>
+                      <Box sx={{ p: { xs: 0.5, md: 4 }, height: { xs: '300px', md: '200px' }, overflowY: 'auto', overflowX: 'hidden' }}>
                         <Stack spacing={{ xs: 0.5, md: 2 }}>
                           {rankedStudentsByCourse.map((s, idx) => {
                             const isMe = s.id === selectedStudent?.id;
