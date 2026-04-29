@@ -31,7 +31,7 @@ export default function LessonTopic() {
   const theme = useTheme();
   const navigate = useNavigate();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const { i18n} = useTranslation();
+  const { i18n, t } = useTranslation();
 
   const [apiData, setApiData] = useState<DataStructure | null>(null);
   const [loading, setLoading] = useState(true);
@@ -67,15 +67,16 @@ export default function LessonTopic() {
   if (!course || !lesson) return null;
 
   return (
-    <Box sx={{
-      position: 'fixed', inset: 0,
-      height: isMobile ? '87.2vh' : '92vh',
-      mt: isMobile ? 4 : 10,
-      width: '100vw',
-      display: 'flex', flexDirection: 'column',
-      bgcolor: 'background.default', color: 'text.primary',
-      overflow: 'hidden',
-    }}>
+     <Box sx={{
+       position: 'fixed', inset: 0,
+       height: isMobile ? '87.2vh' : '92vh',
+       mt: isMobile ? 4 : 10,
+       width: '100vw',
+       display: 'flex', flexDirection: 'column',
+       bgcolor: 'background.default', color: 'text.primary',
+       overflow: 'hidden',
+       pb: '70px',
+     }}>
 
       {/* Header */}
       <Box sx={{ height: 50, flexShrink: 0, borderBottom: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', px: 3, justifyContent: 'space-between', bgcolor: 'background.paper' }}>
@@ -106,7 +107,7 @@ export default function LessonTopic() {
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <BookOpen size={14} color={theme.palette.primary.main} />
               <Typography sx={{ fontSize: '0.7rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'text.secondary' }}>
-                Lliçons
+                {t('lesson.lessons')}
               </Typography>
             </Box>
           </Box>
@@ -164,7 +165,7 @@ export default function LessonTopic() {
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
                 <Box sx={{ width: 6, height: 24, bgcolor: 'primary.main', borderRadius: 2 }} />
                 <Typography sx={{ fontWeight: 800, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'text.primary' }}>
-                  Explicació
+                  {t('lesson.explanation')}
                 </Typography>
               </Box>
               <Typography sx={{ 
@@ -184,12 +185,12 @@ export default function LessonTopic() {
               border: '2px solid', 
               borderColor: 'primary.main', 
               bgcolor: alpha(theme.palette.primary.main, 0.03),
-              maxWidth: '500px'
+              maxWidth: '300px'
             }}>
               <Typography sx={{ fontSize: '0.8rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.15em', color: 'primary.main', mb: 1.5 }}>
-                El teu repte
+                {t('lesson.your_challenge')}
               </Typography>
-              <Typography sx={{ fontSize: '1.2rem', fontWeight: 600, fontFamily: 'monospace', color: 'text.primary' }}>
+              <Typography sx={{ fontSize: '1rem', fontWeight: 600, fontFamily: 'monospace', color: 'text.primary' }}>
                 {getText(lesson.challenge)}
               </Typography>
             </Box>
@@ -197,15 +198,15 @@ export default function LessonTopic() {
         </Box>
       </Box>
 
-      {/* Footer navegació */}
-      <Box sx={{ height: 60,flexShrink: 0, borderTop: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: { xs: 1, md: 2 }, bgcolor: 'background.paper',px: 2}}>
+       {/* Footer navegació */}
+       <Box sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1000, height: 70, flexShrink: 0, borderTop: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: { xs: 1, md: 2 }, bgcolor: 'background.paper', px: 2 }}>
         <Button 
           onClick={() => goToLesson(currentIndex - 1)} 
           disabled={currentIndex <= 0} 
           variant="outlined" 
           sx={{ minWidth: { xs: 40, md: 120 }, fontWeight: 700 }}
         >
-          <ChevronLeft size={18} /> {!isMobile && "Anterior"}
+          <ChevronLeft size={18} /> {!isMobile && t('lesson.previous')}
         </Button>
 
         <Button 
@@ -213,7 +214,7 @@ export default function LessonTopic() {
           variant="contained" 
           color="secondary"
           sx={{ px: 4, fontWeight: 800, borderRadius: 2, fontSize: 11 }}>
-          Anar a l'activitat
+          {t('lesson.go_to_activity')}
         </Button>
 
         <Button 
@@ -222,7 +223,7 @@ export default function LessonTopic() {
           variant="outlined" 
           sx={{ minWidth: { xs: 40, md: 120 }, fontWeight: 700 }}
         >
-          {!isMobile && "Següent"} <ChevronRight size={18} />
+          {!isMobile && t('lesson.next')} <ChevronRight size={18} />
         </Button>
       </Box>
 

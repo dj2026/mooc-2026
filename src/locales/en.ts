@@ -23,7 +23,16 @@ export default {
     register_btn: "Register Student",
     reset_course_confirm: "Are you sure you want to reset the progress of this course?",
     reset_course_tooltip: "Reset course",
-    progress_detail: "Progress Detail"
+    progress_detail: "Progress Detail",
+    click_to_login: "Click to log in",
+    role_student: "Student",
+    role_teacher: "Teacher",
+    register_student: "Register Student",
+    register_teacher: "Register Teacher",
+    points: "points",
+    leaderboard: "LEADERBOARD",
+    syllabus: "Leasons",
+    activities: "Activities"
   },
   home: {
     featured_title: "Featured Courses",
@@ -68,7 +77,8 @@ export default {
     blog: "Blog",
     events: "Events",
     copyright: "MOOC REACT • BARCELONA",
-    systems_operational: "SYSTEMS OPERATIONAL"
+    systems_operational: "SYSTEMS OPERATIONAL",
+    telegram: "Telegram"
   },
   course: {
     by: "by",
@@ -76,5 +86,38 @@ export default {
   },
   common: {
     error_loading: "Error loading data"
+  },
+  lesson: {
+    syllabus: "Leassons",
+    laboratory: "Laboratory",
+    academy: "Academy",
+    course_not_found: "Course not found",
+    explanation: "Explanation",
+    your_challenge: "Your challenge",
+    previous: "Previous",
+    next: "Next",
+    go_to_activity: "Go to activity",
+    lessons: "Lessons",
+    objective: "Objective",
+    run: "RUN",
+    debug_console: "DEBUG CONSOLE",
+    lesson_completed: "LESSON COMPLETED!",
+    save: "SAVE",
+    saved: "SAVED",
+    pending: "PENDING",
+    points_label: "POINTS",
+    no_instructions: "No instructions available.",
+    hide_hint: "Hide Hint",
+    need_help: "Need Help?",
+    executing: "Executing...",
+    completed: "COMPLETED!",
+    check_code: "Check your code",
+    time_up: "TIME'S UP!",
+    synced: "Synced!",
+    error_local: "Local error",
+    waiting_execution: "Waiting for execution...",
+    run_code: "Run the code...",
+    app_file: "App.tsx",
+    system: "SYSTEM"
   }
 };

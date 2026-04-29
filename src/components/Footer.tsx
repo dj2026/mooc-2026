@@ -84,7 +84,7 @@ export function Footer() {
             <Grid size={{ xs: 6, md: 2 }} sx={{ textAlign: { xs: 'center', md: 'left' } }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary', fontWeight: 800, mb: 3, textTransform: 'uppercase', letterSpacing: '2px', fontSize: '0.7rem' }}>{t('footer.community')}</Typography>
               <Box component="ul" sx={{ p: 0, m: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                <li><FooterLink href="#">{t('Telegram')}</FooterLink></li>
+                <li><FooterLink href="#">{t('footer.telegram')}</FooterLink></li>
               </Box>
             </Grid>
 

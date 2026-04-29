@@ -213,7 +213,7 @@ export function Header() {
                       {t('dashboard.my_progress')}
                     </Button>
                     <Button fullWidth color="error" onClick={handleLogout} sx={{ fontWeight: 800, py: 1.5 }}>
-                      LOGOUT
+                      {t('auth.logout')}
                     </Button>
                   </>
                 ) : (

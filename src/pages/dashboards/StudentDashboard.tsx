@@ -1,8 +1,9 @@
 import {useState, useEffect, useMemo, useCallback} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {PlayCircle, ChevronRight, CheckCircle2, Loader2, Lock, Code2, Cpu, Globe, Database, Terminal, Layers, Trophy, RotateCcw, UserPlus, Trash2, X, Check} from 'lucide-react';
+import {PlayCircle, ChevronRight, CheckCircle2, Loader2, Lock, Code2, Cpu, Globe, Database, Terminal, Layers, Trophy, RotateCcw, UserPlus, Trash2, X, Check,BookOpen} from 'lucide-react';
 import {motion, AnimatePresence} from 'framer-motion';
 import {Box, Container, Typography, Card, TextField, Button, Avatar, LinearProgress, Stack, Alert, Tabs, Tab, IconButton, Tooltip, useTheme} from '@mui/material';
+
 import Grid from '@mui/material/Grid';
 import LogoutIcon from '@mui/icons-material/Logout';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -10,8 +11,9 @@ import {api} from '../../services/api';
 import localData from '../../../public/data.json';
 import {useTranslation} from 'react-i18next';
 
-interface Lesson { id: string; title: string; }
-interface Course { id: string; title: string; content?: Lesson[]; }
+interface Lesson {id: string; title: any; theoryInstructions?: any; challenge?: any;}
+interface Topic {title: any; lessons: Lesson[];}
+interface Course {id: string; title: any; topics?: Topic[]; content?: Lesson[];}
 interface Student { id: string; name: string; code: string; email: string; average?: number; role?: 'student' | 'teacher'; }
 
 function StudentCard({ student, onLogin, onDelete, error }: { 
@@ -61,19 +63,19 @@ function StudentCard({ student, onLogin, onDelete, error }: {
   );
 }
 
-const CourseIcon = ({ title }: { title: string }) => {
+const CourseIcon = ({ title }: { title: any }) => {
   const iconProps = { size: 22, color: '#a855f7' };
-  const name = title.toLowerCase();
+  const name = typeof title === 'string' ? title.toLowerCase() : (title?.ca || '').toLowerCase();
   if (name.includes('python')) return <Terminal {...iconProps} />;
   if (name.includes('react')) return <Globe {...iconProps} />;
-  if (name.includes('learning')) return <Cpu {...iconProps} />;
+  if (name.includes('learning') || name.includes('aprenent')) return <Cpu {...iconProps} />;
   if (name.includes('spring') || name.includes('java')) return <Layers {...iconProps} />;
   if (name.includes('base de dades') || name.includes('sql')) return <Database {...iconProps} />;
   return <Code2 {...iconProps} />;
 };
 
 export default function StudentDashboard() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const theme = useTheme();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -84,13 +86,27 @@ export default function StudentDashboard() {
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [dbProgress, setDbProgress] = useState<Record<string, boolean>>({});
   const [errorId, setErrorId] = useState<string | null>(null);
-  const [expandedCourse, setExpandedCourse] = useState<string | null>(null);
+const [expandedCourse, setExpandedCourse] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'syllabus' | 'activities'>('syllabus');
   const [rankingTab, setRankingTab] = useState(0);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newName, setNewName] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [newPin, setNewPin] = useState("");
   const [newRole, setNewRole] = useState<'student' | 'teacher'>('student');
+
+  const lang = (i18n.language?.split('-')[0]) as 'ca' | 'es' | 'en';
+  const getText = (field: any): string => {
+    if (!field) return '';
+    if (typeof field === 'string') return field;
+    return field[lang] || field['ca'] || '';
+  };
+
+  const getCourseTopics = (course: Course): Topic[] => {
+    if (course.topics && course.topics.length > 0) return course.topics;
+    if (course.content && course.content.length > 0) return [{ title: '', lessons: course.content as Lesson[] }];
+    return [];
+  };
   const fetchProgress = useCallback(async (studentId: string) => {
     try {
       setActionLoading(true);
@@ -169,10 +185,16 @@ export default function StudentDashboard() {
   };
 
   const getCourseProgress = useCallback((course: Course, studentId: string): number => {
-    if (!course.content || course.content.length === 0) return 0;
+    const topics = getCourseTopics(course);
+    const totalLessons = topics.reduce((acc, topic) => acc + (topic.lessons?.length || 0), 0) || 0;
+    if (totalLessons === 0) return 0;
     const student = students.find(s => s.id === studentId);
-    if (selectedStudent?.id === studentId) {const done = course.content.filter(l => dbProgress[`${course.id}_${l.id}`]).length; return Math.round((done / course.content.length) * 100);}
-    return student?.average || 0;}, [dbProgress, selectedStudent, students]);
+    if (selectedStudent?.id === studentId) {
+      const done = topics.reduce((acc, topic) => acc + (topic.lessons?.filter(l => dbProgress[`${course.id}_${l.id}`]).length || 0), 0) || 0;
+      return Math.round((done / totalLessons) * 100);
+    }
+    return student?.average || 0;
+  }, [dbProgress, selectedStudent, students, getCourseTopics]);
 
   const rankedStudentsByCourse = useMemo(() => {
     const currentCourse = allCourses[rankingTab];
@@ -210,7 +232,7 @@ export default function StudentDashboard() {
                           {t('dashboard.create_user_title')}
                         </Typography>
                         <Typography variant="caption" sx={{ color: 'text.disabled', mt: 0.5, textAlign: 'center' }}>
-                          Fes clic per fer el login
+                          {t('dashboard.click_to_login')}
                         </Typography>
                       </Card>
                     ) : (
@@ -227,13 +249,13 @@ export default function StudentDashboard() {
                           </Stack>
                           <Box sx={{ display: 'flex', bgcolor: 'action.hover', borderRadius: '12px', p: 0.5, position: 'relative' }}>
                             <Box sx={{ position: 'absolute', top: 4, bottom: 4, left: newRole === 'student' ? 4 : 'calc(50% + 2px)', width: 'calc(50% - 6px)', bgcolor: 'primary.main', borderRadius: '10px', transition: 'left 0.25s ease' }} />
-                            <Button disableRipple onClick={() => setNewRole('student')} sx={{ flex: 1, zIndex: 1, borderRadius: '10px', py: 0.75, fontWeight: 800, fontSize: '0.8rem', textTransform: 'none', color: newRole === 'student' ? '#fff' : 'text.secondary', '&:hover': { bgcolor: 'transparent' } }}>Student</Button>
-                            <Button disableRipple onClick={() => setNewRole('teacher')} sx={{ flex: 1, zIndex: 1, borderRadius: '10px', py: 0.75, fontWeight: 800, fontSize: '0.8rem', textTransform: 'none', color: newRole === 'teacher' ? '#fff' : 'text.secondary', '&:hover': { bgcolor: 'transparent' } }}>Teacher</Button>
+                            <Button disableRipple onClick={() => setNewRole('student')} sx={{ flex: 1, zIndex: 1, borderRadius: '10px', py: 0.75, fontWeight: 800, fontSize: '0.8rem', textTransform: 'none', color: newRole === 'student' ? '#fff' : 'text.secondary', '&:hover': { bgcolor: 'transparent' } }}>{t('dashboard.role_student')}</Button>
+                            <Button disableRipple onClick={() => setNewRole('teacher')} sx={{ flex: 1, zIndex: 1, borderRadius: '10px', py: 0.75, fontWeight: 800, fontSize: '0.8rem', textTransform: 'none', color: newRole === 'teacher' ? '#fff' : 'text.secondary', '&:hover': { bgcolor: 'transparent' } }}>{t('dashboard.role_teacher')}</Button>
                           </Box>
                           <TextField fullWidth label={t('dashboard.name_label')} variant="filled" value={newName} onChange={e => setNewName(e.target.value)} sx={{ bgcolor: 'action.hover', borderRadius: '12px' }} />
                           <TextField fullWidth label={t('dashboard.email_label')} variant="filled" value={newEmail} onChange={e => setNewEmail(e.target.value)} sx={{ bgcolor: 'action.hover', borderRadius: '12px' }} />
                           <TextField fullWidth label={t('dashboard.pin_label')} variant="filled" type="password" value={newPin} onChange={e => setNewPin(e.target.value)} slotProps={{ htmlInput: { maxLength: 4 } }} sx={{ bgcolor: 'action.hover', borderRadius: '12px' }} />
-                          <Button type="submit" variant="outlined" fullWidth sx={{ borderRadius: '12px', py: 1.5, borderColor: 'primary.main', color: 'primary.main', fontWeight: 800 }}>{newRole === 'teacher' ? 'Registrar Teacher' : 'Registrar Student'}</Button>
+                          <Button type="submit" variant="outlined" fullWidth sx={{ borderRadius: '12px', py: 1.5, borderColor: 'primary.main', color: 'primary.main', fontWeight: 800 }}>{newRole === 'teacher' ? t('dashboard.register_teacher') : t('dashboard.register_student')}</Button>
                         </Stack>
                       </Card>
                     )}
@@ -271,7 +293,7 @@ export default function StudentDashboard() {
                           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
                             <Typography variant="caption" sx={{ opacity: 0.5, fontWeight: 800, fontSize: { xs: '0.75rem', md: '0.875rem' } }}>{t('dashboard.average')}</Typography>
                             <Typography variant="body2" sx={{ fontWeight: 900, color: 'primary.main', fontSize: { xs: '1rem', md: '1rem' } }}>
-                              {allCourses.length > 0 ? Math.floor(allCourses.reduce((acc, c) => acc + getCourseProgress(c, selectedStudent.id), 0) / allCourses.length) : 0} punts
+                              {allCourses.length > 0 ? Math.floor(allCourses.reduce((acc, c) => acc + getCourseProgress(c, selectedStudent.id), 0) / allCourses.length) : 0} {t('dashboard.points')}
                             </Typography>
                           </Box>
                         </Box>
@@ -285,7 +307,7 @@ export default function StudentDashboard() {
                           {allCourses.map(course => (
                             <Box key={course.id}>
                               <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
-                                <Typography variant="caption" sx={{ fontWeight: 600 }}>{course.title}</Typography>
+                                <Typography variant="caption" sx={{ fontWeight: 600 }}>{getText(course.title)}</Typography>
                                 <Typography variant="caption" sx={{ fontWeight: 800, color: 'primary.main' }}>{getCourseProgress(course, selectedStudent.id)}%</Typography>
                               </Box>
                               <LinearProgress 
@@ -321,11 +343,11 @@ export default function StudentDashboard() {
                             <Card onClick={() => setExpandedCourse(expandedCourse === course.id ? null : course.id)} sx={{ p: { xs: 0.75, md: 3 }, cursor: 'pointer', borderRadius: { xs: 1.5, md: 2 }, bgcolor: 'background.paper', border: '2px solid', borderColor: expandedCourse === course.id ? 'primary.main' : 'transparent', transition: '0.2s', minWidth: 0, minHeight: { xs: 60, md: 100 }, position: 'relative', zIndex: expandedCourse === course.id ? 50 : 0, width: '100%' }}>
                               <Stack spacing={{ xs: 0.75, md: 2 }}>
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, flexWrap: 'nowrap' }}>
-                                  <Typography variant="body2" sx={{ fontWeight: 900, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>{course.title}</Typography>
+                                  <Typography variant="body2" sx={{ fontWeight: 900, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>{getText(course.title)}</Typography>
                                   <Box sx={{ p: 0.5, bgcolor: 'primary.main' + '1A', borderRadius: '4px', flexShrink: 0 }}><CourseIcon title={course.title} /></Box>
                                 </Box>
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                  <Typography variant="caption" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.65rem' }}>{getCourseProgress(course, selectedStudent.id)} punts</Typography>
+                                  <Typography variant="caption" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '0.65rem' }}>{getCourseProgress(course, selectedStudent.id)} {t('dashboard.points')}</Typography>
                                   <Stack direction="row" spacing={0.25} sx={{ alignItems: "center", flexShrink: 0 }}>
                                     <Tooltip title={t('dashboard.reset_course_tooltip')}>
                                       <IconButton onClick={(e) => handleResetCourse(e, course.id)} size="small" sx={{ color: 'text.secondary', '&:hover': { color: 'error.main' } }}><RotateCcw size={12} /></IconButton>
@@ -335,19 +357,43 @@ export default function StudentDashboard() {
                                 </Box>
                               </Stack>
                             </Card>
-                            
+                                                        
                             <AnimatePresence>
                               {expandedCourse === course.id && (
                                 <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 50, marginTop: '8px' }} onClick={(e) => e.stopPropagation()}>
-                                  <Box sx={{ p: 1.5, bgcolor: 'background.paper', borderRadius: { xs: 1, md: 1.2 }, border: '1px solid', borderColor: 'primary.main' + '4D', maxHeight: '200px', overflowY: 'auto' }}>
-                                    <Stack spacing={0}>
-                                      {course.content?.map(lesson => (
-                                        <Box key={lesson.id} onClick={() => navigate(`/courses/${course.id}/${lesson.id}`)} sx={{ p: 1.2, borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', '&:hover': { bgcolor: 'action.hover' }, minWidth: 0 }}>
-                                          <Typography variant="caption" sx={{ minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{lesson.title}</Typography>
-                                          {dbProgress[`${course.id}_${lesson.id}`] ? <CheckCircle2 size={18} color={theme.palette.success.main} /> : <PlayCircle size={18} color={theme.palette.primary.main} />}
-                                        </Box>
-                                      ))}
-                                    </Stack>
+                                  <Box sx={{ bgcolor: 'background.paper', borderRadius: { xs: 1, md: 1.2 }, border: '1px solid', borderColor: 'primary.main' + '4D', maxHeight: '350px', overflowY: 'auto' }}>
+                                    <Box sx={{ p: 0.5, bgcolor: 'action.hover', display: 'flex', borderRadius: '8px', m: 1, mb: 0 }}>
+                                      <Button disableRipple onClick={() => setActiveTab('syllabus')} sx={{ flex: 1, borderRadius: '6px', py: 0.75, fontWeight: 800, fontSize: '0.75rem', textTransform: 'none', color: activeTab === 'syllabus' ? '#fff' : 'text.secondary', bgcolor: activeTab === 'syllabus' ? 'primary.main' : 'transparent', '&:hover': { bgcolor: activeTab === 'syllabus' ? 'primary.main' : 'action.hover' } }}>{t('dashboard.syllabus')}</Button>
+                                      <Button disableRipple onClick={() => setActiveTab('activities')} sx={{ flex: 1, borderRadius: '6px', py: 0.75, fontWeight: 800, fontSize: '0.75rem', textTransform: 'none', color: activeTab === 'activities' ? '#fff' : 'text.secondary', bgcolor: activeTab === 'activities' ? 'primary.main' : 'transparent', '&:hover': { bgcolor: activeTab === 'activities' ? 'primary.main' : 'action.hover' } }}>{t('dashboard.activities')}</Button>
+                                    </Box>
+                                    <Box sx={{ p: 1.5 }}>
+                                      <Stack spacing={2}>
+                                        {getCourseTopics(course).map(topic => (
+                                          <Box key={getText(topic.title)}>
+                                            <Typography variant="caption" sx={{ fontWeight: 900, color: 'primary.main', mb: 0.5, display: 'block' }}>{getText(topic.title)}</Typography>
+                                            <Stack spacing={0.5}>
+                                              {topic.lessons?.map(lesson => (
+                                                <Box key={lesson.id} onClick={() => navigate(activeTab === 'syllabus' ? `/courses/${course.id}/${lesson.id}/topic` : `/courses/${course.id}/${lesson.id}`)} sx={{ p: 1, borderRadius: '8px', cursor: 'pointer', '&:hover': { bgcolor: 'action.hover' }, minWidth: 0 }}>
+                                                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                    <Typography variant="caption" sx={{ fontWeight: 600, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>{getText(lesson.title)}</Typography>
+                                                    {activeTab === 'syllabus' ? (<BookOpen size={16} color="#7c3aed" /> ) : (dbProgress[`${course.id}_${lesson.id}`] ? (<CheckCircle2 size={16} color={theme.palette.success.main} />) : (<PlayCircle size={16} color={theme.palette.primary.main} />))}
+                                                  </Box>
+                                                  {activeTab === 'syllabus' && lesson.theoryInstructions && (
+                                                    <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mt: 0.5, fontSize: '0.65rem', opacity: 0.8 }}>
+                                                    </Typography>
+                                                  )}
+
+                                                  {activeTab === 'activities' && lesson.challenge && (
+                                                    <Typography variant="caption" sx={{ color: 'secondary.main', display: 'block', mt: 0.5, fontSize: '0.65rem', opacity: 0.8 }}>
+                                                    </Typography>
+                                                  )}
+                                                </Box>
+                                              ))}
+                                            </Stack>
+                                          </Box>
+                                        ))}
+                                      </Stack>
+                                    </Box>
                                   </Box>
                                 </motion.div>
                               )}
@@ -376,7 +422,7 @@ export default function StudentDashboard() {
                       ))}
                     </Box>
                     {/* MOBILE ── SCROLL DOWN */}
-                    <Typography sx={{fontSize: '0.6rem',fontWeight: 900, letterSpacing: '0.25em',color: 'text.primary', textTransform: 'uppercase', mx: 1}}>LEADERBOARD</Typography>
+                    <Typography sx={{fontSize: '0.6rem',fontWeight: 900, letterSpacing: '0.25em',color: 'text.primary', textTransform: 'uppercase', mx: 1}}>{t('dashboard.leaderboard')}</Typography>
 
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '20px', justifyContent: 'center' }}>
                       {[0, 1, 2].map((i) => (
@@ -393,7 +439,7 @@ export default function StudentDashboard() {
                     </Stack>
                     <Card sx={{ borderRadius: { xs: 1, md: 2 }, bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', overflow: 'hidden', minWidth: 0, width: '100%' }}>
                       <Tabs value={rankingTab} onChange={(_, val) => setRankingTab(val)} variant="scrollable" sx={{ bgcolor: 'action.hover', '& .MuiTabs-indicator': { bgcolor: 'primary.main' } }}>
-                        {allCourses.map(c => <Tab key={c.id} label={c.title} sx={{ fontWeight: 800, textTransform: 'none', minWidth: 0, whiteSpace: 'nowrap', fontSize: { xs: '0.7rem', md: '0.875rem' } } } />)}
+                        {allCourses.map(c => <Tab key={c.id} label={getText(c.title)} sx={{ fontWeight: 800, textTransform: 'none', minWidth: 0, whiteSpace: 'nowrap', fontSize: { xs: '0.7rem', md: '0.875rem' } } } />)}
                       </Tabs>
                       <Box sx={{ p: { xs: 0.5, md: 4 }, height: { xs: '300px', md: '200px' }, overflowY: 'auto', overflowX: 'hidden' }}>
                         <Stack spacing={{ xs: 0.5, md: 2 }}>
@@ -406,7 +452,7 @@ export default function StudentDashboard() {
                                 <Typography sx={{ flex: 1, fontWeight: isMe ? 900 : 900, color: isMe ? 'primary.main' : 'text.primary', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: '1rem' }}>
                                   {s.name} {isMe && `(${t('dashboard.you')})`}
                                 </Typography>
-                                <Typography sx={{ fontWeight: 900, color: 'primary.main', flexShrink: 0, fontSize: '1rem' }}>{getCourseProgress(allCourses[rankingTab], s.id)} punts</Typography>
+                                <Typography sx={{ fontWeight: 900, color: 'primary.main', flexShrink: 0, fontSize: '1rem' }}>{getCourseProgress(allCourses[rankingTab], s.id)} {t('dashboard.points')}</Typography>
                               </Box>
                             );
                           })}

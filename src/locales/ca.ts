@@ -1,4 +1,4 @@
-export default{
+export default {
   auth: {
     login: "login",
     logout: "Sortir",
@@ -23,7 +23,16 @@ export default{
     register_btn: "Registrar Alumne",
     reset_course_confirm: "Estàs segur que vols reiniciar el progrés d'aquest curs?",
     reset_course_tooltip: "Reiniciar curs",
-    progress_detail: "Detall del Progrés"
+    progress_detail: "Detall del Progrés",
+    click_to_login: "Fes clic per fer el login",
+    role_student: "Alumne",
+    role_teacher: "Professor",
+    register_student: "Registrar Alumne",
+    register_teacher: "Registrar Professor",
+    points: "punts",
+    leaderboard: "CLASSIFICACIÓ",
+    syllabus: "Temari",
+    activities: "Laboratori"
   },
   home: {
     featured_title: "Cursos Destacats",
@@ -68,7 +77,8 @@ export default{
     blog: "Blog",
     events: "Events",
     copyright: "MOOC REACT • BARCELONA",
-    systems_operational: "SYSTEMS OPERATIONAL"
+    systems_operational: "SYSTEMS OPERATIONAL",
+    telegram: "Telegram"
   },
   course: {
     by: "by",
@@ -76,5 +86,38 @@ export default{
   },
   common: {
     error_loading: "Error en carregar les dades"
+  },
+  lesson: {
+    syllabus: "Temari",
+    laboratory: "Laboratori",
+    academy: "Academy",
+    course_not_found: "Curs no trobat",
+    explanation: "Explicació",
+    your_challenge: "El teu repte",
+    previous: "Anterior",
+    next: "Següent",
+    go_to_activity: "Anar a l'activitat",
+    lessons: "Lliçons",
+    objective: "Objectiu",
+    run: "EXECUTAR",
+    debug_console: "CONSOLA DE DEBUG",
+    lesson_completed: "LLIÇÓ COMPLETADA!",
+    save: "GUARDAR",
+    saved: "DESAT",
+    pending: "PENDENT",
+    points_label: "PUNTS",
+    no_instructions: "No hi ha instruccions disponibles.",
+    hide_hint: "Amagar Pista",
+    need_help: "Necessites Ajuda?",
+    executing: "Executant...",
+    completed: "COMPLETAT!",
+    check_code: "Revisa el codi",
+    time_up: "TEMPS EXHAURIT!",
+    synced: "Sincronitzat!",
+    error_local: "Error local",
+    waiting_execution: "Esperant execució...",
+    run_code: "Executa el codi...",
+    app_file: "App.tsx",
+    system: "SISTEMA"
   }
 };

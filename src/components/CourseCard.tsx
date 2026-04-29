@@ -8,8 +8,8 @@ import { useTranslation } from 'react-i18next';
 
 interface Course {
   id: string;
-  title: string;
-  description: string;
+  title: string | { ca: string; es: string; en: string };
+  description: string | { ca: string; es: string; en: string };
   image: string;
   level: string;
   duration: string;
@@ -19,14 +19,20 @@ interface Course {
   logoHeight?: number;
 }
 
+function getLocalizedText(text: string | { ca: string; es: string; en: string }, lang: string): string {
+  if (typeof text === 'string') return text;
+  return text[lang as keyof typeof text] || text.en || text.ca || text.es || '';
+}
+
 interface CourseCardProps {
   course: Course;
   index: number;
 }
 
 export function CourseCard({ course, index }: CourseCardProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const theme = useTheme();
+  const lang = i18n.language.split('-')[0] || 'en';
   
   const logoW = course.logoWidth || course.logoSize || 100;
   const logoH = course.logoHeight || course.logoSize || 100;
@@ -82,7 +88,7 @@ export function CourseCard({ course, index }: CourseCardProps) {
                 <Box
                   component="img"
                   src={course.image}
-                  alt={course.title}
+                  alt={getLocalizedText(course.title, lang)}
                   sx={{
                     width: { xs: logoW * 0.65, md: logoW },
                     height: { xs: logoH * 0.65, md: logoH },
@@ -109,23 +115,23 @@ export function CourseCard({ course, index }: CourseCardProps) {
           >
             {/* Secció superior del contingut */}
             <Box>            
-              <CardTitle sx={{ 
-                mb: 1, 
-                fontSize: { xs: '1.05rem', md: '1.4rem' },
-                lineHeight: 1.3,
-                transition: 'color 0.3s',
-                '.MuiCard-root:hover &': { color: 'primary.main' } 
-              }}>
-                {course.title}
-              </CardTitle>
-              
-              <CardDescription sx={{ 
-                mb: { xs: 2, md: 3 },
-                // Descripció més petita i compacta a mòbil XS
-                fontSize: { xs: '0.8rem', md: '1rem' }
-              }}>
-                {course.description}
-              </CardDescription>
+               <CardTitle sx={{ 
+                 mb: 1, 
+                 fontSize: { xs: '1.05rem', md: '1.4rem' },
+                 lineHeight: 1.3,
+                 transition: 'color 0.3s',
+                 '.MuiCard-root:hover &': { color: 'primary.main' } 
+               }}>
+                 {getLocalizedText(course.title, lang)}
+               </CardTitle>
+               
+               <CardDescription sx={{ 
+                 mb: { xs: 2, md: 3 },
+                 // Descripció més petita i compacta a mòbil XS
+                 fontSize: { xs: '0.8rem', md: '1rem' }
+               }}>
+                 {getLocalizedText(course.description, lang)}
+               </CardDescription>
             </Box>
 
             {/* Secció inferior (ENROLL) */}

@@ -23,7 +23,16 @@ export default {
     register_btn: "Registrar Alumno",
     reset_course_confirm: "¿Estás seguro de que quieres reiniciar el progreso de este curso?",
     reset_course_tooltip: "Reiniciar curso",
-    progress_detail: "Detalle del Progreso"
+    progress_detail: "Detalle del Progreso",
+    click_to_login: "Haz clic para iniciar sesión",
+    role_student: "Alumno",
+    role_teacher: "Profesor",
+    register_student: "Registrar Alumno",
+    register_teacher: "Registrar Profesor",
+    points: "puntos",
+    leaderboard: "CLASIFICACIÓN",
+    syllabus: "Temario",
+    activities: "Laboratorio"
   },
   home: {
     featured_title: "Cursos Destacados",
@@ -68,7 +77,8 @@ export default {
     blog: "Blog",
     events: "Eventos",
     copyright: "MOOC REACT • BARCELONA",
-    systems_operational: "SYSTEMS OPERATIONAL"
+    systems_operational: "SYSTEMS OPERATIONAL",
+    telegram: "Telegram"
   },
   course: {
     by: "by",
@@ -76,5 +86,38 @@ export default {
   },
   common: {
     error_loading: "Error al cargar los datos"
+  },
+  lesson: {
+    syllabus: "Temario",
+    laboratory: "Laboratorio",
+    academy: "Academy",
+    course_not_found: "Curso no encontrado",
+    explanation: "Explicación",
+    your_challenge: "Tu reto",
+    previous: "Anterior",
+    next: "Siguiente",
+    go_to_activity: "Ir a la actividad",
+    lessons: "Lecciones",
+    objective: "Objetivo",
+    run: "EJECUTAR",
+    debug_console: "CONSOLA DE DEBUG",
+    lesson_completed: "LECCIÓN COMPLETADA!",
+    save: "GUARDAR",
+    saved: "GUARDADO",
+    pending: "PENDIENTE",
+    points_label: "PUNTOS",
+    no_instructions: "No hay instrucciones disponibles.",
+    hide_hint: "Ocultar Pista",
+    need_help: "¿Necesitas Ayuda?",
+    executing: "Ejecutando...",
+    completed: "COMPLETADO!",
+    check_code: "Revisa el código",
+    time_up: "TIEMPO AGOTADO!",
+    synced: "Sincronizado!",
+    error_local: "Error local",
+    waiting_execution: "Esperando ejecución...",
+    run_code: "Ejecuta el código...",
+    app_file: "App.tsx",
+    system: "SISTEMA"
   }
 };
