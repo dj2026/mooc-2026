@@ -5,7 +5,7 @@
       "title": { "ca": "Python", "es": "Python", "en": "Python" },
       "description": { "ca": "Domina el llenguatge més versàtil: des de scripting fins a automatització de dades.", "es": "Domina el lenguaje más versátil: desde scripting hasta automatización de datos.", "en": "Master the most versatile language: from scripting to data automation." },
       "icon": "CODE",
-      "image": "./src/img/Python.svg",
+      "image": "/img/Python.svg",
       "logoSize": 80,
       "content": [
         {
@@ -35,7 +35,7 @@
       "title": { "ca": "React", "es": "React", "en": "React" },
       "description": { "ca": "Construeix interfícies modernes.", "es": "Construye interfaces modernas.", "en": "Build modern interfaces." },
       "icon": "CONNECT_O",
-      "image": "./src/img/React.svg",
+      "image": "/img/React.svg",
       "logoSize": 90,
       "content": [
         {
@@ -65,7 +65,7 @@
       "title": { "ca": "Spring Boot", "es": "Spring Boot", "en": "Spring Boot" },
       "description": { "ca": "APIs REST amb Java.", "es": "APIs REST con Java.", "en": "REST APIs with Java." },
       "icon": "DATABASE",
-      "image": "./src/img/SB.svg",
+      "image": "/img/SB.svg",
       "logoSize": 100,
       "content": [
         {
@@ -95,7 +95,7 @@
       "title": { "ca": "Machine Learning", "es": "Machine Learning", "en": "Machine Learning" },
       "description": { "ca": "Models predictius i IA.", "es": "Modelos predictivos e IA.", "en": "Predictive models and AI." },
       "icon": "CLUSTER",
-      "image": "./src/img/ml.svg",
+      "image": "/img/ml.svg",
       "logoSize": 110,
       "content": [
         {
