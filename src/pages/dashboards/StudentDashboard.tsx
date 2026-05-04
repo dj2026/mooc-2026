@@ -23,6 +23,7 @@ function StudentCard({ student, onLogin, onDelete, error }: {
   const [pin, setPin] = useState("");
   const [deletePin, setDeletePin] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
+  
 
   const handleConfirmDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -86,7 +87,7 @@ export default function StudentDashboard() {
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [dbProgress, setDbProgress] = useState<Record<string, boolean>>({});
   const [errorId, setErrorId] = useState<string | null>(null);
-const [expandedCourse, setExpandedCourse] = useState<string | null>(null);
+  const [expandedCourse, setExpandedCourse] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'syllabus' | 'activities'>('syllabus');
   const [rankingTab, setRankingTab] = useState(0);
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -154,13 +155,22 @@ const [expandedCourse, setExpandedCourse] = useState<string | null>(null);
     return true;
   };
 
-  const handleLogin = async (student: Student, code: string) => {
-    if (code === student.code) {
+  const handleLogin = (student: Student, pin: string) => {
+    if (student.code !== pin) {
+      setErrorId(student.id);
+      setTimeout(() => setErrorId(null), 500);
+      return; 
+    }
+
+    if (student.role === 'teacher') {
+      alert("⚠️ Mode Professor: In process... Aviat podràs gestionar els teus cursos.");
+    } else {
       setSelectedStudent(student);
       localStorage.setItem('currentStudent', JSON.stringify(student));
-      window.dispatchEvent(new Event('auth-state-change'));
-      await fetchProgress(student.id);
-    } else { setErrorId(student.id); setTimeout(() => setErrorId(null), 500); }
+      if (typeof fetchProgress === 'function') {
+        fetchProgress(student.id);
+      }
+    }
   };
 
   const handleLogoutAction = () => {
@@ -213,8 +223,15 @@ const [expandedCourse, setExpandedCourse] = useState<string | null>(null);
           <AnimatePresence mode="wait">
             {!selectedStudent ? (
               <motion.div key="login" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
-                <Typography variant="h6" align="center" sx={{ fontWeight: 900, mb: 3, mt:3 }}>{t('dashboard.title')}</Typography>
-                
+                {/* SWITCH BUTTON */}
+                <Stack direction="row" spacing={2} sx={{ alignItems: 'center', justifyContent: 'center', mb: 3, mt: 3 }}><Typography variant="h6" sx={{ fontWeight: 900 }}>{t('dashboard.title')}</Typography>
+                  <Box sx={{ display: 'flex', bgcolor: 'action.hover', borderRadius: '10px', p: 0.5, position: 'relative', width: '200px', height: '36px', cursor: 'pointer' }}>
+                    <Box sx={{ position: 'absolute', top: 3, bottom: 3, left: newRole === 'student' ? 3 : 'calc(50% + 1px)', width: 'calc(50% - 4px)', bgcolor: 'primary.main', borderRadius: '8px', transition: 'left 0.25s cubic-bezier(0.4, 0, 0.2, 1)', zIndex: 0 }} />
+                    <Button disableRipple onClick={() => setNewRole('student')} sx={{ flex: 1, zIndex: 1, borderRadius: '8px', fontWeight: 800, fontSize: '0.75rem', textTransform: 'none', color: newRole === 'student' ? '#fff' : 'text.secondary', '&:hover': { bgcolor: 'transparent' } }}>{t('dashboard.role_student')}</Button>
+                    <Button disableRipple onClick={() => setNewRole('teacher')} sx={{ flex: 1, zIndex: 1, borderRadius: '8px', fontWeight: 800, fontSize: '0.75rem', textTransform: 'none', color: newRole === 'teacher' ? '#fff' : 'text.secondary', '&:hover': { bgcolor: 'transparent' } }}>{t('dashboard.role_teacher')}</Button>
+                  </Box>
+                </Stack>           
+
                 {/* Mobile: scroll vertical | Desktop: dos canals (form + cards) */}
                 <Box sx={{flex: 1,overflowY: 'auto',overflowX: 'hidden',pb: 2,}}>
                 <Box sx={{display: 'flex',flexDirection: { xs: 'column', md: 'row' },gap: { xs: 2, md: 4 },alignItems: 'flex-start',}}>
@@ -222,9 +239,7 @@ const [expandedCourse, setExpandedCourse] = useState<string | null>(null);
                   {/* ── COLUMNA ESQUERRA: Formulari */}
                   <Box sx={{ width: { xs: '100%', md: '320px' }, flexShrink: 0, minWidth: 0 }}>
                     {!showCreateForm ? (
-                      <Card
-                        onClick={() => setShowCreateForm(true)}
-                        sx={{p: { xs: 2, md: 4 },display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',borderRadius: { xs: 3, md: 10 },border: '2px dashed', borderColor: 'divider',bgcolor: 'background.paper',height: '100%', minHeight: { xs: 160, md: 210 },cursor: 'pointer', transition: 'all 0.3s ease','&:hover': { borderColor: 'primary.main', '& *': { color: 'primary.main' } }}}>
+                      <Card onClick={() => setShowCreateForm(true)} sx={{p: { xs: 2, md: 4 },display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',borderRadius: { xs: 3, md: 10 },border: '2px dashed', borderColor: 'divider',bgcolor: 'background.paper',height: '100%', minHeight: { xs: 160, md: 210 },cursor: 'pointer', transition: 'all 0.3s ease','&:hover': { borderColor: 'primary.main', '& *': { color: 'primary.main' } }}}>
                         <Box sx={{ width: 48, height: 48, borderRadius: '50%', border: '2px dashed', borderColor: 'divider', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
                           <UserPlus size={20} color={theme.palette.text.secondary} />
                         </Box>
@@ -237,25 +252,35 @@ const [expandedCourse, setExpandedCourse] = useState<string | null>(null);
                       </Card>
                     ) : (
                       <Card sx={{ p: { xs: 2, md: 5 }, borderRadius: { xs: 2, md: 2.5 }, bgcolor: 'background.paper', border: '2px dashed', borderColor: 'primary.main' + '4D', height: 'fit-content' }}>
-                        <Stack spacing={{ xs: 2, md: 3 }} component="form" onSubmit={handleCreateStudent}>
+                        <Stack spacing={{ xs: 2, md: 3 }} component="form" onSubmit={(e) => {
+                          e.preventDefault(); 
+                          handleCreateStudent(e);
+                        }}>
+                          
+                          {/* Header i Switcher */}
                           <Stack direction="row" sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
                             <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
                               <UserPlus size={18} color={theme.palette.primary.main} />
                               <Typography variant="h6" sx={{ fontWeight: 900 }}>{t('dashboard.create_user_title')}</Typography>
                             </Stack>
-                            <IconButton size="small" onClick={() => setShowCreateForm(false)} sx={{ color: 'text.secondary', '&:hover': { color: 'error.main' } }}>
-                              <X size={18} />
-                            </IconButton>
+                            <IconButton size="small" onClick={() => setShowCreateForm(false)} sx={{ color: 'text.secondary' }}><X size={18} /></IconButton>
                           </Stack>
+
+                          {/* Selector de Rol */}
                           <Box sx={{ display: 'flex', bgcolor: 'action.hover', borderRadius: '12px', p: 0.5, position: 'relative' }}>
                             <Box sx={{ position: 'absolute', top: 4, bottom: 4, left: newRole === 'student' ? 4 : 'calc(50% + 2px)', width: 'calc(50% - 6px)', bgcolor: 'primary.main', borderRadius: '10px', transition: 'left 0.25s ease' }} />
-                            <Button disableRipple onClick={() => setNewRole('student')} sx={{ flex: 1, zIndex: 1, borderRadius: '10px', py: 0.75, fontWeight: 800, fontSize: '0.8rem', textTransform: 'none', color: newRole === 'student' ? '#fff' : 'text.secondary', '&:hover': { bgcolor: 'transparent' } }}>{t('dashboard.role_student')}</Button>
-                            <Button disableRipple onClick={() => setNewRole('teacher')} sx={{ flex: 1, zIndex: 1, borderRadius: '10px', py: 0.75, fontWeight: 800, fontSize: '0.8rem', textTransform: 'none', color: newRole === 'teacher' ? '#fff' : 'text.secondary', '&:hover': { bgcolor: 'transparent' } }}>{t('dashboard.role_teacher')}</Button>
+                            <Button type="button" disableRipple onClick={() => setNewRole('student')} sx={{ flex: 1, zIndex: 1, borderRadius: '10px', py: 0.75, fontWeight: 800, fontSize: '0.8rem', textTransform: 'none', color: newRole === 'student' ? '#fff' : 'text.secondary', '&:hover': { bgcolor: 'transparent' } }}>{t('dashboard.role_student')}</Button>
+                            <Button type="button" disableRipple onClick={() => setNewRole('teacher')} sx={{ flex: 1, zIndex: 1, borderRadius: '10px', py: 0.75, fontWeight: 800, fontSize: '0.8rem', textTransform: 'none', color: newRole === 'teacher' ? '#fff' : 'text.secondary', '&:hover': { bgcolor: 'transparent' } }}>{t('dashboard.role_teacher')}</Button>
                           </Box>
-                          <TextField fullWidth label={t('dashboard.name_label')} variant="filled" value={newName} onChange={e => setNewName(e.target.value)} sx={{ bgcolor: 'action.hover', borderRadius: '12px' }} />
-                          <TextField fullWidth label={t('dashboard.email_label')} variant="filled" value={newEmail} onChange={e => setNewEmail(e.target.value)} sx={{ bgcolor: 'action.hover', borderRadius: '12px' }} />
-                          <TextField fullWidth label={t('dashboard.pin_label')} variant="filled" type="password" value={newPin} onChange={e => setNewPin(e.target.value)} slotProps={{ htmlInput: { maxLength: 4 } }} sx={{ bgcolor: 'action.hover', borderRadius: '12px' }} />
-                          <Button type="submit" variant="outlined" fullWidth sx={{ borderRadius: '12px', py: 1.5, borderColor: 'primary.main', color: 'primary.main', fontWeight: 800 }}>{newRole === 'teacher' ? t('dashboard.register_teacher') : t('dashboard.register_student')}</Button>
+
+                          {/* Inputs */}
+                          <TextField fullWidth label={t('dashboard.name_label')} variant="filled" value={newName} onChange={e => setNewName(e.target.value)} required sx={{ '& .MuiInputBase-root': { bgcolor: 'action.hover', borderRadius: '12px' } }} />
+                          <TextField fullWidth label={t('dashboard.email_label')} variant="filled" value={newEmail} onChange={e => setNewEmail(e.target.value)} required sx={{ '& .MuiInputBase-root': { bgcolor: 'action.hover', borderRadius: '12px' } }} />
+                          <TextField fullWidth label={t('dashboard.pin_label')} variant="filled" type="password" value={newPin} onChange={e => setNewPin(e.target.value)} required slotProps={{ htmlInput: { maxLength: 4 } }} sx={{ '& .MuiInputBase-root': { bgcolor: 'action.hover', borderRadius: '12px' } }} />
+
+                          <Button type="submit" variant="contained" fullWidth sx={{ borderRadius: '12px', py: 1.5, fontWeight: 800, boxShadow: 'none', '&:hover': { boxShadow: 'none' } }}>
+                            {newRole === 'teacher' ? 'Registrar Professor' : 'Registrar Estudiant'}
+                          </Button>
                         </Stack>
                       </Card>
                     )}
@@ -378,15 +403,8 @@ const [expandedCourse, setExpandedCourse] = useState<string | null>(null);
                                                     <Typography variant="caption" sx={{ fontWeight: 600, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>{getText(lesson.title)}</Typography>
                                                     {activeTab === 'syllabus' ? (<BookOpen size={16} color="#7c3aed" /> ) : (dbProgress[`${course.id}_${lesson.id}`] ? (<CheckCircle2 size={16} color={theme.palette.success.main} />) : (<PlayCircle size={16} color={theme.palette.primary.main} />))}
                                                   </Box>
-                                                  {activeTab === 'syllabus' && lesson.theoryInstructions && (
-                                                    <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mt: 0.5, fontSize: '0.65rem', opacity: 0.8 }}>
-                                                    </Typography>
-                                                  )}
-
-                                                  {activeTab === 'activities' && lesson.challenge && (
-                                                    <Typography variant="caption" sx={{ color: 'secondary.main', display: 'block', mt: 0.5, fontSize: '0.65rem', opacity: 0.8 }}>
-                                                    </Typography>
-                                                  )}
+                                                  {activeTab === 'syllabus' && lesson.theoryInstructions && (<Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mt: 0.5, fontSize: '0.65rem', opacity: 0.8 }}></Typography>)}
+                                                  {activeTab === 'activities' && lesson.challenge && (<Typography variant="caption" sx={{ color: 'secondary.main', display: 'block', mt: 0.5, fontSize: '0.65rem', opacity: 0.8 }}></Typography>)}
                                                 </Box>
                                               ))}
                                             </Stack>
@@ -406,24 +424,13 @@ const [expandedCourse, setExpandedCourse] = useState<string | null>(null);
                     <Box sx={{display: { xs: 'flex', md: 'none' }, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 2, zIndex: 11,width: '100%',my: 4}}>
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '20px', justifyContent: 'center' }}>
                       {[0, 1, 2].map((i) => (
-                        <Box
-                          key={`left-${i}`}
-                          component={motion.div}
-                          animate={{ opacity: [0, 1, 0], y: [0, 5, 10] }}
-                          transition={{ duration: 2, repeat: Infinity, delay: i * 0.3, ease: "easeInOut" }}
-                          sx={{ 
-                            mt: i === 0 ? -2 : -3, 
-                            display: 'flex',
-                            color: 'text.primary'
-                          }}
-                        >
+                        <Box key={`left-${i}`} component={motion.div} animate={{ opacity: [0, 1, 0], y: [0, 5, 10] }} transition={{ duration: 2, repeat: Infinity, delay: i * 0.3, ease: "easeInOut" }} sx={{mt: i === 0 ? -2 : -3, display: 'flex', color: 'text.primary'}}>
                           <KeyboardArrowDownIcon sx={{ fontSize: '1.2rem' }} />
                         </Box>
                       ))}
                     </Box>
                     {/* MOBILE ── SCROLL DOWN */}
                     <Typography sx={{fontSize: '0.6rem',fontWeight: 900, letterSpacing: '0.25em',color: 'text.primary', textTransform: 'uppercase', mx: 1}}>{t('dashboard.leaderboard')}</Typography>
-
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '20px', justifyContent: 'center' }}>
                       {[0, 1, 2].map((i) => (
                         <Box key={`right-${i}`} component={motion.div} animate={{ opacity: [0, 1, 0], y: [0, 5, 10] }} transition={{ duration: 2, repeat: Infinity, delay: i * 0.3, ease: "easeInOut" }}sx={{mt: i === 0 ? -2 : -3,display: 'flex', color: 'text.primary'}}>

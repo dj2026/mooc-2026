@@ -8,17 +8,8 @@ export function ThemeToggleButton() {
   const isDark = mode === 'dark';
 
   return (
-    <IconButton
-      onClick={toggleTheme}
-      sx={{
-        color: theme.palette.text.primary,
-        transition: 'all 0.3s ease',
-        '&:hover': {
-          color: theme.palette.primary.main,
-          bgcolor: theme.palette.primary.main + '15',
-        },
-      }}
-    >
+    <IconButton onClick={toggleTheme} aria-label={isDark ? "Activar mode clar" : "Activar mode fosc"}
+      sx={{color: theme.palette.text.primary, transition: 'all 0.3s ease', '&:hover': {color: theme.palette.primary.main, bgcolor: theme.palette.primary.main + '15'},}}>
       {isDark ? <Sun size={20} /> : <Moon size={20} />}
     </IconButton>
   );

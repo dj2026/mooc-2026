@@ -48,24 +48,17 @@ export default function CourseLessons() {
           <MuiLink component={RouterLink} to="/" sx={{ color: 'text.secondary', textDecoration: 'none', fontSize: '0.8rem' }}>{t('lesson.academy')}</MuiLink>
           <Typography sx={{ fontSize: '0.8rem', fontWeight: 800 }}>{getText(course.title)}</Typography>
         </Breadcrumbs>
-        <Typography variant="h4" sx={{ fontWeight: 900 }}>{getText(course.title).toUpperCase()}</Typography>
+        <Typography variant="h1" sx={{ fontWeight: 900, fontSize: { xs: '1.5rem', md: '2.5rem' } }}>{getText(course.title).toUpperCase()}</Typography>
       </Box>
 
       {/* CONTENIDOR SPA: 2 COLUMNES AMB PIPELINE VERTICAL */}
-      <Box sx={{ 
-        flex: 1, 
-        display: 'flex', 
-        flexDirection: { xs: 'column', md: 'row' },
-        px: 4,
-        gap: 0,
-        position: 'relative'
-      }}>
+      <Box sx={{flex: 1, display: 'flex', flexDirection: { xs: 'column', md: 'row' },px: 4,gap: 0, position: 'relative'}}>
         
         {/* SECCIÓ ESQUERRA: TEMARI */}
         <Box sx={{ flex: 1, py: 4, pr: { md: 4 } }}>
           <Stack direction="row" spacing={1.5} sx={{ mb: 4, alignItems: 'center' }}>
             <BookOpen size={20} color="#7c3aed" />
-            <Typography variant="h6" sx={{ fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+            <Typography variant="h6" component="h2" sx={{ fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
               {t('lesson.syllabus')}
             </Typography>
           </Stack>
@@ -90,24 +83,8 @@ export default function CourseLessons() {
         </Box>
 
         {/* PIPELINE VERTICAL (Només visible en Desktop) */}
-        <Box sx={{ 
-          display: { xs: 'none', md: 'flex' }, 
-          width: '1px', 
-          bgcolor: 'divider', 
-          my: 4,
-          position: 'relative',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
-          <Box sx={{ 
-            position: 'absolute', 
-            p: 1, 
-            bgcolor: 'background.default', 
-            border: '1px solid', 
-            borderColor: 'divider', 
-            borderRadius: '50%',
-            color: 'text.disabled'
-          }}>
+        <Box sx={{ display: { xs: 'none', md: 'flex' }, width: '1px', bgcolor: 'divider', my: 4, position: 'relative', alignItems: 'center', justifyContent: 'center' }}>
+          <Box sx={{ position: 'absolute', p: 1, bgcolor: 'background.default', border: '1px solid', borderColor: 'divider', borderRadius: '50%', color: 'text.disabled' }}>
             <ChevronRight size={12} />
           </Box>
         </Box>
@@ -116,7 +93,7 @@ export default function CourseLessons() {
         <Box sx={{ flex: 1, py: 4, pl: { md: 4 } }}>
           <Stack direction="row" spacing={1.5} sx={{ mb: 4, alignItems: 'center' }}>
             <Code2 size={20} color="#db2777" />
-            <Typography variant="h6" sx={{ fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+            <Typography variant="h6" component="h2" sx={{ fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
               {t('lesson.laboratory')}
             </Typography>
           </Stack>

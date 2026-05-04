@@ -32,14 +32,9 @@ export default function LessonTopic() {
   const navigate = useNavigate();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const { i18n, t } = useTranslation();
-
   const [apiData, setApiData] = useState<DataStructure | null>(null);
   const [loading, setLoading] = useState(true);
-
-  // Determinar idioma actual
   const lang = (i18n.language?.split('-')[0] as keyof I18nField) || 'ca';
-
-  // Helper per treure el text correcte
   const getText = (field: I18nField | string | undefined): string => {
     if (!field) return '';
     if (typeof field === 'string') return field;
@@ -67,16 +62,7 @@ export default function LessonTopic() {
   if (!course || !lesson) return null;
 
   return (
-     <Box sx={{
-       position: 'fixed', inset: 0,
-       height: isMobile ? '87.2vh' : '92vh',
-       mt: isMobile ? 4 : 10,
-       width: '100vw',
-       display: 'flex', flexDirection: 'column',
-       bgcolor: 'background.default', color: 'text.primary',
-       overflow: 'hidden',
-       pb: '70px',
-     }}>
+     <Box sx={{ position: 'fixed', inset: 0, height: isMobile ? '87.2vh' : '92vh', mt: isMobile ? 4 : 10, width: '100vw', display: 'flex', flexDirection: 'column', bgcolor: 'background.default', color: 'text.primary', overflow: 'hidden', pb: '70px' }}>
 
       {/* Header */}
       <Box sx={{ height: 50, flexShrink: 0, borderBottom: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', px: 3, justifyContent: 'space-between', bgcolor: 'background.paper' }}>
@@ -94,15 +80,7 @@ export default function LessonTopic() {
       <Box sx={{ flex: 1, display: 'flex', overflow: 'hidden', minHeight: 0, flexDirection: isMobile ? 'column' : 'row' }}>
 
         {/* COLUMNA 1: Índex de lliçons (Sidebar) */}
-        <Box sx={{ 
-          width: isMobile ? '100%' : '50%', 
-          borderRight: isMobile ? 'none' : '1px solid', 
-          borderBottom: isMobile ? '1px solid' : 'none',
-          borderColor: 'divider', 
-          bgcolor: 'background.paper', 
-          overflowY: 'auto', 
-          flexShrink: 0 
-        }}>
+        <Box sx={{ width: isMobile ? '100%' : '50%', borderRight: isMobile ? 'none' : '1px solid', borderBottom: isMobile ? '1px solid' : 'none', borderColor: 'divider', bgcolor: 'background.paper', overflowY: 'auto', flexShrink: 0 }}>
           <Box sx={{ p: 2, borderBottom: '1px solid', borderColor: 'divider', position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <BookOpen size={14} color={theme.palette.primary.main} />
@@ -120,18 +98,7 @@ export default function LessonTopic() {
               const realIndex = course.content.findIndex((item) => item.id === l.id);
 
               return (
-                <Box
-                  key={l.id}
-                  /* Ja no cal el navigate() aquí perquè ja hi som, però ho deixem per coherència */
-                  sx={{
-                    px: 2, py: 1.5,
-                    borderBottom: '1px solid', borderColor: 'divider',
-                    bgcolor: alpha(theme.palette.primary.main, 0.1),
-                    borderLeft: '3px solid',
-                    borderLeftColor: 'primary.main',
-                    transition: 'all 0.2s ease',
-                  }}
-                >
+                <Box key={l.id} sx={{ px: 2, py: 1.5, borderBottom: '1px solid', borderColor: 'divider', bgcolor: alpha(theme.palette.primary.main, 0.1), borderLeft: '3px solid', borderLeftColor: 'primary.main', transition: 'all 0.2s ease' }}>
                   <Typography sx={{ fontSize: '0.7rem', color: 'text.disabled', mb: 0.25 }}>
                     {String(realIndex + 1).padStart(2, '0')}
                   </Typography>
@@ -153,7 +120,7 @@ export default function LessonTopic() {
             transition={{ duration: 0.4 }}
           >
             {/* Títol i Descripció de la lliçó actual */}
-            <Typography variant="h3" sx={{ fontWeight: 900, mb: 1, fontSize: { xs: '1.8rem', md: '2.5rem' }, letterSpacing: '-0.02em' }}>
+            <Typography variant="h3" component="h1" sx={{ fontWeight: 900, mb: 1, fontSize: { xs: '1.8rem', md: '2.5rem' }, letterSpacing: '-0.02em' }}>
               {getText(lesson.title)}
             </Typography>
             <Typography sx={{ color: 'text.secondary', fontSize: '1.1rem', mb: 5, lineHeight: 1.5 }}>
@@ -179,14 +146,7 @@ export default function LessonTopic() {
             </Box>
 
             {/* Objectiu / Repte */}
-            <Box sx={{ 
-              p: 2, 
-              borderRadius: 3, 
-              border: '2px solid', 
-              borderColor: 'primary.main', 
-              bgcolor: alpha(theme.palette.primary.main, 0.03),
-              maxWidth: '300px'
-            }}>
+            <Box sx={{p: 2, borderRadius: 3, border: '2px solid', borderColor: 'primary.main', bgcolor: alpha(theme.palette.primary.main, 0.03),maxWidth: '300px'}}>
               <Typography sx={{ fontSize: '0.8rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.15em', color: 'primary.main', mb: 1.5 }}>
                 {t('lesson.your_challenge')}
               </Typography>
@@ -200,29 +160,12 @@ export default function LessonTopic() {
 
        {/* Footer navegació */}
        <Box sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1000, height: 70, flexShrink: 0, borderTop: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: { xs: 1, md: 2 }, bgcolor: 'background.paper', px: 2 }}>
-        <Button 
-          onClick={() => goToLesson(currentIndex - 1)} 
-          disabled={currentIndex <= 0} 
-          variant="outlined" 
-          sx={{ minWidth: { xs: 40, md: 120 }, fontWeight: 700 }}
-        >
+        <Button onClick={() => goToLesson(currentIndex - 1)} disabled={currentIndex <= 0} variant="outlined" sx={{ minWidth: { xs: 40, md: 120 }, fontWeight: 700 }}>
           <ChevronLeft size={18} /> {!isMobile && t('lesson.previous')}
         </Button>
 
-        <Button 
-          onClick={() => navigate(`/courses/${courseId}/${lessonId}`)} 
-          variant="contained" 
-          color="secondary"
-          sx={{ px: 4, fontWeight: 800, borderRadius: 2, fontSize: 11 }}>
-          {t('lesson.go_to_activity')}
-        </Button>
-
-        <Button 
-          onClick={() => goToLesson(currentIndex + 1)} 
-          disabled={currentIndex >= (course?.content.length ?? 0) - 1} 
-          variant="outlined" 
-          sx={{ minWidth: { xs: 40, md: 120 }, fontWeight: 700 }}
-        >
+        <Button onClick={() => navigate(`/courses/${courseId}/${lessonId}`)} variant="contained" color="secondary" sx={{ px: 4, fontWeight: 800, borderRadius: 2, fontSize: 11 }}>{t('lesson.go_to_activity')}</Button>
+        <Button onClick={() => goToLesson(currentIndex + 1)} disabled={currentIndex >= (course?.content.length ?? 0) - 1} variant="outlined" sx={{ minWidth: { xs: 40, md: 120 }, fontWeight: 700 }}>
           {!isMobile && t('lesson.next')} <ChevronRight size={18} />
         </Button>
       </Box>

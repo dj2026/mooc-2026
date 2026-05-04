@@ -80,13 +80,9 @@ export default {
     systems_operational: "SYSTEMS OPERATIONAL",
     telegram: "Telegram"
   },
-  course: {
-    by: "by",
-    enroll: "ENROLL COURSE"
-  },
-  common: {
-    error_loading: "Error loading data"
-  },
+  course: {by: "by", enroll: "SUBSCRIBE COURSE"},
+  common: {error_loading: "Error loading data"},
+  
   lesson: {
     syllabus: "Leassons",
     laboratory: "Laboratory",

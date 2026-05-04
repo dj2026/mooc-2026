@@ -7,8 +7,6 @@ interface Mouse {
   radius: number;
 }
 
-
-
 class Particle {
   x: number;
   y: number;

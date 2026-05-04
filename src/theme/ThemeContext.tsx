@@ -17,26 +17,13 @@ const STORAGE_KEY = 'mooc-theme-mode';
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [mode, setModeState] = useState<ThemeMode>(() => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored === 'light' || stored === 'dark') return stored;
-    }
+    if (typeof window !== 'undefined') {const stored = localStorage.getItem(STORAGE_KEY); if (stored === 'light' || stored === 'dark') return stored;}
     return 'dark';
   });
 
-  const setMode = (newMode: ThemeMode) => {
-    setModeState(newMode);
-    localStorage.setItem(STORAGE_KEY, newMode);
-  };
-
-  const toggleTheme = () => {
-    setMode(mode === 'dark' ? 'light' : 'dark');
-  };
-
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, mode);
-  }, [mode]);
-
+  const setMode = (newMode: ThemeMode) => {setModeState(newMode);localStorage.setItem(STORAGE_KEY, newMode);};
+  const toggleTheme = () => {setMode(mode === 'dark' ? 'light' : 'dark');};
+  useEffect(() => {localStorage.setItem(STORAGE_KEY, mode);}, [mode]);
   const theme = getTheme(mode);
 
   return (
@@ -51,8 +38,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
 export function useThemeMode() {
   const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error('useThemeMode must be used within ThemeProvider');
-  }
+  if (!context) {throw new Error('useThemeMode must be used within ThemeProvider');}
   return context;
 }

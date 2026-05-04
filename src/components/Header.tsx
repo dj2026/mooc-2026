@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 import { Menu as MenuIcon, Close as CloseIcon } from '@mui/icons-material';
-import { Rocket, GraduationCap } from 'lucide-react'; 
+import { GraduationCap } from 'lucide-react'; 
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  AppBar, Toolbar, Box, Typography, Button, IconButton, Stack, useTheme, Divider
-} from '@mui/material';
+import { AppBar, Toolbar, Box, Typography, Button, IconButton, Stack, useTheme, Divider} from '@mui/material';
 import { authService } from '../services/authService';
 import { useTranslation } from 'react-i18next';
 import { ThemeToggleButton } from './ThemeToggleButton';
+import logo from '../img/logo.png';
 
 export function Header() {
   const { t, i18n } = useTranslation();
@@ -87,30 +86,16 @@ export function Header() {
 
   return (
     <>
-      <AppBar 
-        position="sticky" 
-        sx={{ 
-          width: '100%', 
-          bgcolor: theme.palette.mode === 'dark' ? 'rgba(18, 18, 18, 0.95)' : 'rgba(255, 255, 255, 0.95)', 
-          backdropFilter: 'blur(20px)', 
-          boxShadow: 'none', 
-          borderBottom: `1px solid ${theme.palette.divider}`, 
-          zIndex: 1400 
-        }}
-      >
+      <AppBar position="sticky" sx={{width: '100%', bgcolor: theme.palette.mode === 'dark' ? 'black' : 'white', zIndex: 1400}}>
         <Toolbar sx={{ px: { xs: 2, md: 8 }, height: '80px', display: 'flex', justifyContent: 'space-between' }}>
           
           {/* LOGO */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <motion.div whileHover={{ scale: 1.05 }} onClick={() => { setMobileOpen(false); navigate('/'); }} style={{ cursor: 'pointer' }}>
-              <Rocket size={32} color={theme.palette.primary.main} fill={theme.palette.primary.main} style={{ transform: 'rotate(-45deg)' }} />
-            </motion.div>
-            <RouterLink to="/" onClick={() => setMobileOpen(false)} style={{ textDecoration: 'none' }}>
-              <Stack direction="row" sx={{ alignItems: 'baseline' }}>
-                <Typography variant="h5" sx={{ fontWeight: 900, color: 'text.primary', letterSpacing: '-1.5px' }}>MOOC</Typography>
-                <Typography variant="h5" sx={{ fontWeight: 900, color: 'primary.main', ml: 0.5 }}>2026</Typography>
-              </Stack>
-            </RouterLink>
+        <Box component={RouterLink} to="/" sx={{ display: 'flex', flexDirection: { xs: 'row', md: 'row' }, alignItems: 'center', gap: { xs: 0.5, md: 1.5 }, textDecoration: 'none' }}>
+          <Box component="img" src={logo} alt="Rocket" sx={{ height: { xs: 22, md: 50 }, width: 'auto', transform: { xs: 'rotate(-90deg)', md: 'none' }, transition: 'transform 0.5s' }} />
+            <Stack direction="row" sx={{ alignItems: 'baseline' }}>
+              <Typography variant="h5" component="span" sx={{ fontWeight: 900, color: 'text.primary'}}>MOOC</Typography>
+              <Typography variant="h5" component="span" sx={{ fontWeight: 900, color: 'primary.main'}}>2026</Typography>
+            </Stack>
           </Box>
 
           {/* DESKTOP NAV (Cursos > Accedir > Language > Theme) */}
@@ -153,46 +138,15 @@ export function Header() {
       {/* MOBILE MENU OVERLAY (Language > Accedir > Cursos) */}
       <AnimatePresence>
         {mobileOpen && (
-          <Box
-            component={motion.div}
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            sx={{
-              position: 'fixed',
-              top: '80px',
-              left: 0,
-              right: 0,
-              bottom: 0,
-              width: '100vw',
-              height: 'calc(100vh - 80px)',
-              bgcolor: 'background.default',
-              zIndex: 1300,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              overflowY: 'auto',
-              pt: 4,
-              pb: 6
-            }}
-          >
+          <Box component={motion.div} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}  sx={{position: 'fixed', top: '80px',left: 0,right: 0,bottom: 0,width: '100vw',height: 'calc(100vh - 80px)',bgcolor: 'background.default', zIndex: 1300, display: 'flex', flexDirection: 'column', alignItems: 'center', overflowY: 'auto', pt: 4, pb: 6}}>
             <Stack spacing={4} sx={{ width: '85%', alignItems: 'center' }}>
               
               {/* 1. Language */}
               <Box sx={{ textAlign: 'center' }}>
-                <Typography variant="caption" sx={{ display: 'block', mb: 1.5, fontWeight: 700, color: 'text.secondary', letterSpacing: '1px' }}>
-                  {t('')?.toUpperCase()}
-                </Typography>
+                <Typography variant="caption" sx={{ display: 'block', mb: 1.5, fontWeight: 700, color: 'text.secondary', letterSpacing: '1px' }}>{t('')?.toUpperCase()}</Typography>
                 <Stack direction="row" spacing={1} sx={{ bgcolor: 'action.hover', p: 0.5, borderRadius: '12px' }}>
                   {['ca', 'es', 'en'].map((lng) => (
-                    <Button 
-                      key={lng} size="small" onClick={() => i18n.changeLanguage(lng)} 
-                      sx={{ 
-                        minWidth: '70px', fontWeight: 800, borderRadius: '10px', 
-                        color: currentLanguage === lng ? '#fff' : 'text.secondary', 
-                        bgcolor: currentLanguage === lng ? 'primary.main' : 'transparent' 
-                      }}
-                    >
+                    <Button key={lng} size="small" onClick={() => i18n.changeLanguage(lng)} sx={{minWidth: '70px', fontWeight: 800, borderRadius: '10px', color: currentLanguage === lng ? '#fff' : 'text.secondary', bgcolor: currentLanguage === lng ? 'primary.main' : 'transparent'}}>
                       {lng.toUpperCase()}
                     </Button>
                   ))}
@@ -205,34 +159,18 @@ export function Header() {
               <Stack spacing={2} sx={{ width: '100%' }}>
                 {isLoggedIn ? (
                   <>
-                    <Button 
-                      fullWidth component={RouterLink} to="/dashboards/student" 
-                      startIcon={<GraduationCap />} onClick={() => setMobileOpen(false)} 
-                      sx={{ fontWeight: 800, borderRadius: '12px', py: 2, color: 'text.primary', bgcolor: 'action.hover', fontSize: '1.1rem' }}
-                    >
+                    <Button fullWidth component={RouterLink} to="/dashboards/student" startIcon={<GraduationCap />} onClick={() => setMobileOpen(false)} sx={{ fontWeight: 800, borderRadius: '12px', py: 2, color: 'text.primary', bgcolor: 'action.hover', fontSize: '1.1rem' }}>
                       {t('dashboard.my_progress')}
                     </Button>
-                    <Button fullWidth color="error" onClick={handleLogout} sx={{ fontWeight: 800, py: 1.5 }}>
-                      {t('auth.logout')}
-                    </Button>
+                    <Button fullWidth color="error" onClick={handleLogout} sx={{ fontWeight: 800, py: 1.5 }}>{t('auth.logout')}</Button>
                   </>
-                ) : (
-                  <Button 
-                    fullWidth onClick={() => { navigate('/dashboards/student'); setMobileOpen(false); }} 
-                    sx={{ ...commonButtonStyle, py: 2, fontSize: '1.1rem' }}
-                  >
-                    {t('auth.access').toUpperCase()}
-                  </Button>
-                )}
+                ) : (<Button fullWidth onClick={() => { navigate('/dashboards/student'); setMobileOpen(false); }} sx={{ ...commonButtonStyle, py: 2, fontSize: '1.1rem' }}>{t('auth.access').toUpperCase()}</Button>)}
               </Stack>
 
               <Divider sx={{ width: '100%', opacity: 0.1 }} />
 
               {/* 3. Cursos */}
-              <Button 
-                fullWidth onClick={() => scrollToDynamic(1000, 700)} 
-                sx={{ color: 'text.primary', fontWeight: 900, py: 2, fontSize: '1.4rem' }}
-              >
+              <Button fullWidth onClick={() => scrollToDynamic(1000, 700)} sx={{ color: 'text.primary', fontWeight: 900, py: 2, fontSize: '1.4rem' }}>
                 {t('footer.courses').toUpperCase()}
               </Button>
 

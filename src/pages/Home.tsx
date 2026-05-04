@@ -55,44 +55,12 @@ export default function Home() {
       >
         <Container maxWidth="lg">
           <motion.div 
-            initial={{ opacity: 0, y: 30 }} 
-            whileInView={{ opacity: 1, y: 0 }} 
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
+            initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
             <Box sx={{ textAlign: 'center', mb: 10 }}>
-              <Typography
-                variant="h5"
-                sx={{ 
-                  fontSize: { xs: '1.7rem', md: '3.5rem' }, 
-                  fontWeight: 900, 
-                  background: 'linear-gradient(to bottom, ' + theme.palette.text.primary,
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  display: 'inline-block',
-                  mb: 3 
-                }}
-              >
+              <Typography component="h2" variant="h5" sx={{ fontSize: { xs: '1.7rem', md: '3.5rem' }, fontWeight: 900, background: 'linear-gradient(to bottom, ' + theme.palette.text.primary, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', display: 'inline-block', mb: 3 }}>
                 {t('home.featured_title')}
               </Typography>
-              <Typography 
-                variant="h6" 
-                sx={{ 
-                  color: 'text.primary', 
-                  maxWidth: '80rem', 
-                  mx: 'auto', 
-                  fontWeight: 400,
-                  fontSize: { 
-                    xs: '0.9rem',   
-                    sm: '1.1rem',   
-                    md: '1.8rem'  
-                  },
-                  lineHeight: { xs: 1.5, md: 1.6 },
-                  px: { xs: 2, md: 0 },
-                  mt:{ xs:2},
-                  mb:{ xs:-5}
-                }}
-              >
+              <Typography component="p" variant="body1" sx={{ color: 'text.primary', maxWidth: '80rem', mx: 'auto', fontWeight: 400, fontSize: { xs: '0.9rem', sm: '1.1rem', md: '1.8rem' }, lineHeight: { xs: 1.5, md: 1.6 }, px: { xs: 2, md: 0 }, mt: { xs: 2 }, mb: { xs: -5 } }}>
                 {t('home.featured_subtitle')}
               </Typography>
             </Box>
@@ -123,26 +91,10 @@ export default function Home() {
       </Box>
 
       {/* SECCIÓ 3: FEATURES */}
-      <Box 
-        component="section" 
-        id="features" 
-        sx={{ 
-          py: { xs: 20, md: 10 },
-          position: 'relative',
-          zIndex: 2 
-        }}
-      >
+      <Box component="section" id="features" sx={{ py: { xs: 20, md: 10 }, position: 'relative', zIndex: 2 }}>
         <Container maxWidth="lg">
           <Box sx={{ textAlign: 'center', mb: { xs: 8, md: 10 } }}>
-            <Typography 
-              variant="h2" 
-              sx={{ 
-                fontSize: { xs: '1.8rem', md: '2.5rem' }, 
-                fontWeight: 900, 
-                mb: 3,
-                px: { xs: 2, md: 0 }
-              }}
-            >
+            <Typography component="h2" variant="h2" sx={{ fontSize: { xs: '1.8rem', md: '2.5rem' }, fontWeight: 900, mb: 3, px: { xs: 2, md: 0 } }}>
               {t('home.why_choose_title')}
             </Typography>
           </Box>
@@ -150,45 +102,12 @@ export default function Home() {
           <Grid container spacing={4} sx={{ justifyContent: 'center' }}>
             {features.map((feature, index) => (
               <Grid size={{ xs: 10.5, sm: 6, md: 4 }} key={index}> 
-                <Box sx={{
-                  p: { xs: 2.5, md: 3 }, 
-                  height: '100%', 
-                  borderRadius: 6,
-                  mx: 'auto',
-                  bgcolor: 'background.paper',
-                  border: '2px solid',
-                  borderColor: theme.palette.mode === 'dark' ? '#8400ff' : 'black',
-                  transition: 'all 0.3s',
-                  '&:hover': { 
-                    bgcolor: theme.palette.mode === 'dark' ? '#ffffff2d' : '#ffffffb6',
-                    borderColor: 'primary.main', 
-                    transform: {md: 'translateY(-10px)'} 
-                  }
-                }}>
-                  <Box sx={{ 
-                    fontSize: {xs: '2rem', md: '2.5rem'}, 
-                    mb: 2 
-                  }}>
-                    {feature.icon}
-                  </Box>
-                  <Typography 
-                    variant="h6" 
-                    sx={{ 
-                      fontWeight: 800, 
-                      mb: 1,
-                      fontSize: { xs: '1.1rem', md: '1.25rem' } 
-                    }}
-                  >
+                <Box sx={{ p: { xs: 2.5, md: 3 }, height: '100%', borderRadius: 6, mx: 'auto', bgcolor: 'background.paper', border: '2px solid', borderColor: theme.palette.mode === 'dark' ? '#8400ff' : 'black', transition: 'all 0.3s', '&:hover': { bgcolor: theme.palette.mode === 'dark' ? '#ffffff2d' : '#ffffffb6', borderColor: 'primary.main', transform: { md: 'translateY(-10px)' } } }}>
+                  <Box sx={{ fontSize: { xs: '2rem', md: '2.5rem' }, mb: 2 }}>{feature.icon}</Box>
+                  <Typography variant="h3" component="h3" sx={{ fontWeight: 800, mb: 1, fontSize: { xs: '1.1rem', md: '1.25rem' } }}>
                     {feature.title}
                   </Typography>
-                  <Typography 
-                    variant="body2" 
-                    sx={{ 
-                      color: 'text.secondary', 
-                      lineHeight: 1.7,
-                      fontSize: { xs: '0.85rem', md: '0.875rem' } 
-                    }}
-                  >
+                  <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.7, fontSize: { xs: '0.85rem', md: '0.875rem' } }}>
                     {feature.desc}
                   </Typography>
                 </Box>

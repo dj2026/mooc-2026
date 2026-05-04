@@ -19,6 +19,20 @@ export default defineConfig({
       usePolling: true,
     },
   },
+  build: {
+    sourcemap: true, 
+    reportCompressedSize: true,
+    cssCodeSplit: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor': ['react', 'react-dom', 'react-router-dom'],
+          'ui-library': ['@mui/material', '@emotion/react', '@emotion/styled'],
+          'animations': ['framer-motion']
+        }
+      }
+    }
+  },
   optimizeDeps: {
     include: [
       '@mui/material',

@@ -3,24 +3,16 @@
     {
       "id": "Python",
       "title": { "ca": "Python", "es": "Python", "en": "Python" },
-      "description": {
-        "ca": "Domina el llenguatge més versàtil: des de scripting fins a automatització de dades.",
-        "es": "Domina el lenguaje más versátil: desde scripting hasta automatización de datos.",
-        "en": "Master the most versatile language: from scripting to data automation."
-      },
+      "description": { "ca": "Domina el llenguatge més versàtil: des de scripting fins a automatització de dades.", "es": "Domina el lenguaje más versátil: desde scripting hasta automatización de datos.", "en": "Master the most versatile language: from scripting to data automation." },
       "icon": "CODE",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg",
+      "image": "./src/img/Python.svg",
       "logoSize": 80,
       "content": [
         {
           "id": "py-1",
           "title": { "ca": "1. Introducció i Variables", "es": "1. Introducción y Variables", "en": "1. Introduction and Variables" },
           "description": { "ca": "Primera línia de codi", "es": "Primera línea de código", "en": "First line of code" },
-          "theoryInstructions": {
-            "ca": "Python utilitza la funció print('') per mostrar text a la pantalla. Avalua l'expressió dins dels parèntesis i mostra el resultat.",
-            "es": "Python utiliza la función print('') para mostrar texto en la pantalla. Evalúa la expresión dentro de los paréntesis y muestra el resultado.",
-            "en": "Python uses the print('') function to display text on the screen. It evaluates the expression inside the parentheses and shows the result."
-          },
+          "theoryInstructions": {"ca": "Python utilitza la funció print('') per mostrar text a la pantalla. Avalua l'expressió dins dels parèntesis i mostra el resultat.", "es": "Python utiliza la función print('') para mostrar texto en la pantalla. Evalúa la expresión dentro de los paréntesis y muestra el resultado.", "en": "Python uses the print('') function to display text on the screen. It evaluates the expression inside the parentheses and shows the result." },
           "exerciseInstructions": { "ca": "Assegura't d'envoltar el text amb cometes.", "es": "Asegúrate de rodear el texto con comillas.", "en": "Make sure to surround the text with quotes." },
           "challenge": { "ca": "Imprimeix a la pantalla: Hola Python", "es": "Imprime en la pantalla: Hola Python", "en": "Print to the screen: Hello Python" },
           "initialCode": "# El teu codi aquí\n",
@@ -30,11 +22,7 @@
           "id": "py-2",
           "title": { "ca": "2. Variables Numèriques", "es": "2. Variables Numéricas", "en": "2. Numeric Variables" },
           "description": { "ca": "Assignant valors", "es": "Asignando valores", "en": "Assigning values" },
-          "theoryInstructions": {
-            "ca": "A Python, les variables es creen en el moment que li assignes un valor amb el signe igual (=).",
-            "es": "En Python, las variables se crean en el momento que le asignas un valor con el signo igual (=).",
-            "en": "In Python, variables are created the moment you assign a value with the equal sign (=)."
-          },
+          "theoryInstructions": { "ca": "A Python, les variables es creen en el moment que li assignes un valor amb el signe igual (=).", "es": "En Python, las variables se crean en el momento que le asignas un valor con el signo igual (=).", "en": "In Python, variables are created the moment you assign a value with the equal sign (=)."},
           "exerciseInstructions": { "ca": "Crea una variable escrivint el seu nom, seguit de = i el valor.", "es": "Crea una variable escribiendo su nombre, seguido de = y el valor.", "en": "Create a variable by writing its name, followed by = and the value." },
           "challenge": { "ca": "Crea una variable 'punts' amb el valor 100.", "es": "Crea una variable 'puntos' con el valor 100.", "en": "Create a variable 'points' with the value 100." },
           "initialCode": "# Defineix la variable\n",
@@ -47,7 +35,7 @@
       "title": { "ca": "React", "es": "React", "en": "React" },
       "description": { "ca": "Construeix interfícies modernes.", "es": "Construye interfaces modernas.", "en": "Build modern interfaces." },
       "icon": "CONNECT_O",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg",
+      "image": "./src/img/React.svg",
       "logoSize": 90,
       "content": [
         {
@@ -77,7 +65,7 @@
       "title": { "ca": "Spring Boot", "es": "Spring Boot", "en": "Spring Boot" },
       "description": { "ca": "APIs REST amb Java.", "es": "APIs REST con Java.", "en": "REST APIs with Java." },
       "icon": "DATABASE",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/4/44/Spring_Framework_Logo_2018.svg",
+      "image": "./src/img/SB.svg",
       "logoSize": 100,
       "content": [
         {
@@ -107,7 +95,7 @@
       "title": { "ca": "Machine Learning", "es": "Machine Learning", "en": "Machine Learning" },
       "description": { "ca": "Models predictius i IA.", "es": "Modelos predictivos e IA.", "en": "Predictive models and AI." },
       "icon": "CLUSTER",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/0/05/Scikit_learn_logo_small.svg",
+      "image": "./src/img/ml.svg",
       "logoSize": 110,
       "content": [
         {

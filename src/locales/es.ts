@@ -58,11 +58,11 @@ export default {
     subtitle: "Únete a los alumnos que ya están dominando las tecnologías de 2026 con proyectos reales.",
     build_apps: "Build Real-World Apps",
     stats: {
-      students: "Students",
-      courses: "Courses",
-      support: "Support"
+      students: "Estudiantes",
+      courses: "Cursos",
+      support: "Soporte"
     },
-    scroll_down: "Scroll Down"
+    scroll_down: "Desliza"
   },
   footer: {
     brand_name: "MOOC REACT",
@@ -82,7 +82,7 @@ export default {
   },
   course: {
     by: "by",
-    enroll: "ENROLL COURSE"
+    enroll: "inscribir-se al curso"
   },
   common: {
     error_loading: "Error al cargar los datos"

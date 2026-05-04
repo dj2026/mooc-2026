@@ -57,13 +57,10 @@ export default {
   hero: {
     subtitle: "Uneix-te als alumnes que ja estan dominant les tecnologies de 2026 amb projectes reals.",
     build_apps: "Build Real-World Apps",
-    stats: {
-      students: "Students",
-      courses: "Courses",
-      support: "Support"
-    },
-    scroll_down: "Scroll Down"
+    stats: {students: "Estudiants", courses: "Cursos",support: "Support"},
+    scroll_down: "FES SCROLL"
   },
+
   footer: {
     brand_name: "MOOC REACT",
     brand_tagline: "La plataforma de referència per a la nova generació de desenvolupadors Frontend.",
@@ -80,13 +77,10 @@ export default {
     systems_operational: "SYSTEMS OPERATIONAL",
     telegram: "Telegram"
   },
-  course: {
-    by: "by",
-    enroll: "ENROLL COURSE"
-  },
-  common: {
-    error_loading: "Error en carregar les dades"
-  },
+
+  course: {by: "by", enroll: "inscriure's al curs"},
+  common: {error_loading: "Error en carregar les dades"},
+
   lesson: {
     syllabus: "Temari",
     laboratory: "Laboratori",
