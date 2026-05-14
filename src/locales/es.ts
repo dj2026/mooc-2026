@@ -1,0 +1,123 @@
+export default {
+  auth: {
+    login: "Iniciar Sesión",
+    logout: "Salir",
+    start: "Inicio",
+    login_students: "Acceso Alumnos",
+    incorrect_pin: "PIN incorrecto",
+    access: "Acceder",
+    enroll_login_required: "Debes iniciar sesión para inscribirte al curso"
+  },
+  dashboard: {
+    title: "Panel del Alumno",
+    subtitle: "Gestiona tu aprendizaje y consulta tu progreso",
+    my_progress: "Mi Progreso",
+    my_courses: "Mis cursos",
+    completed: "completado",
+    ranking_title: "Ranking",
+    you: "Tú",
+    create_user_title: "Nuevo Alumno",
+    name_label: "Nombre completo",
+    email_label: "Correo electrónico",
+    pin_label: "PIN (4 dígitos)",
+    register_btn: "Registrar Alumno",
+    reset_course_confirm: "¿Estás seguro de que quieres reiniciar el progreso de este curso?",
+    reset_course_tooltip: "Reiniciar curso",
+    progress_detail: "Detalle del Progreso",
+    click_to_login: "Haz clic para iniciar sesión",
+    role_student: "Alumno",
+    role_teacher: "Profesor",
+    register_student: "Registrar Alumno",
+    register_teacher: "Registrar Profesor",
+    points: "puntos",
+    leaderboard: "CLASIFICACIÓN",
+    syllabus: "Temario",
+    activities: "Laboratorio"
+  },
+  home: {
+    featured_title: "Cursos Destacados",
+    featured_subtitle: "Comienza tu viaje con nuestros cursos mejor valorados. Proyectos prácticos incluidos.",
+    no_courses: "No hay cursos disponibles actualmente.",
+    why_choose_title: "¿Por qué elegir MOOC 2026?",
+    features: {
+      code_title: "Código de Grado Empresarial",
+      code_desc: "Domina patrones de diseño escalables y arquitecturas profesionales.",
+      portfolio_title: "Portfolio de Alto Impacto",
+      portfolio_desc: "Construye 20+ aplicaciones fullstack para impresionar en entrevistas.",
+      stack_title: "Stack de Vanguardia 2026",
+      stack_desc: "Domina Next.js 15, React 19 y Tailwind v4.",
+      networking_title: "Networking Global",
+      networking_desc: "Comunidad exclusiva en Discord con 50k+ desarrolladores.",
+      mobile_title: "Aprendizaje Sin Barreras",
+      mobile_desc: "Plataforma 100% optimizada para dispositivos móviles.",
+      cert_title: "Certificación de Maestría",
+      cert_desc: "Obtén un certificado digital al finalizar tus proyectos."
+    }
+  },
+  hero: {
+    subtitle: "Únete a los alumnos que ya están dominando las tecnologías de 2026 con proyectos reales.",
+    build_apps: "Build Real-World Apps",
+    stats: {
+      students: "Estudiantes",
+      courses: "Cursos Activos",
+      support: "Soporte"
+    },
+    scroll_down: "Desliza"
+  },
+  footer: {
+    brand_name: "MOOC REACT",
+    brand_tagline: "La plataforma de referencia para la nueva generación de desarrolladores Frontend.",
+    explore: "Explora",
+    community: "Comunidad",
+    connect: "Conecta",
+    courses: "Cursos",
+    challenges: "Retos",
+    paths: "Rutas",
+    discord: "Discord",
+    blog: "Blog",
+    events: "Eventos",
+    copyright: "MOOC REACT • BARCELONA",
+    systems_operational: "SYSTEMS OPERATIONAL",
+    telegram: "Telegram"
+  },
+  course: {
+    by: "by",
+    enroll: "inscribir-se al curso"
+  },
+  common: {
+    error_loading: "Error al cargar los datos"
+  },
+  lesson: {
+    syllabus: "Temario",
+    laboratory: "Laboratorio",
+    academy: "Academy",
+    course_not_found: "Curso no encontrado",
+    explanation: "Explicación",
+    your_challenge: "Tu reto",
+    previous: "Anterior",
+    next: "Siguiente",
+    go_to_activity: "Ir a la actividad",
+    lessons: "Lecciones",
+    objective: "Objetivo",
+    run: "EJECUTAR",
+    debug_console: "CONSOLA DE DEBUG",
+    lesson_completed: "LECCIÓN COMPLETADA!",
+    save: "GUARDAR",
+    saved: "GUARDADO",
+    pending: "PENDIENTE",
+    points_label: "PUNTOS",
+    no_instructions: "No hay instrucciones disponibles.",
+    hide_hint: "Ocultar Pista",
+    need_help: "¿Necesitas Ayuda?",
+    executing: "Ejecutando...",
+    completed: "COMPLETADO!",
+    check_code: "Revisa el código",
+    time_up: "TIEMPO AGOTADO!",
+    synced: "Sincronizado!",
+    error_local: "Error local",
+    waiting_execution: "Esperando ejecución...",
+    run_code: "Ejecuta el código...",
+    app_file: "App.tsx",
+    system: "SISTEMA"
+  }
+};
