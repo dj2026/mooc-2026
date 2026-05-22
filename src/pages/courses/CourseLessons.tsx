@@ -173,9 +173,8 @@ export default function CourseLessons() {
               onClick={() => setMobileSyllabusOpen(true)}
               variant="outlined"
               size="small"
-              startIcon={<BookOpen size={16} />}
-              sx={{ fontWeight: 700, borderRadius: 2, textTransform: 'none' }}
-            >
+              startIcon={<BookOpen size={16}/>}
+              sx={{fontWeight: 700, borderRadius: 2, textTransform: 'none'}}>
               {t('lesson.syllabus')}
             </Button>
           </Box>
@@ -191,10 +190,10 @@ export default function CourseLessons() {
             <Box sx={{ px: 2, pb: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <BookOpen size={30} color={theme.palette.primary.main} />
-                <Typography sx={{ fontSize: '1.5rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'text.secondary', flex: 1 }}>
+                <Typography sx={{ fontSize: '1rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'text.secondary', flex: 1 }}>
                   {t('lesson.syllabus')}
                 </Typography>
-                <Box component="button" onClick={() => setMobileSyllabusOpen(false)} sx={{ border: 'none', bgcolor: 'transparent', cursor: 'pointer', display: 'flex', p: 0.5, borderRadius: 1, '&:hover': { bgcolor: alpha(theme.palette.primary.main, 0.1) } }}>
+                <Box component="button" onClick={() => setMobileSyllabusOpen(false)} sx={{ border: 'none', bgcolor: 'transparent', cursor: 'pointer', display: 'flex', p: 0.5, borderRadius: 1, color:'red'}}>
                   <X size={24} />
                 </Box>
               </Box>
@@ -212,10 +211,10 @@ export default function CourseLessons() {
                   '&:hover': { bgcolor: alpha(theme.palette.primary.main, 0.5) }
                 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <Typography sx={{ fontSize: '1rem', fontWeight: 800, color: 'text.disabled', fontVariantNumeric: 'tabular-nums' }}>
+                    <Typography sx={{ fontSize: '0.7rem', fontWeight: 800, color: 'text.disabled', fontVariantNumeric: 'tabular-nums' }}>
                       {String(index + 1).padStart(2, '0')}
                     </Typography>
-                    <Typography sx={{ fontSize: '1rem', fontWeight: 600, lineHeight: 1.3, flex: 1 }}>
+                    <Typography sx={{ fontSize: '0.8rem', fontWeight: 600, lineHeight: 1.3, flex: 1 }}>
                       {getText(lesson.title)}
                     </Typography>
                     {progress[`${courseId}_${lesson.id}`] && (

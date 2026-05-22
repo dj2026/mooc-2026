@@ -74,7 +74,6 @@ export default {
     blog: "Blog",
     events: "Events",
     copyright: "MOOC REACT • BARCELONA",
-    systems_operational: "SYSTEMS OPERATIONAL",
     telegram: "Telegram"
   },
 

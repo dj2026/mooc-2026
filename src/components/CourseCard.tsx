@@ -27,7 +27,7 @@ export function CourseCard({ course, index }: CourseCardProps) {
     const token = localStorage.getItem('token');
     const currentStudent = localStorage.getItem('currentStudent');
     if (!token && !currentStudent) {
-      alert(t('auth.enroll_login_required'));
+      navigate('/dashboards/student');
       return;
     }
     navigate('/dashboards/student');

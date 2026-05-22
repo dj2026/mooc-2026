@@ -9,7 +9,7 @@
     "en": "Master the most versatile language: from scripting to data automation." 
   },
   "icon": "CODE",
-  "image": "/img/Python.svg",
+  "image": "/src/img/Python.svg",
   "logoSize": 80,
   "content": [
     {
@@ -228,7 +228,7 @@
       "title": { "ca": "React", "es": "React", "en": "React" },
       "description": { "ca": "Construeix interfícies modernes.", "es": "Construye interfaces modernas.", "en": "Build modern interfaces." },
       "icon": "CONNECT_O",
-      "image": "/img/React.svg",
+      "image": "/src/img/React.svg",
       "logoSize": 90,
       "content": [
         {
@@ -278,7 +278,7 @@
       "disabled": true,
       "description": { "ca": "APIs REST amb Java.", "es": "APIs REST con Java.", "en": "REST APIs with Java." },
       "icon": "DATABASE",
-      "image": "/img/SB.svg",
+      "image": "/src/img/SB.svg",
       "logoSize": 100,
       "content": [
         {
@@ -333,7 +333,7 @@
       "disabled": true,
       "description": { "ca": "Models predictius i IA.", "es": "Modelos predictivos e IA.", "en": "Predictive models and AI." },
       "icon": "CLUSTER",
-      "image": "/img/ml.svg",
+      "image": "/src/img/ml.svg",
       "logoSize": 110,
       "content": [
         {

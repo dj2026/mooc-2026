@@ -77,10 +77,9 @@ export default {
     blog: "Blog",
     events: "Events",
     copyright: "MOOC REACT • BARCELONA",
-    systems_operational: "SYSTEMS OPERATIONAL",
     telegram: "Telegram"
   },
-  course: {by: "by", enroll: "SUBSCRIBE COURSE"},
+  course: {by: "by", enroll: "Subscribe Course"},
   common: {error_loading: "Error loading data"},
   
   lesson: {

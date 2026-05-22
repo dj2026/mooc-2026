@@ -54,14 +54,15 @@ export default function Hero() {
         <Box component={motion.div} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }}>
           
           {/* TÍTOL PRINCIPAL */}
-          <Box component={motion.div} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}><Typography variant="h1" sx={{ fontSize: { xs: '1.8rem', sm: '3rem', md: '4rem' }, fontWeight: 900, color: 'text.primary', mt: { xs: -8, md: -15 }, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+          <Box component={motion.div} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}>
+            <Typography variant="h1" sx={{ fontSize: { xs: '1.8rem', sm: '3rem', md: '4rem' }, fontWeight: 900, color: 'text.primary', mt: { xs: -8, md: -15 }, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
               <Box sx={{ flex: 1, textAlign: 'center' }}>Mooc</Box>
               <Box sx={{ flex: 1, textAlign: 'center', display: 'block' }}>
                 <Typewriter words={techStack} />
               </Box>
             </Typography>
             
-            <Typography variant="h2" sx={{ fontSize: { xs: '1.3rem', sm: '2rem', md: '3rem' }, fontWeight: 800, background: 'linear-gradient(135deg, #10b981 20%, #a855f7 60%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', mt: { xs: 2, md: 5 }, mb: { xs: 2, md: 5 }, lineHeight: 1.2 }}>
+            <Typography variant="h2" sx={{ fontSize: { xs: '1.3rem', sm: '2rem', md: '2.8rem' }, fontWeight: 800, background: 'linear-gradient(135deg, #10b981 20%, #a855f7 60%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', mt: { xs: 2, md: 5 }, mb: { xs: 2, md: 5 }}}>
               {t('hero.build_apps')}
             </Typography>
           </Box>
@@ -77,7 +78,7 @@ export default function Hero() {
               const statColors = [theme.palette.primary.main, '#10b981', '#f59e0b'];
               return (
                 <Box key={i} component={motion.div} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 + stat.delay }} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                  <Typography sx={{fontSize: { xs: '2rem', md: '3.5rem' },fontWeight: 900, color: statColors[i], fontFamily: 'monospace',lineHeight: 1}}>
+                  <Typography sx={{fontSize: { xs: '2rem', md: '3.5rem' },fontWeight: 900, color: statColors[i], fontFamily: 'monospace'}}>
                     <AnimatePresence mode="wait"><motion.span key={stat.value} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}>{stat.value}</motion.span></AnimatePresence>
                   </Typography>
                   <Typography variant="caption" component="p" sx={{ textTransform: 'uppercase', letterSpacing: '0.2em', fontWeight: 800 }}>{stat.label}</Typography>

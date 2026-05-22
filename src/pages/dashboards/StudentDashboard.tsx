@@ -171,7 +171,7 @@ export default function StudentDashboard() {
     }
 
     if (student.role === 'teacher') {
-      alert("⚠️ Mode Professor: In process... Aviat podràs gestionar els teus cursos.");
+      alert("⚠️ Mode Professor: In process...");
     } else {
       setSelectedStudent(student);
       localStorage.setItem('currentStudent', JSON.stringify(student));
@@ -387,7 +387,7 @@ export default function StudentDashboard() {
                                 PROXIMAMENT
                               </Box>
                             )}
-                            <Card onClick={() => !course.disabled && setExpandedCourse(expandedCourse === course.id ? null : course.id)} sx={{ p: { xs: 0.75, md: 3 }, cursor: course.disabled ? 'default' : 'pointer', borderRadius: { xs: 1.5, md: 2 }, bgcolor: 'background.paper', border: '1px solid', borderColor: expandedCourse === course.id ? 'primary.main' : (theme.palette.mode === 'dark' ? '#fff' : '#000'), transition: '0.2s', minWidth: 0, minHeight: { xs: 60, md: 100 }, position: 'relative', zIndex: expandedCourse === course.id ? 50 : 0, width: '100%', opacity: course.disabled ? 0.5 : 1, filter: course.disabled ? 'grayscale(0.8)' : 'none' }}>
+                            <Card onClick={() => {if (!selectedStudent) {navigate('/login'); return;} !course.disabled && setExpandedCourse(expandedCourse === course.id ? null : course.id);}} sx={{ p: { xs: 0.75, md: 3 }, cursor: course.disabled ? 'default' : 'pointer', borderRadius: { xs: 1.5, md: 2 }, bgcolor: 'background.paper', border: '1px solid', borderColor: expandedCourse === course.id ? 'primary.main' : (theme.palette.mode === 'dark' ? '#fff' : '#000'), transition: '0.2s', minWidth: 0, minHeight: { xs: 60, md: 100 }, position: 'relative', zIndex: expandedCourse === course.id ? 50 : 0, width: '100%', opacity: course.disabled ? 0.5 : 1, filter: course.disabled ? 'grayscale(0.8)' : 'none' }}>
                               <Stack spacing={{ xs: 0.75, md: 2 }}>
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, flexWrap: 'nowrap' }}>
                                   <Typography variant="body2" sx={{ fontWeight: 900, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>{getText(course.title)}</Typography>

@@ -91,7 +91,7 @@ export function Header() {
           
           {/* LOGO */}
         <Box component={RouterLink} to="/" sx={{ display: 'flex', flexDirection: { xs: 'row', md: 'row' }, alignItems: 'center', gap: { xs: 0.5, md: 1.5 }, textDecoration: 'none' }}>
-          <Box component="img" src={logo} alt="Rocket" sx={{ height: { xs: 22, md: 50 }, width: 'auto', transform: { xs: 'rotate(-90deg)', md: 'none' }, transition: 'transform 0.5s' }} />
+          <Box component="img" src={logo} alt="Rocket" width={438} height={190} sx={{ height: { xs: 22, md: 50 }, width: 'auto', transform: { xs: 'rotate(-90deg)', md: 'none' }, transition: 'transform 0.5s' }} />
             <Stack direction="row" sx={{ alignItems: 'baseline' }}>
               <Typography variant="h5" component="span" sx={{ fontWeight: 900, color: 'text.primary'}}>MOOC</Typography>
               <Typography variant="h5" component="span" sx={{ fontWeight: 900, color: 'primary.main'}}>2026</Typography>
@@ -128,7 +128,7 @@ export function Header() {
           {/* MOBILE CONTROLS (Theme + Menu al costat) */}
           <Stack direction="row" spacing={1} sx={{ display: { md: 'none' }, alignItems: 'center' }}>
             <ThemeToggleButton />
-            <IconButton sx={{ color: 'text.primary' }} onClick={handleDrawerToggle}>
+            <IconButton sx={{ color: 'text.primary' }} onClick={handleDrawerToggle} aria-label={mobileOpen ? 'Close menu' : 'Open menu'}>
               {mobileOpen ? <CloseIcon fontSize="large" /> : <MenuIcon fontSize="large" />}
             </IconButton>
           </Stack>
