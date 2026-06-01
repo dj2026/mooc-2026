@@ -6,6 +6,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Box, Typography, Button, IconButton, Stack, alpha, CircularProgress, useTheme, useMediaQuery } from '@mui/material';
 import { api } from '../../services/api';
 import { useTranslation } from 'react-i18next';
+import { courses as localCourses } from '../../data/courses';
+import { exercises as localExercises } from '../../data/exercises';
 
 interface Lesson { id: string; title: string | { ca: string; es: string; en: string }; description: string | { ca: string; es: string; en: string }; challenge: string | { ca: string; es: string; en: string }; initialCode: string | { ca: string; es: string; en: string }; solution: string | { ca: string; es: string; en: string }; exerciseInstructions?: string | { ca: string; es: string; en: string }; theoryInstructions?: string | { ca: string; es: string; en: string }; subTopics?: { subtitle: string | { ca: string; es: string; en: string }; text: string | { ca: string; es: string; en: string }; exampleCode: string; }[]; }
 interface Course { id: string; title: string | { ca: string; es: string; en: string }; content: Lesson[]; }
@@ -52,11 +54,13 @@ export default function LessonPage() {
     setMounted(true);
     const saved = localStorage.getItem('currentStudent');
     if (saved) setCurrentUser(JSON.parse(saved));
-    fetch('/data.json').then(res => res.json()).then(json => { setApiData(json); setLoading(false); }).catch(err => { console.error("Error:", err); setLoading(false); });
+    setApiData({ courses: localCourses as any[], students: [] });
+    setLoading(false);
   }, []);
 
   const course = apiData?.courses?.find((c) => c.id === courseId);
   const baseLesson = course?.content?.find((l) => l.id === lessonId);
+  const exercise = localExercises.find(e => e.id === lessonId && e.courseId === courseId);
   const currentLessonIndex = course?.content?.findIndex((l) => l.id === lessonId) ?? -1;
 
   const goToLesson = (index: number) => {
@@ -76,7 +80,7 @@ export default function LessonPage() {
   useEffect(() => {
     if (mounted && baseLesson) {
       const savedCode = localStorage.getItem(codeStorageKey);
-      setUserInput(savedCode || getText(baseLesson.initialCode) || '');
+      setUserInput(savedCode || exercise?.initialCode || getText(baseLesson.initialCode) || '');
       const globalProgress = JSON.parse(localStorage.getItem('mooc_global_progress') || '{}');
       const key = getGlobalProgressKey();
       if (globalProgress[key]) setStatus('pass'); else setStatus('idle');
@@ -133,7 +137,7 @@ export default function LessonPage() {
     setHasAttemptedRun(true);
     setConsoleOutput(["[SISTEMA]: Executant..."]);
     const cleanUser = userInput.replace(/\s+/g, '').trim();
-    const cleanSol = getText(baseLesson?.solution).replace(/\s+/g, '').trim() || "";
+    const cleanSol = (exercise?.solution || getText(baseLesson?.solution)).replace(/\s+/g, '').trim() || "";
     setTimeout(() => {
       const passed = cleanUser.includes(cleanSol);
       if (passed) {
@@ -194,7 +198,7 @@ export default function LessonPage() {
         <Box sx={{ width: '100%', bgcolor: 'background.paper', p: 2, borderBottom: '1px solid', borderColor: 'divider', flexShrink: 0}}>
           <Box sx={{ p: 1.5, bgcolor: alpha(theme.palette.primary.main, 0.05), borderRadius: 1, border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}` }}>
             <Typography sx={{ fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', mb: 0.5, color: 'primary.main' }}>{t('lesson.your_challenge')}</Typography>
-            <Typography sx={{ fontFamily: 'monospace', fontSize: '0.8rem', fontWeight: 600 }}>{getText(baseLesson.challenge)}</Typography>
+            <Typography sx={{ fontFamily: 'monospace', fontSize: '0.8rem', fontWeight: 600 }}>{getText(exercise?.challenge) || getText(baseLesson.challenge)}</Typography>
           </Box>
         </Box>
 
@@ -314,10 +318,10 @@ export default function LessonPage() {
         <Box sx={{ width: '20%', borderRight: '1px solid', borderColor: 'divider', display: 'flex', flexDirection: 'column', bgcolor: 'background.paper' }}>
           <Box sx={{ flex: 1, p: 2, overflowY: 'auto'}}>
             <Typography sx={{ fontSize: '1rem', fontWeight: 700, mb: 3 , mt:3 }}>{getText(baseLesson.title)}</Typography>
-            <Typography sx={{ fontSize: '1rem', color: 'text.secondary', lineHeight: 2, mb: 2 }}>{getText(baseLesson.exerciseInstructions) || t('lesson.no_instructions')}</Typography>
+            <Typography sx={{ fontSize: '1rem', color: 'text.secondary', lineHeight: 2, mb: 2 }}>{getText(exercise?.exerciseInstructions) || getText(baseLesson.exerciseInstructions) || t('lesson.no_instructions')}</Typography>
             <Box sx={{ p: 1.5, bgcolor: alpha(theme.palette.primary.main, 0.05), borderRadius: 1, border: '3px solid', borderColor: alpha(theme.palette.primary.main, 0.5), mt:5}}>
               <Typography sx={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', mb: 0.5 }}>{t('lesson.objective')}</Typography>
-              <Typography sx={{ fontFamily: 'monospace', fontSize: '1rem' }}>{getText(baseLesson.challenge)}</Typography>
+              <Typography sx={{ fontFamily: 'monospace', fontSize: '1rem' }}>{getText(exercise?.challenge) || getText(baseLesson.challenge)}</Typography>
             </Box>
             {currentMode === 'drill' && (
               <Box>
@@ -339,7 +343,7 @@ export default function LessonPage() {
               {hintVisible ? t('lesson.hide_hint') : `💡 ${t('lesson.need_help')} (${assistsLeft})`}
             </Button>
           )}
-            <AnimatePresence>{hintVisible && <motion.div initial={{opacity:0}} animate={{opacity:1}}><Box sx={{ p: 1.5, bgcolor: alpha('#3b82f6',0.1), borderRadius: 1.5, fontSize: '0.75rem', color: '#93c5fd' }}>💡 {getText(baseLesson.solution).slice(0,16)}...</Box></motion.div>}</AnimatePresence>
+            <AnimatePresence>{hintVisible && <motion.div initial={{opacity:0}} animate={{opacity:1}}><Box sx={{ p: 1.5, bgcolor: alpha('#3b82f6',0.1), borderRadius: 1.5, fontSize: '0.75rem', color: '#93c5fd' }}>💡 {(exercise?.solution || getText(baseLesson.solution)).slice(0,16)}...</Box></motion.div>}</AnimatePresence>
           </Box>
           {/* Estat de punts - reduced */}
           <Box sx={{ p: 2, bgcolor: alpha('#fbbf24',0.08), borderTop: '1px solid #fbbf24', textAlign: 'center' }}>

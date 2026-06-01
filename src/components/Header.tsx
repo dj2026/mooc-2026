@@ -7,7 +7,7 @@ import { AppBar, Toolbar, Box, Typography, Button, IconButton, Stack, useTheme, 
 import { authService } from '../services/authService';
 import { useTranslation } from 'react-i18next';
 import { ThemeToggleButton } from './ThemeToggleButton';
-const logo = '/img/logo.png';
+const logo = '/img/logo.webp';
 
 export function Header() {
   const { t, i18n } = useTranslation();

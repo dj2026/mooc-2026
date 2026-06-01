@@ -97,7 +97,7 @@ export default function Home() {
           <Grid container spacing={4} sx={{ justifyContent: 'center' }}>
             {features.map((feature, index) => (
               <Grid size={{ xs: 10.5, sm: 6, md: 4 }} key={index}> 
-                <Box sx={{ p: { xs: 2.5, md: 3 }, height: '100%', borderRadius: 6, mx: 'auto', bgcolor: 'background.paper', border: '2px solid', borderColor: theme.palette.mode === 'dark' ? '#8400ff' : 'black', transition: 'all 0.3s', '&:hover': { bgcolor: theme.palette.mode === 'dark' ? '#ffffff2d' : '#ffffffb6', borderColor: 'primary.main', transform: { md: 'translateY(-10px)' } } }}>
+                <Box sx={{ p: { xs: 2.5, md: 3 }, height: '100%', borderRadius: 2, mx: 'auto', bgcolor: 'background.paper', border: '2px solid', borderColor: theme.palette.mode === 'dark' ? '#8400ff' : 'black', transition: 'all 0.3s', '&:hover': { bgcolor: theme.palette.mode === 'dark' ? '#ffffff2d' : '#ffffffb6', borderColor: 'primary.main', transform: { md: 'translateY(-10px)' } } }}>
                   <Box sx={{ fontSize: { xs: '2rem', md: '2.5rem' }, mb: 2 }}>{feature.icon}</Box>
                   <Typography variant="h3" component="h3" sx={{ fontWeight: 800, mb: 1, fontSize: { xs: '1.1rem', md: '1.25rem' } }}>
                     {feature.title}

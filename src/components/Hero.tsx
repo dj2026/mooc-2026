@@ -3,7 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ParticlesBackground from './ParticlesBackground';
 import { Box, Container, Typography, useTheme, useMediaQuery } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'; // Icona Chevron
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { courses as localCourses } from '../data/courses';
+import { students as localStudents } from '../data/students';
 
 interface TypewriterProps {words: string[];}
 
@@ -31,14 +33,11 @@ export default function Hero() {
   const [apiStats, setApiStats] = useState<{students: number, courses: number}>({ students: 0, courses: 0 });
 
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const res = await fetch(`/data.json?t=${new Date().getTime()}`);
-        const data = await res.json();
-        setApiStats({students: data.students?.length || 0,courses: data.courses?.filter((c: any) => !c.disabled).length || 0});
-      } catch (err) {console.error("Error en el polling de stats:", err);}
-    };
-    fetchStats(); const interval = setInterval(fetchStats, 5000);  return () => clearInterval(interval);}, []);
+    setApiStats({
+      students: localStudents.length,
+      courses: localCourses.filter((c: any) => !c.disabled).length
+    });
+  }, []);
 
   const stats = [{label: t('hero.stats.students'), value: apiStats.students, delay: 0 },{ label: t('hero.stats.courses'), value: apiStats.courses, delay: 0.2 },{ label: t('hero.stats.support'), value: '24/7', delay: 0.4 },];
 

@@ -1,6 +1,6 @@
 import { IconButton, useTheme } from '@mui/material';
 import { Moon, Sun } from 'lucide-react';
-import { useThemeMode } from '../theme/ThemeContext';
+import { useThemeMode } from '../hooks/useTheme';
 
 export function ThemeToggleButton() {
   const theme = useTheme();

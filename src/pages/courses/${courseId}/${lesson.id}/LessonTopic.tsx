@@ -4,6 +4,8 @@ import { ChevronLeft, ChevronRight, BookOpen} from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Box, Typography, Button, IconButton, CircularProgress, useTheme, useMediaQuery, alpha } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { courses as localCourses } from '../../../../data/courses';
+import { exercises as localExercises } from '../../../../data/exercises';
 
 // Tipus per a suportar multiidioma (ca, es, en)
 type I18nField = { ca: string; es: string; en: string };
@@ -35,27 +37,20 @@ export default function LessonTopic() {
   const [apiData, setApiData] = useState<DataStructure | null>(null);
   const [loading, setLoading] = useState(true);
   const lang = (i18n.language?.split('-')[0] as keyof I18nField) || 'ca';
-  const getText = (field: I18nField | string | undefined): string => {
+  const getText = (field: I18nField | string | Record<string, string> | undefined): string => {
     if (!field) return '';
     if (typeof field === 'string') return field;
-    return field[lang] || field['ca'] || '';
+    return (field as any)[lang] || (field as any)['ca'] || '';
   };
 
   useEffect(() => {
-    fetch('/data.json')
-      .then(res => res.json())
-      .then(json => { 
-        setApiData(json); 
-        setLoading(false); 
-      })
-      .catch(err => { 
-        console.error("Error carregant dades:", err); 
-        setLoading(false); 
-      });
+    setApiData({ courses: localCourses as any[] });
+    setLoading(false);
   }, []);
 
   const course = useMemo(() => apiData?.courses?.find((c) => c.id === courseId), [apiData, courseId]);
   const lesson = useMemo(() => course?.content?.find((l) => l.id === lessonId), [course, lessonId]);
+  const exercise = useMemo(() => localExercises.find(e => e.id === lessonId && e.courseId === courseId), [lessonId, courseId]);
   const currentIndex = useMemo(() => course?.content?.findIndex((l) => l.id === lessonId) ?? -1, [course, lessonId]);
   const goToLesson = (index: number) => {if (!course?.content?.[index]) return; navigate(`/courses/${courseId}/${course.content[index].id}/topic`);};
   if (loading) return (<Box sx={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'background.default' }}><CircularProgress color="secondary" /></Box>);
@@ -151,9 +146,19 @@ export default function LessonTopic() {
                 {t('lesson.your_challenge')}
               </Typography>
               <Typography sx={{ fontSize: '1rem', fontWeight: 600, fontFamily: 'monospace', color: 'text.primary' }}>
-                {getText(lesson.challenge)}
+                {getText(exercise?.challenge) || getText(lesson.challenge)}
               </Typography>
             </Box>
+            {exercise && (
+              <Box sx={{ mt: 3, p: 2, bgcolor: alpha(theme.palette.primary.main, 0.03), borderRadius: 2, border: '1px solid', borderColor: alpha(theme.palette.primary.main, 0.15), maxWidth: '500px' }}>
+                <Typography sx={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', mb: 0.5, color: 'text.secondary' }}>
+                  {t('lesson.objective')}
+                </Typography>
+                <Typography sx={{ fontSize: '0.9rem', color: 'text.primary', lineHeight: 1.5 }}>
+                  {getText(exercise.exerciseInstructions)}
+                </Typography>
+              </Box>
+            )}
           </motion.div>
         </Box>
       </Box>

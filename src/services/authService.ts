@@ -17,30 +17,8 @@ export const authService = {
       return data;
 
     } catch (error) {
-      console.warn("⚠️ API Offline o Error: Intentant validació local amb data.json...");
-
-      try {
-        const response = await fetch('/data.json');
-        const localData = await response.json();
-
-        const student = localData.students.find(
-          (s: any) => s.email === credentials.email && s.code === credentials.code
-        );
-
-        if (student) {
-          const fakeToken = `fake-jwt-token-${student.id}`;
-          localStorage.setItem('token', fakeToken);
-          localStorage.setItem('currentStudent', JSON.stringify(student));
-          
-          console.log("✅ Login local correcte per a:", student.name);
-          return { token: fakeToken, user: student };
-        } else {
-          throw new Error("Email o PIN incorrectes");
-        }
-      } catch (fetchError: any) {
-        console.error("Error en la validació local:", fetchError.message);
-        throw fetchError;
-      }
+      console.error("❌ API no disponible. No hi ha validació local sense connexió.");
+      throw error;
     }
   },
 

@@ -1,15 +1,11 @@
 import axios from 'axios';
 import { Course, Lesson, Student } from '../types';
+import { courses as localCourses } from '../data/courses';
 
 const API_URL = 'http://localhost:8080/api/v1';
 
 const getLocalFallback = async () => {
-  try {
-    const response = await fetch('/data.json');
-    return await response.json();
-  } catch (err) {
-    console.error("No s'ha pogut carregar ni l'API ni el fitxer local", err);
-    return { courses: [], students: [] };  }
+  return { courses: localCourses as Course[], students: [] as Student[] };
 };
 
 const api = axios.create({

@@ -1,7 +1,7 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { getTheme } from './theme';
+import { getTheme } from '../theme/Theme';
 
 type ThemeMode = 'light' | 'dark';
 
@@ -17,14 +17,27 @@ const STORAGE_KEY = 'mooc-theme-mode';
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [mode, setModeState] = useState<ThemeMode>(() => {
-    if (typeof window !== 'undefined') {const stored = localStorage.getItem(STORAGE_KEY); if (stored === 'light' || stored === 'dark') return stored;}
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored === 'light' || stored === 'dark') return stored;
+    }
     return 'dark';
   });
 
-  const setMode = (newMode: ThemeMode) => {setModeState(newMode);localStorage.setItem(STORAGE_KEY, newMode);};
-  const toggleTheme = () => {setMode(mode === 'dark' ? 'light' : 'dark');};
-  useEffect(() => {localStorage.setItem(STORAGE_KEY, mode);}, [mode]);
-  const theme = getTheme(mode);
+  const setMode = (newMode: ThemeMode) => {
+    setModeState(newMode);
+    localStorage.setItem(STORAGE_KEY, newMode);
+  };
+
+  const toggleTheme = () => {
+    setMode(mode === 'dark' ? 'light' : 'dark');
+  };
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, mode);
+  }, [mode]);
+
+  const theme = useMemo(() => getTheme(mode), [mode]);
 
   return (
     <ThemeContext.Provider value={{ mode, toggleTheme, setMode }}>
@@ -36,8 +49,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useThemeMode() {
+export function useThemeMode(): ThemeContextValue {
   const context = useContext(ThemeContext);
-  if (!context) {throw new Error('useThemeMode must be used within ThemeProvider');}
+  if (!context) {
+    throw new Error('useThemeMode must be used within ThemeProvider');
+  }
   return context;
 }

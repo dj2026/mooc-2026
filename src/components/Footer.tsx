@@ -4,7 +4,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Box, Container, Typography, Link as MuiLink, useTheme } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { useTranslation } from 'react-i18next'; 
-const logo = '/img/logo.png';
+const logo = '/img/logo.webp';
 
 interface FooterLinkProps {children: React.ReactNode;to?: string;href?: string;}
 

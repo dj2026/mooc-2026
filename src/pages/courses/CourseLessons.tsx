@@ -7,6 +7,8 @@ import {
 import { BookOpen, ChevronDown, ChevronRight, Code2, CheckCircle2, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { courses as localCourses } from '../../data/courses';
+
 
 type I18nField = { ca: string; es: string; en: string };
 
@@ -65,10 +67,8 @@ export default function CourseLessons() {
   };
 
   useEffect(() => {
-    fetch('/data.json')
-      .then(res => res.json())
-      .then(json => { setApiData(json); setLoading(false); })
-      .catch(err => { console.error("Error:", err); setLoading(false); });
+    setApiData({ courses: localCourses as any[] });
+    setLoading(false);
   }, []);
 
 

@@ -2,9 +2,9 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
-import ca from './i18n/ca';
-import es from './i18n/es';
-import en from './i18n/en';
+import ca from './ca';
+import es from './es';
+import en from './en';
 
 i18n
   .use(LanguageDetector)
