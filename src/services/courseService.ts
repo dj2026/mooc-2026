@@ -4,8 +4,25 @@ import { courses as localCourses } from '../data/courses';
 
 const API_URL = 'http://localhost:8080/api/v1';
 
-const getLocalFallback = async () => {
-  return { courses: localCourses as Course[], students: [] as Student[] };
+const getLocalFallback = async (): Promise<{ courses: Course[]; students: Student[] }> => {
+  const mapped: Course[] = localCourses.map(c => ({
+    id: c.id,
+    title: c.title.en,
+    description: c.description.en,
+    image: c.image,
+    disabled: c.disabled,
+    level: 'Bàsic',
+    duration: '8 hores',
+    instructor: 'Professor',
+    icon: c.icon,
+    logoSize: c.logoSize,
+    content: c.content.map(l => ({
+      id: l.id,
+      title: l.title.en,
+      description: l.description?.en || '',
+    })),
+  }));
+  return { courses: mapped, students: [] };
 };
 
 const api = axios.create({
