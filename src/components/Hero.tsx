@@ -30,14 +30,10 @@ export default function Hero() {
   const { t } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const [apiStats, setApiStats] = useState<{students: number, courses: number}>({ students: 0, courses: 0 });
-
-  useEffect(() => {
-    setApiStats({
-      students: localStudents.length,
-      courses: localCourses.filter((c: any) => !c.disabled).length
-    });
-  }, []);
+  const [apiStats] = useState(() => ({
+    students: localStudents.length,
+    courses: localCourses.filter((c: any) => !c.disabled).length
+  }));
 
   const stats = [{label: t('hero.stats.students'), value: apiStats.students, delay: 0 },{ label: t('hero.stats.courses'), value: apiStats.courses, delay: 0.2 },{ label: t('hero.stats.support'), value: '24/7', delay: 0.4 },];
 

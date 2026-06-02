@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, type MouseEvent} from 'react';
 import {useTranslation} from 'react-i18next';
 import {motion} from 'framer-motion';
 import {Box, Card, TextField, Button, Avatar, Stack, IconButton, Typography, useTheme} from '@mui/material';
@@ -14,7 +14,7 @@ export function StudentCard({ student, onLogin, onDelete, error }: {
   const [deletePin, setDeletePin] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const handleConfirmDelete = (e: React.MouseEvent) => {
+  const handleConfirmDelete = (e: MouseEvent) => {
     e.stopPropagation();
     if (onDelete(student.id, deletePin)) {
       setIsDeleting(false);

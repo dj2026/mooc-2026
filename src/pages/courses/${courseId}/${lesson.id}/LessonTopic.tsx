@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, BookOpen} from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -34,19 +34,14 @@ export default function LessonTopic() {
   const navigate = useNavigate();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const { i18n, t } = useTranslation();
-  const [apiData, setApiData] = useState<DataStructure | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [apiData] = useState<DataStructure | null>(() => ({ courses: localCourses as any[] }));
+  const [loading] = useState(false);
   const lang = (i18n.language?.split('-')[0] as keyof I18nField) || 'ca';
   const getText = (field: I18nField | string | Record<string, string> | undefined): string => {
     if (!field) return '';
     if (typeof field === 'string') return field;
     return (field as any)[lang] || (field as any)['ca'] || '';
   };
-
-  useEffect(() => {
-    setApiData({ courses: localCourses as any[] });
-    setLoading(false);
-  }, []);
 
   const course = useMemo(() => apiData?.courses?.find((c) => c.id === courseId), [apiData, courseId]);
   const lesson = useMemo(() => course?.content?.find((l) => l.id === lessonId), [course, lessonId]);

@@ -1,4 +1,4 @@
-import {useState, useEffect, useMemo, useCallback} from 'react';
+import {useState, useEffect, useMemo, useCallback, type FormEvent, type MouseEvent} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Loader2} from 'lucide-react';
 import {motion, AnimatePresence} from 'framer-motion';
@@ -84,7 +84,7 @@ export default function StudentDashboard() {
     return () => { mounted = false; document.removeEventListener('visibilitychange', onVisible); };
   }, [fetchProgress]);
 
-  const handleCreateStudent = (e: React.FormEvent) => {
+  const handleCreateStudent = (e: FormEvent) => {
     e.preventDefault();
     if (!newName || !newEmail || !newPin) return;
     const newStudent = { id: `local-${Date.now()}`, name: newName, email: newEmail, code: newPin, role: newRole };
@@ -133,7 +133,7 @@ export default function StudentDashboard() {
     window.dispatchEvent(new Event('auth-state-change'));
   };
 
-  const handleResetCourse = async (e: React.MouseEvent, courseId: string) => {
+  const handleResetCourse = async (e: MouseEvent, courseId: string) => {
     e.stopPropagation();
     if (!selectedStudent || !window.confirm(t('dashboard.reset_course_confirm'))) return;
     try {

@@ -5,7 +5,7 @@ import {useTranslation} from 'react-i18next';
 import {Student} from './types';
 import {StudentCard} from './StudentCard';
 import { students as initialStudents } from '../../data/students';
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 
 interface LoginProps {
   newRole: 'student' | 'teacher';
@@ -18,7 +18,7 @@ interface LoginProps {
   onNewEmailChange: (email: string) => void;
   newPin: string;
   onNewPinChange: (pin: string) => void;
-  onCreateStudent: (e: React.FormEvent) => void;
+  onCreateStudent: (e: FormEvent) => void;
   onLogin: (student: Student, pin: string) => void;
   onDeleteStudent: (id: string, pin: string) => boolean;
   errorId: string | null;

@@ -42,16 +42,17 @@ export default function CourseLessons() {
   const { courseId } = useParams<{ courseId: string }>();
   const { t, i18n } = useTranslation();
   const theme = useTheme();
-  const [apiData, setApiData] = useState<DataStructure | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [apiData] = useState<DataStructure | null>(() => ({ courses: localCourses as any[] }));
+  const [loading] = useState(false);
   const [activeLessonId, setActiveLessonId] = useState<string | null>(null);
   const [mobileSyllabusOpen, setMobileSyllabusOpen] = useState(false);
-  const [progress, setProgress] = useState<Record<string, boolean>>({});
+  const [progress, setProgress] = useState<Record<string, boolean>>(() =>
+    JSON.parse(localStorage.getItem('mooc_global_progress') || '{}')
+  );
   const reSyncProgress = useCallback(() => {
     setProgress(JSON.parse(localStorage.getItem('mooc_global_progress') || '{}'));
   }, []);
   useEffect(() => {
-    reSyncProgress();
     window.addEventListener('lessonProgressUpdated', reSyncProgress);
     return () => window.removeEventListener('lessonProgressUpdated', reSyncProgress);
   }, [reSyncProgress]);
@@ -65,12 +66,6 @@ export default function CourseLessons() {
     if (typeof field === 'string') return field;
     return field[lang] || field['ca'] || '';
   };
-
-  useEffect(() => {
-    setApiData({ courses: localCourses as any[] });
-    setLoading(false);
-  }, []);
-
 
   if (loading) return (
     <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'background.default' }}>

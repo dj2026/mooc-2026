@@ -1,6 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import { Box, useTheme } from '@mui/material';
-import { useEffect } from 'react';
+import { Box } from '@mui/material';
 import Home from './pages/Home';
 import CourseLessons from './pages/courses/CourseLessons';
 import LessonPage from './pages/courses/LessonPage';
@@ -8,12 +7,6 @@ import StudentDashboard from './pages/dashboards/StudentDashboard';
 import { MainLayout } from './layouts/MainLayout';
 
 function App() {
-  const theme = useTheme();
-
-  useEffect(() => {
-    document.body.style.backgroundColor = theme.palette.background.default;
-  }, [theme.palette.background.default]);
-
   return (
     <Box sx={{bgcolor: 'background.default' }}>
       <Routes>

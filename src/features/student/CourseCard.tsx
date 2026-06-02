@@ -3,6 +3,7 @@ import {Box, Typography, Card, Stack, IconButton, Tooltip, useTheme} from '@mui/
 import {ChevronRight, RotateCcw} from 'lucide-react';
 import {useTranslation} from 'react-i18next';
 import {Course, Student, Topic} from './types';
+import { type MouseEvent } from 'react';
 import {CourseIcon} from './CourseIcon';
 import {CourseExpandedContent} from './CourseExpandedContent';
 
@@ -13,7 +14,7 @@ interface Props {
   selectedStudent: Student;
   getText: (field: any) => string;
   getCoursePoints: (course: Course, studentId: string) => number;
-  onResetCourse: (e: React.MouseEvent, courseId: string) => void;
+  onResetCourse: (e: MouseEvent, courseId: string) => void;
   activeTab: 'syllabus' | 'activities';
   onTabChange: (tab: 'syllabus' | 'activities') => void;
   dbProgress: Record<string, boolean>;

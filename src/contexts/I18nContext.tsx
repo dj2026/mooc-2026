@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, use, useState, useEffect, ReactNode } from 'react';
 import i18n from '../i18n';
 
 interface I18nContextValue {
@@ -40,7 +40,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 }
 
 export function useI18n() {
-  const context = useContext(I18nContext);
+  const context = use(I18nContext);
   if (!context) throw new Error('useI18n must be used within I18nProvider');
   return context;
 }

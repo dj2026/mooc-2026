@@ -3,6 +3,7 @@ import {Card, CardContent, CardTitle, CardDescription} from './ui/Card';
 import {motion} from 'framer-motion';
 import {useNavigate} from 'react-router-dom';
 import {ArrowRight} from 'lucide-react';
+import { type MouseEvent } from 'react';
 import {useTranslation} from 'react-i18next';
 
 interface Course {id: string;title: string | { ca: string; es: string; en: string }; description: string | { ca: string; es: string; en: string }; image: string; level: string; duration: string; instructor: string; logoSize?: number; logoWidth?: number; logoHeight?: number; disabled?: boolean;}
@@ -20,7 +21,7 @@ export function CourseCard({ course, index }: CourseCardProps) {
   const navigate = useNavigate();
   const lang = i18n.language.split('-')[0] || 'en';
 
-  const handleEnroll = (e: React.MouseEvent) => {
+  const handleEnroll = (e: MouseEvent) => {
     if (course.disabled) return;
     e.preventDefault();
     e.stopPropagation();

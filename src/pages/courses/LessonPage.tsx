@@ -20,12 +20,15 @@ export default function LessonPage() {
   const { t, i18n } = useTranslation();
   const theme = useTheme();
   const navigate = useNavigate();
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval>>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const [apiData, setApiData] = useState<DataStructure | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [currentUser, setCurrentUser] = useState<Student | null>(null);
+  const [apiData] = useState<DataStructure | null>(() => ({ courses: localCourses as any[], students: [] }));
+  const [loading] = useState(false);
+  const [currentUser] = useState<Student | null>(() => {
+    const saved = localStorage.getItem('currentStudent');
+    return saved ? JSON.parse(saved) : null;
+  });
   const [userInput, setUserInput] = useState("");
   const [consoleOutput, setConsoleOutput] = useState<string[]>([]);
   const [status, setStatus] = useState<'idle' | 'pass' | 'fail'>('idle');
@@ -48,13 +51,6 @@ export default function LessonPage() {
     if (typeof field === 'string') return field;
     return field[lang] || field['ca'] || '';
   };
-
-  useEffect(() => {
-    const saved = localStorage.getItem('currentStudent');
-    if (saved) setCurrentUser(JSON.parse(saved));
-    setApiData({ courses: localCourses as any[], students: [] });
-    setLoading(false);
-  }, []);
 
   const course = apiData?.courses?.find((c) => c.id === courseId);
   const baseLesson = course?.content?.find((l) => l.id === lessonId);
