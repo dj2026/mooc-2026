@@ -1,4 +1,4 @@
-import React from 'react';
+import type { ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { Link as RouterLink } from 'react-router-dom';
 import { Box, Container, Typography, Link as MuiLink, useTheme } from '@mui/material';
@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid';
 import { useTranslation } from 'react-i18next'; 
 const logo = '/img/logo.webp';
 
-interface FooterLinkProps {children: React.ReactNode;to?: string;href?: string;}
+interface FooterLinkProps {children: ReactNode;to?: string;href?: string;}
 
 function FooterLink({ children, to, href }: FooterLinkProps) {const styles = { color: 'text.primary', fontWeight: 600, fontSize: { xs: '0.9rem', md: '1rem' }, textDecoration: 'none', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', display: 'inline-block', '&:hover': { color: 'primary.main', transform: 'translateX(6px)' } };
   if (to) return <RouterLink to={to} style={{ textDecoration: 'none' }}><Box component="span" sx={styles}>{children}</Box></RouterLink>;

@@ -12,7 +12,7 @@ function App() {
 
   useEffect(() => {
     document.body.style.backgroundColor = theme.palette.background.default;
-  }, [theme, theme.palette.mode]);
+  }, [theme.palette.background.default]);
 
   return (
     <Box sx={{bgcolor: 'background.default' }}>

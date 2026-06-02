@@ -12,7 +12,6 @@ const logo = '/img/logo.webp';
 export function Header() {
   const { t, i18n } = useTranslation();
   const theme = useTheme();
-  const [mounted, setMounted] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
@@ -43,7 +42,6 @@ export function Header() {
   };
 
   useEffect(() => {
-    setMounted(true); 
     checkAuth();
 
     if (mobileOpen) {
@@ -73,7 +71,6 @@ export function Header() {
     }
   };
 
-  if (!mounted) return null;
   const currentLanguage = i18n.language.split('-')[0];
 
   const commonButtonStyle = {

@@ -23,7 +23,6 @@ export default function LessonPage() {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const [mounted, setMounted] = useState(false);
   const [apiData, setApiData] = useState<DataStructure | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState<Student | null>(null);
@@ -51,7 +50,6 @@ export default function LessonPage() {
   };
 
   useEffect(() => {
-    setMounted(true);
     const saved = localStorage.getItem('currentStudent');
     if (saved) setCurrentUser(JSON.parse(saved));
     setApiData({ courses: localCourses as any[], students: [] });
@@ -78,7 +76,7 @@ export default function LessonPage() {
   const getGlobalProgressKey = () => `${courseId}_${lessonId}`;
 
   useEffect(() => {
-    if (mounted && baseLesson) {
+    if (baseLesson) {
       const savedCode = localStorage.getItem(codeStorageKey);
       setUserInput(savedCode || exercise?.initialCode || getText(baseLesson.initialCode) || '');
       const globalProgress = JSON.parse(localStorage.getItem('mooc_global_progress') || '{}');
@@ -87,7 +85,7 @@ export default function LessonPage() {
       setConsoleOutput([]); setHintVisible(false); setTimer(60); setIsTimerActive(false); setIsDirty(false); setWasSavedInSession(false); setHasAttemptedRun(false); setAssistsLeft(3); setShowResultModal(false);
     }
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
-  }, [baseLesson, mounted, currentUser, courseId, lessonId]);
+  }, [baseLesson, currentUser, courseId, lessonId]);
 
   useEffect(() => {
     if (currentMode === 'drill' && isTimerActive && timer > 0 && status !== 'pass') {
@@ -167,7 +165,7 @@ export default function LessonPage() {
   };
 
   if (loading) return <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'background.default' }}><CircularProgress color="secondary" /></Box>;
-  if (!mounted || !course || !baseLesson) return null;
+  if (!course || !baseLesson) return null;
 
   const globalProgress = course?.content?.reduce((acc, lesson) => acc + (JSON.parse(localStorage.getItem('mooc_global_progress') || '{}')[`${courseId}_${lesson.id}`] ? 1 : 0), 0) ?? 0;
   const progressPercent = course?.content?.length ? (globalProgress / course.content.length) * 100 : 0;

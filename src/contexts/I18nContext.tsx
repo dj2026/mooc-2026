@@ -32,10 +32,6 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, language);
-  }, [language]);
-
   return (
     <I18nContext.Provider value={{ language, setLanguage }}>
       {children}
