@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Box, Typography, Button, IconButton, Stack, alpha, CircularProgress, useTheme, useMediaQuery } from '@mui/material';
 import { api } from '../../services/api';
 import { useTranslation } from 'react-i18next';
+import { useNotifications } from '../../contexts/NotificationContext';
 import { courses as localCourses } from '../../data/courses';
 import { exercises as localExercises } from '../../data/exercises';
 
@@ -23,6 +24,7 @@ export default function LessonPage() {
   const timerRef = useRef<ReturnType<typeof setInterval>>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const { addNotification } = useNotifications();
   const [apiData] = useState<DataStructure | null>(() => ({ courses: localCourses as any[], students: [] }));
   const [loading] = useState(false);
   const [currentUser] = useState<Student | null>(() => {
@@ -115,7 +117,11 @@ export default function LessonPage() {
       setConsoleOutput(p => [...p, "💾 Sincronitzat!"]);
       await api.postProgress({ studentId: currentUser.id, courseId, lessonId, status: globalProgress[key] || false });
       window.dispatchEvent(new Event('lessonProgressUpdated'));
-    } catch (err) { setConsoleOutput(p => [...p, "⚠️ Error local"]); } 
+      addNotification(t('notifications.progress_saved'), 'success');
+    } catch (err) {
+      addNotification(t('notifications.progress_error'), 'error');
+      setConsoleOutput(p => [...p, "⚠️ Error local"]);
+    } 
     finally { setIsSaving(false); }
   };
 

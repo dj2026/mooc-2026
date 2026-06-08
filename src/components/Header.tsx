@@ -91,7 +91,7 @@ export function Header() {
           <Box component="img" src={logo} alt="Rocket" width={438} height={190} sx={{ height: { xs: 22, md: 50 }, width: 'auto', transform: { xs: 'rotate(-90deg)', md: 'none' }, transition: 'transform 0.5s' }} />
             <Stack direction="row" sx={{ alignItems: 'baseline' }}>
               <Typography variant="h5" component="span" sx={{ fontWeight: 900, color: 'text.primary'}}>MOOC</Typography>
-              <Typography variant="h5" component="span" sx={{ fontWeight: 900, color: 'primary.main'}}>2026</Typography>
+              <Typography variant="h5" component="span" sx={{ fontWeight: 900, color: 'primary.main', ml:0.5}}>2026</Typography>
             </Stack>
           </Box>
 

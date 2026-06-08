@@ -82,6 +82,17 @@ export default {
   course: {by: "by", enroll: "Subscribe Course"},
   common: {error_loading: "Error loading data"},
   
+  notifications: {
+    progress_saved: "Progress saved successfully ✅",
+    progress_error: "Error saving progress ⚠️",
+    account_created: "Account created successfully, {{name}} ({{role}}) 🎉",
+    user_deleted: "User deleted: {{name}} ({{role}}) 🗑️",
+    incorrect_pin: "Incorrect PIN ❌",
+    welcome: "Welcome, {{name}} 👋",
+    session_closed: "Session closed 👋",
+    course_reset: "Course reset successfully 🗑️",
+    course_reset_error: "Error resetting the course ⚠️"
+  },
   lesson: {
     syllabus: "Leassons",
     laboratory: "Laboratory",

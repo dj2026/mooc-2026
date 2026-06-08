@@ -2,17 +2,17 @@
 
 ## Resum
 
-Migració completa del projecte a patrons React 19. S'han eliminat anti-patrons heredats de React 17/18 i redundàncies, sense alterar l'estil visual ni la lògica de negoci. **Build: 0 errors.**
+Migració completa del projecte a patrons React 19. S'han eliminat anti-patrons heredats de React 17/18 i redundàncies, sense alterar l'estil visual ni la lògica de negoci. **Build: 0 errors. Última actualització: 4 de juny de 2026.**
 
 ---
 
 ## Canvis realitzats
 
-### 1. `useContext` → `use()` (2 fitxers)
-**Fitxers**: `src/contexts/ThemeContext.tsx`, `I18nContext.tsx`
+### 1. `useContext` → `use()` (4 fitxers)
+**Fitxers**: `src/contexts/ThemeContext.tsx`, `I18nContext.tsx`, `AuthContext.tsx`, `NotificationContext.tsx`
 
 - **`import { useContext, ... }`** → **`import { use, ... }`**
-- **`useContext(AuthContext)`** → **`use(AuthContext)`**
+- **`useContext(TheContext)`** → **`use(TheContext)`**
 - **Motiu**: React 19 recomana `use(Context)` en lloc de `useContext(Context)` per llegir valors de context.
 
 ### 2. `useEffect` per persistència → eliminat (1 fitxer)
@@ -22,11 +22,11 @@ Migració completa del projecte a patrons React 19. S'han eliminat anti-patrons 
 - **`I18nContext.tsx`**: Manté un `useEffect` per sincronitzar localStorage amb i18n (necessari perquè i18n pot canviar externament)
 - **Motiu**: `setMode()` ja crida `localStorage.setItem()`. L'effect era redundant i afegia un cicle de render extra.
 
-### 3. `useEffect` amb dades estàtiques → lazy initializer (1 fitxer)
+### 3. `useEffect` per dades estàtiques → `useEffect` per events + `useCallback` (1 fitxer)
 **Fitxer**: `src/components/Hero.tsx`
 
-- **`useEffect`** que carregava dades d'imports estàtics → **`useState(() => {...})`** amb lazy initializer
-- **Motiu**: Les dades són síncrones (imports estàtics). El lazy initializer evita un render extra i un `useEffect` innecessari.
+- **`useEffect`** que carregava dades d'imports estàtics → **`useCallback`** per llegir estudiants des de localStorage + **`useEffect`** per escoltar event `studentsUpdated`
+- **Motiu**: Les stats d'estudiants ara són dinàmiques (es poden afegir/eliminar usuaris). L'`useEffect` subscriu a un event window, cosa que és un ús legítim d'`useEffect` per a efectes externs.
 
 ### 4. `React.FormEvent`/`React.MouseEvent` → tipus directes (5 fitxers)
 **Fitxers**: `Login.tsx`, `StudentDashboard.tsx`, `features/student/CourseCard.tsx`, `features/student/StudentCard.tsx`, `components/CourseCard.tsx`
@@ -39,10 +39,11 @@ Migració completa del projecte a patrons React 19. S'han eliminat anti-patrons 
 - Eliminat `useEffect` que feia `document.body.style.backgroundColor = theme.palette.background.default`
 - El fons es gestiona directament al JSX (`<Box sx={{bgcolor: 'background.default'}}>`)
 
-### 6. `main.tsx` — imports nets
+### 6. `main.tsx` — imports nets + NotificationProvider
 - **`import React from 'react'`** → **`import { StrictMode } from 'react'`**
 - **`ReactDOM.createRoot`** → **`createRoot`**
 - **`<React.StrictMode>`** → **`<StrictMode>`**
+- **Afegit `NotificationProvider`** a la cadena de providers
 
 ### 7. `Header.tsx` — estat `mounted` eliminat
 - Eliminat patró `mounted` necessari per SSR/hidratació. En app Vite client-side, `mounted` és `true` des del primer render.
@@ -53,11 +54,43 @@ Migració completa del projecte a patrons React 19. S'han eliminat anti-patrons 
 ### 9. `LessonPage.tsx` — `useRef` tipus simplificat
 - **`useRef<NodeJS.Timeout | null>(null)`** → **`useRef<ReturnType<typeof setInterval>>(null)`**
 
-### 10. `Login.tsx` — `useEffect` + `useState` → lazy initializer
-- Lectura de localStorage síncrona amb lazy initializer.
+### 10. `Login.tsx` — `useEffect` + `useState` → prop `students` des del pare
+- Lectura de localStorage síncrona amb lazy initializer eliminada.
+- `students` ara es rep com a prop des de `StudentDashboard`, que gestiona la fusió i persistència.
 
 ### 11. `LessonPage.tsx` — estat `mounted` eliminat
 - `baseLesson` ja fa de guard.
+
+### 12. `src/i18n.ts` (arrel) — eliminat
+- Duplicat de `src/i18n/index.ts` eliminat. `main.tsx` ara importa `./i18n` que resol a `src/i18n/index.ts`.
+
+### 13. `NotificationContext` integrat a LessonPage + StudentDashboard
+- Toast notifications en desar progrés (LessonPage) i en login/logout/create/delete/reset (StudentDashboard).
+
+### 14. `StudentDashboard.tsx` — gestió d'estudiants centralitzada
+- Fusió i persistència d'estudiants moguda del `Login` al `StudentDashboard`.
+- `Login` rep `students` com a prop.
+- Es dispara event `studentsUpdated` en crear/eliminar usuaris per sincronitzar `Hero.tsx`.
+
+### 15. Notificacions traduïbles als 3 idiomes
+- Totes les notificacions toast (`LessonPage.tsx` + `StudentDashboard.tsx`) ara usen `t('notifications.*')` amb interpolació d'i18next.
+- 9 claus afegides a `ca.ts`, `es.ts`, `en.ts` secció `notifications`.
+
+### 16. `AuthProvider` + `I18nProvider` connectats a main.tsx
+- `AuthProvider` afegit a la cadena de providers (abans no estava connectat).
+- `I18nProvider` afegit a la cadena de providers (abans es feia `import './i18n'` directament).
+- Eliminat `import './i18n'` de `main.tsx` — `I18nProvider` ja s'encarrega d'inicialitzar i18next.
+
+### 17. `StudentDashboard.tsx` — `AnimatePresence` + `motion` eliminats
+- Import `{motion, AnimatePresence}` de framer-motion eliminat.
+- Wrappers `<AnimatePresence>` i `<motion.div>` substituïts per JSX natiu/Box.
+- `Motion` eliminat de `CourseExpandedContent.tsx` (`motion.div` → `Box`).
+
+### 18. `theme.ts` — `background.default` canviat a `white`
+- **`'#f5f5f5'`** → **`'white'`** per al mode clar.
+
+### 19. `courseService.ts` — fallback metadata buit
+- `level: 'Bàsic'` → `''`, `duration: '8 hores'` → `''`, `instructor: 'Professor'` → `''`
 
 ---
 
@@ -106,7 +139,7 @@ src/services/teacherService.ts
 | `src/types/` | Types només, no React |
 | `src/theme/` | MUI pur, no React |
 | `src/i18n/` | i18next, no React |
-| `src/middleware/` | Buit |
+| `src/middleware/` | No existeix |
 | `public/` | Estàtics |
 | `dist/` | Build output |
 
@@ -126,8 +159,11 @@ src/services/teacherService.ts
 ## Dependències del projecte
 
 ```json
-"react": "^19.2.7"
-"react-dom": "^19.2.7"
-"@types/react": "^19.2.16"
-"@types/react-dom": "^19.2.3"
+"react": "^19.2.7"              → 19.2.7
+"react-dom": "^19.2.7"          → 19.2.7
+"@types/react": "^19.2.16"      → 19.2.16
+"@types/react-dom": "^19.2.3"   → 19.2.3
+"react-router-dom": "^6.30.3"   → 6.30.4
 ```
+
+**Override**: `"react-is": "19.0.0"` (per compatibilitat MUI v9)

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ParticlesBackground from './ParticlesBackground';
 import { Box, Container, Typography, useTheme, useMediaQuery } from '@mui/material';
@@ -30,12 +30,25 @@ export default function Hero() {
   const { t } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const [apiStats] = useState(() => ({
-    students: localStudents.length,
-    courses: localCourses.filter((c: any) => !c.disabled).length
-  }));
+  const getStudentCount = useCallback(() => {
+    const local = JSON.parse(localStorage.getItem('mooc_local_students') || '[]');
+    const deletedIds = JSON.parse(localStorage.getItem('mooc_deleted_ids') || '[]');
+    return [...localStudents, ...local].filter((s: any) => !deletedIds.includes(s.id)).length;
+  }, []);
 
-  const stats = [{label: t('hero.stats.students'), value: apiStats.students, delay: 0 },{ label: t('hero.stats.courses'), value: apiStats.courses, delay: 0.2 },{ label: t('hero.stats.support'), value: '24/7', delay: 0.4 },];
+  const [studentCount, setStudentCount] = useState(getStudentCount);
+
+  useEffect(() => {
+    const handler = () => setStudentCount(getStudentCount());
+    window.addEventListener('studentsUpdated', handler);
+    return () => window.removeEventListener('studentsUpdated', handler);
+  }, [getStudentCount]);
+
+  const stats = [
+    { label: t('hero.stats.students'), value: studentCount, delay: 0 },
+    { label: t('hero.stats.courses'), value: localCourses.filter((c: any) => !c.disabled).length, delay: 0.2 },
+    { label: t('hero.stats.support'), value: '24/7', delay: 0.4 },
+  ];
 
   const techStack: string[] = ['React', 'Python', 'SpringBoot', isMobile ? 'ML' : 'Machine Learning'];
 

@@ -1,11 +1,11 @@
 import {useState, useEffect, useMemo, useCallback, type FormEvent, type MouseEvent} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Loader2} from 'lucide-react';
-import {motion, AnimatePresence} from 'framer-motion';
 import {Box, Container, Typography, Stack, Alert, useTheme} from '@mui/material';
 import Grid from '@mui/material/Grid';
 import {api} from '../../services/api';
 import {useTranslation} from 'react-i18next';
+import {useNotifications} from '../../contexts/NotificationContext';
 import {Login} from '../../features/student/Login';
 import {Student, Lesson, Topic, Course} from '../../features/student/types';
 import {StudentProfileCard} from '../../features/student/StudentProfileCard';
@@ -21,6 +21,7 @@ export default function StudentDashboard() {
   const { t, i18n } = useTranslation();
   const theme = useTheme();
   const navigate = useNavigate();
+  const { addNotification } = useNotifications();
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [globalError, setGlobalError] = useState<string | null>(null);
@@ -93,6 +94,8 @@ export default function StudentDashboard() {
     setStudents(prev => [...prev, newStudent]);
     setNewName(""); setNewEmail(""); setNewPin(""); setNewRole("student");
     setShowCreateForm(false);
+    addNotification(t('notifications.account_created', { name: newName, role: newRole }), 'success');
+    window.dispatchEvent(new Event('studentsUpdated'));
   };
 
   const handleDeleteStudent = (id: string, pin: string): boolean => {
@@ -103,6 +106,8 @@ export default function StudentDashboard() {
     const localOnly = JSON.parse(localStorage.getItem('mooc_local_students') || '[]');
     localStorage.setItem('mooc_local_students', JSON.stringify(localOnly.filter((s: any) => s.id !== id)));
     setStudents(prev => prev.filter(s => s.id !== id));
+    addNotification(t('notifications.user_deleted', { name: target.name, role: target.role || 'student' }), 'info');
+    window.dispatchEvent(new Event('studentsUpdated'));
     if (selectedStudent?.id === id) {handleLogoutAction();}
     return true;
   };
@@ -110,6 +115,7 @@ export default function StudentDashboard() {
   const handleLogin = (student: Student, pin: string) => {
     if (student.code !== pin) {
       setErrorId(student.id);
+      addNotification(t('notifications.incorrect_pin'), 'error');
       setTimeout(() => setErrorId(null), 500);
       return; 
     }
@@ -119,6 +125,7 @@ export default function StudentDashboard() {
     } else {
       setSelectedStudent(student);
       localStorage.setItem('currentStudent', JSON.stringify(student));
+      addNotification(t('notifications.welcome', { name: student.name }), 'success');
       if (typeof fetchProgress === 'function') {
         fetchProgress(student.id);
       }
@@ -130,6 +137,7 @@ export default function StudentDashboard() {
     localStorage.removeItem('mooc_global_progress');
     setSelectedStudent(null);
     setDbProgress({});
+    addNotification(t('notifications.session_closed'), 'info');
     window.dispatchEvent(new Event('auth-state-change'));
   };
 
@@ -143,7 +151,11 @@ export default function StudentDashboard() {
       Object.keys(local).forEach(key => { if (key.startsWith(`${courseId}_`)) delete local[key]; });
       localStorage.setItem('mooc_global_progress', JSON.stringify(local));
       await fetchProgress(selectedStudent.id);
-    } catch (err) { setGlobalError("Error reset."); } finally { setActionLoading(false); }
+      addNotification(t('notifications.course_reset'), 'success');
+    } catch (err) {
+      addNotification(t('notifications.course_reset_error'), 'error');
+      setGlobalError("Error reset.");
+    } finally { setActionLoading(false); }
   };
 
   const getCourseProgress = useCallback((course: Course, studentId: string): number => {
@@ -185,10 +197,9 @@ export default function StudentDashboard() {
          <Box sx={{ width: '100%', flex: 1, display: 'flex', flexDirection: 'column', overflow: { xs: 'visible', md: 'hidden' } }}>
           {globalError && <Alert severity="error" sx={{ mb: 3, borderRadius: '1rem' }}>{globalError}</Alert>}
           
-          <AnimatePresence mode="wait">
-            {!selectedStudent ? (
-              <motion.div key="login" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+          {!selectedStudent ? (
                 <Login
+                  students={students}
                   newRole={newRole}
                   onRoleChange={(role) => setNewRole(role)}
                   showCreateForm={showCreateForm}
@@ -204,9 +215,7 @@ export default function StudentDashboard() {
                   onDeleteStudent={handleDeleteStudent}
                   errorId={errorId}
                 />
-              </motion.div>
             ) : (
-              <motion.div key="dash" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }}>
                 <Grid container spacing={{ xs: 2, md: 6 }}>
                   <Grid size={{ xs: 12, md: 3 }}>
                     <Stack spacing={2} sx={{ alignItems: 'center' }}>
@@ -217,17 +226,12 @@ export default function StudentDashboard() {
                   </Grid>
 
                   <Grid size={{ xs: 12, md: 9}} sx={{ mt: { xs: '20px', md: '50px' } }}>
-                    <AnimatePresence>
-                      {expandedCourse && (
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
+                    {expandedCourse && (
+                        <Box
                           onClick={() => setExpandedCourse(null)}
-                          style={{ position: 'fixed', inset: 0, zIndex: 40, backgroundColor: 'rgba(0, 0, 0, 0.5)', backdropFilter: 'blur(10px)' }}
+                          sx={{ position: 'fixed', inset: 0, zIndex: 40, backgroundColor: 'rgba(0, 0, 0, 0.5)', backdropFilter: 'blur(10px)' }}
                         />
                       )}
-                    </AnimatePresence>
                     
                     <Typography variant="h6" sx={{ fontWeight: 900, mb: { xs: 2, md: 3 } }}>{t('dashboard.my_courses')}</Typography>
                     <Grid container spacing={{ xs: 2, md: 2 }}>
@@ -256,9 +260,8 @@ export default function StudentDashboard() {
                     <RankingCard courses={allCourses} rankingTab={rankingTab} onRankingTabChange={setRankingTab} rankedStudents={rankedStudentsByCourse} getText={getText} getCoursePoints={getCoursePoints} getCourseProgress={getCourseProgress} selectedStudent={selectedStudent} allCourses={allCourses} />
                   </Grid>
                 </Grid>
-              </motion.div>
             )}
-          </AnimatePresence>
+
         </Box>
       </Container>
     </Box>

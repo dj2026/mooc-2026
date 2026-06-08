@@ -4,10 +4,10 @@ import {UserPlus, X} from 'lucide-react';
 import {useTranslation} from 'react-i18next';
 import {Student} from './types';
 import {StudentCard} from './StudentCard';
-import { students as initialStudents } from '../../data/students';
-import { useState, type FormEvent } from 'react';
+import { type FormEvent } from 'react';
 
 interface LoginProps {
+  students: Student[];
   newRole: 'student' | 'teacher';
   onRoleChange: (role: 'student' | 'teacher') => void;
   showCreateForm: boolean;
@@ -25,6 +25,7 @@ interface LoginProps {
 }
 
 export function Login({
+  students,
   newRole,
   onRoleChange,
   showCreateForm,
@@ -40,11 +41,6 @@ export function Login({
   onDeleteStudent,
   errorId,
 }: LoginProps) {
-  const [students] = useState<Student[]>(() => {
-    const localStudents = JSON.parse(localStorage.getItem('mooc_local_students') || '[]');
-    const deletedIds = JSON.parse(localStorage.getItem('mooc_deleted_ids') || '[]');
-    return [...initialStudents, ...localStudents].filter(s => !deletedIds.includes(s.id));
-  });
   const { t } = useTranslation();
   const theme = useTheme();
 

@@ -80,6 +80,17 @@ export default {
   course: {by: "by", enroll: "inscriure's al curs"},
   common: {error_loading: "Error en carregar les dades"},
 
+  notifications: {
+    progress_saved: "Progrés desat correctament ✅",
+    progress_error: "Error en desar el progrés ⚠️",
+    account_created: "Compte creat correctament, {{name}} ({{role}}) 🎉",
+    user_deleted: "Usuari eliminat: {{name}} ({{role}}) 🗑️",
+    incorrect_pin: "PIN incorrecte ❌",
+    welcome: "Benvingut/da, {{name}} 👋",
+    session_closed: "Sessió tancada 👋",
+    course_reset: "Curs reiniciat correctament 🗑️",
+    course_reset_error: "Error en reiniciar el curs ⚠️"
+  },
   lesson: {
     syllabus: "Temari",
     laboratory: "Laboratori",

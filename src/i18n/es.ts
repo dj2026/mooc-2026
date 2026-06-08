@@ -86,6 +86,17 @@ export default {
   common: {
     error_loading: "Error al cargar los datos"
   },
+  notifications: {
+    progress_saved: "Progreso guardado correctamente ✅",
+    progress_error: "Error al guardar el progreso ⚠️",
+    account_created: "Cuenta creada correctamente, {{name}} ({{role}}) 🎉",
+    user_deleted: "Usuario eliminado: {{name}} ({{role}}) 🗑️",
+    incorrect_pin: "PIN incorrecto ❌",
+    welcome: "Bienvenido/a, {{name}} 👋",
+    session_closed: "Sesión cerrada 👋",
+    course_reset: "Curso reiniciado correctamente 🗑️",
+    course_reset_error: "Error al reiniciar el curso ⚠️"
+  },
   lesson: {
     syllabus: "Temario",
     laboratory: "Laboratorio",

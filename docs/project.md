@@ -1,26 +1,26 @@
 # MOOC React 2026
-**Última actualització: 3 de juny de 2026**
+**Última actualització: 4 de juny de 2026**
 ---
 
 ## 1. Tecnologies i Dependències
 
-| Categoria | Llibreria | Versió | Ús |
-|-----------|-----------|--------|-----|
-| **Framework** | React | ^19.2.7 | Components i hooks |
-| **Build** | Vite | ^6.0.0 | Dev server i bundling |
-| **UI** | @mui/material | ^9.0.0 | Components Material Design + CssBaseline |
-| **Estils** | @emotion/react, @emotion/styled | ^11.14.0 / ^11.14.1 | Estils CSS-in-JS |
-| **Icons** | @mui/icons-material + lucide-react | ^9.0.0 / ^0.577.0 | Icones |
-| **Routing** | react-router-dom | ^6.30.3 | Navegació SPA (v7 future flags) |
-| **Animacions** | framer-motion + @react-spring/web | ^12.38.0 / ^10.1.0 | Animacions declaratives |
-| **Internacionalització** | i18next + react-i18next + i18next-browser-languagedetector | ^26.0.6 / ^17.0.4 / ^8.2.1 | Multiidioma (CA, ES, EN) |
-| **HTTP** | axios | ^1.15.0 | Peticions a API REST |
-| **Confetti** | canvas-confetti | ^1.9.2 | Animació en completar lliçons |
-| **React Compiler** | babel-plugin-react-compiler | ^1.0.0 | Optimització React 19 |
-| **Util** | clsx, class-variance-authority | ^2.1.1 / ^0.7.1 | Classes condicionals |
-| **Util** | tailwind-merge, tailwindcss-animate, tw-animate-css | ^3.5.0 / ^1.0.7 / ^1.4.0 | Utilitats Tailwind (instal·lades) |
-| **Tipus** | TypeScript | ^5.5.0 | Tipat estàtic |
-| **Dev** | @vitejs/plugin-react, postcss, autoprefixer, tailwindcss | — | Configuració build |
+| Categoria | Llibreria | Versió (instal·lada) | Ús |
+|-----------|-----------|----------------------|-----|
+| **Framework** | React | 19.2.7 | Components i hooks |
+| **Build** | Vite | 6.4.3 | Dev server i bundling |
+| **UI** | @mui/material | 9.0.1 | Components Material Design + CssBaseline |
+| **Estils** | @emotion/react, @emotion/styled | 11.14.0 / 11.14.1 | Estils CSS-in-JS |
+| **Icons** | @mui/icons-material + lucide-react | 9.0.1 / 0.577.0 | Icones |
+| **Routing** | react-router-dom | 6.30.4 | Navegació SPA (v7 future flags) |
+| **Animacions** | framer-motion + @react-spring/web | 12.40.0 / 10.1.0 | Animacions declaratives |
+| **Internacionalització** | i18next + react-i18next + i18next-browser-languagedetector | 26.3.0 / 17.0.8 / 8.2.1 | Multiidioma (CA, ES, EN) |
+| **HTTP** | axios | 1.16.1 | Peticions a API REST |
+| **Confetti** | canvas-confetti | 1.9.4 | Animació en completar lliçons |
+| **React Compiler** | babel-plugin-react-compiler | 1.0.0 | Optimització React 19 |
+| **Util** | clsx, class-variance-authority | 2.1.1 / 0.7.1 | Classes condicionals |
+| **Util** | tailwind-merge, tailwindcss-animate, tw-animate-css | 3.6.0 / 1.0.7 / 1.4.0 | Utilitats Tailwind (instal·lades) |
+| **Tipus** | TypeScript | 5.9.3 | Tipat estàtic |
+| **Dev** | @vitejs/plugin-react, postcss, autoprefixer, tailwindcss | 4.7.0 / 8.5.15 / 10.5.0 / 3.4.19 | Configuració build |
 
 ---
 
@@ -30,9 +30,8 @@
 src/
 ├── App.tsx                         # Router principal amb rutes (Home, Courses, Dashboard)
 ├── env.d.ts                        # Declaracions de tipus per a fitxers estàtics (.css, .svg, .png, .webp)
-├── i18n.ts                         # Configuració i18next (punt d'entrada, duplicat de i18n/index.ts)
 ├── index.css                       # Scrollbar styling, CSS variables, animació shake
-├── main.tsx                        # Punt d'entrada (BrowserRouter + StyledEngineProvider + ThemeProvider)
+├── main.tsx                        # Punt d'entrada (BrowserRouter + StyledEngineProvider + ThemeProvider + I18nProvider + AuthProvider + NotificationProvider)
 │
 ├── components/                     # Components reutilitzables
 │   ├── CourseCard.tsx              # Targeta de curs (Home) amb motion animations
@@ -45,12 +44,14 @@ src/
 │   └── ui/                         # Components base
 │       ├── badge.tsx               # Badge (standard/outline) basat en MUI Chip
 │       ├── Card.tsx                # Wrapper MUI Card amb blur, border, hover effects
+│       ├── NotificationHub.tsx      # Toast UI: useTransition, useSpring, MUI Alert
 │       ├── ProgressBar.tsx         # (BUIT)
 │       └── SearchInput.tsx         # (BUIT)
 │
 ├── contexts/                       # Contextos React
 │   ├── AuthContext.tsx             # Autenticació (login/logout/token/user) - CREAT però NO usat a main.tsx
 │   ├── I18nContext.tsx             # Idioma (persistència localStorage clau mooc-language)
+│   ├── NotificationContext.tsx     # Context + Provider (estat toasts, setTimeout, renderitza NotificationHub)
 │   └── ThemeContext.tsx            # Tema clar/fosc (persistència localStorage clau mooc-theme-mode)
 │
 ├── data/                           # Dades estàtiques
@@ -93,8 +94,6 @@ src/
 ├── layouts/                        # Layouts per a rutes
 │   ├── MainLayout.tsx              # Header + Outlet
 │   └── TeacherLayout.tsx           # (BUIT)
-│
-├── middleware/                      # (BUIT)
 │
 ├── pages/                          # Pàgines de l'aplicació
 │   ├── Home.tsx                    # Landing: Hero, cursos (courseService), features animades, Footer
@@ -160,7 +159,7 @@ src/
 
 | Fitxer | Funció actual | Per fer |
 |--------|---------------|---------|
-| `main.tsx` | Renderitza `<App />` amb BrowserRouter (v7_startTransition + v7_relativeSplatPath) + StyledEngineProvider + ThemeProvider | (completat) |
+| `main.tsx` | Renderitza `<App />` amb BrowserRouter (v7_startTransition + v7_relativeSplatPath) + StyledEngineProvider + ThemeProvider + I18nProvider + AuthProvider + NotificationProvider | (completat) |
 | `App.tsx` | Router: rutes `/` (Home), `/courses/:courseId` (CourseLessons), `/courses/:courseId/:lessonId` (LessonPage), `/dashboards/student` (StudentDashboard). MainLayout wrapper per courses i dashboard | (completat) |
 
 ### Components (`src/components/`)
@@ -168,7 +167,7 @@ src/
 | Fitxer | Exportacions | Funcions clau |
 |--------|-------------|---------------|
 | `Header.tsx` | `Header` | `scrollToDynamic(desktopPx, mobilePx)`, `handleLogout()`, `checkAuth()`, menú mòbil overlay amb AnimatePresence |
-| `Hero.tsx` | `Hero (default)` | Typewriter animat (React, Python, SpringBoot, ML), stats amb lazy initializer, scroll chevrons |
+| `Hero.tsx` | `Hero (default)` | Typewriter animat (React, Python, SpringBoot, ML), stats dinàmiques (recompte estudiants via localStorage + event `studentsUpdated`), scroll chevrons |
 | `Footer.tsx` | `Footer` | `FooterLink` (component intern), any dinàmic, 4 columnes (logo, explore, community, connect) |
 | `CourseCard.tsx` | `CourseCard` | `handleEnroll()`, `getLocalizedText()`, disabled overlay "PROPERAMENT", motion animations |
 | `ParticlesBackground.tsx` | `ParticlesBackground (default)` | Classe `Particle` amb `draw()` i `update()`, `connect()`, detecció dark/light mode |
@@ -181,6 +180,7 @@ src/
 |--------|-------------|
 | `Card.tsx` | `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardContent` (MUI wrappers amb blur i hover) |
 | `badge.tsx` | `Badge` (mode `standard` / `outline`) basat en MUI Chip |
+| `NotificationHub.tsx` | `NotificationHub` — Toast UI amb useTransition/useSpring, MUI Alert, tancament manual i auto |
 | `ProgressBar.tsx` | (BUIT) |
 | `SearchInput.tsx` | (BUIT) |
 
@@ -188,8 +188,9 @@ src/
 
 | Fitxer | Provider | Hook | Funcions |
 |--------|----------|------|----------|
-| `AuthContext.tsx` | `AuthProvider` | `useAuth()` | `login(credentials)`, `logout()`, estat: `user`, `token`, `isAuthenticated`, `loading` (NO connectat a main.tsx) |
+| `AuthContext.tsx` | `AuthProvider` | `useAuth()` | `login(credentials)`, `logout()`, estat: `user`, `token`, `isAuthenticated`, `loading` (✅ connectat a main.tsx) |
 | `I18nContext.tsx` | `I18nProvider` | `useI18n()` | `setLanguage(lang)`, estat: `language` (persistit a localStorage clau `mooc-language`) |
+| `NotificationContext.tsx` | `NotificationProvider` | `useNotifications()` | `addNotification(msg, severity)`. Estat intern `toasts`. Renderitza `<NotificationHub>` amb react-spring i auto-remove 2000ms |
 | `ThemeContext.tsx` | `ThemeProvider` | `useThemeMode()` | `toggleTheme()`, `setMode(mode)`, estat: `mode` (persistit a localStorage clau `mooc-theme-mode`) |
 
 ### Dades Estàtiques (`src/data/`)
@@ -205,9 +206,9 @@ src/
 | Fitxer | Exportació | Props / Funcions |
 |--------|-----------|------------------|
 | `types.ts` | `Student`, `Lesson`, `Topic`, `Course` | Interfícies compartides (Student amb role opcional) |
-| `Login.tsx` | `Login` | Role toggle (student/teacher), create-user form (name, email, PIN), grid de StudentCards, gestió usuaris locals + IDs eliminats via localStorage |
+| `Login.tsx` | `Login` | Role toggle (student/teacher), create-user form (name, email, PIN), grid de StudentCards, rep `students` com a prop (fusionat al pare), gestió usuaris locals + IDs eliminats via localStorage |
 | `CourseCard.tsx` | `CourseCard` | `onToggle`, `onResetCourse`, `onNavigate`, rep `course`, `isExpanded`, `dbProgress`, disabled overlay |
-| `CourseExpandedContent.tsx` | `CourseExpandedContent` | Tabs syllabus/activities, llista lliçons amb icones (BookOpen/CheckCircle/PlayCircle), posicionament absolut |
+| `CourseExpandedContent.tsx` | `CourseExpandedContent` | Tabs syllabus/activities, llista lliçons amb icones (BookOpen/CheckCircle/PlayCircle), posicionament absolut (motion eliminat, ara Box) |
 | `CourseIcon.tsx` | `CourseIcon` | Retorna icona Lucide (Terminal, Globe, Cpu, Layers, Database, Code2) segons el nom del curs |
 | `ProgressOverview.tsx` | `ProgressOverview` | Barres `LinearProgress` per curs amb percentatge (hoverBg light/dark) |
 | `RankingCard.tsx` | `RankingCard` | Tabs per curs, llistat ordenat per progrés, usuari actiu destacat, icones Trophy (hoverBg light/dark) |
@@ -226,9 +227,9 @@ TOTS ELS FITXERS estan BUITS (pendents d'implementar):
 |--------|-----------|---------------|
 | `Home.tsx` | (default) | Carrega cursos via `courseService.getAllCourses()` amb loading/error, 6 feature cards animades (containerVariants + cardVariants amb stagger i direccional), visibility change listener |
 | `courses/CourseLessons.tsx` | (default) | Layout 3 columnes: syllabus accordion (motion.div amb slide-in seqüencial) + contingut (breadcrumb, course info, subTopics amb code examples) + "On this page" anchor links. Drawer mòbil per syllabus |
-| `courses/LessonPage.tsx` | (default) | Editor codi interactiu. 4 modes (normal/drill/assist/hackathon), tests (cleanUser.includes(cleanSol)), confetti, submissions, localStorage progress. Mostra submissions d'altres estudiants per Python |
+| `courses/LessonPage.tsx` | (default) | Editor codi interactiu. 4 modes (normal/drill/assist/hackathon), tests (cleanUser.includes(cleanSol)), confetti, submissions, localStorage progress. Mostra submissions d'altres estudiants per Python. Notificacions toast via `NotificationContext` en desar progrés |
 | `courses/${courseId}/${lesson.id}/LessonTopic.tsx` | (default) | Sidebar llista lliçons (filtrada a l'actual), explicació teòrica, challenge box, exercise instructions, navegació prev/next/go-to-activity |
-| `dashboards/StudentDashboard.tsx` | (default) | Login/create-user flow, profile card, progress overview, course grid expansible, ranking per tabs. Integra dades locals + API progress sync |
+| `dashboards/StudentDashboard.tsx` | (default) | Login/create-user flow, profile card, progress overview, course grid expansible, ranking per tabs. Integra dades locals + API progress sync. Notificacions toast via `NotificationContext` (login, logout, create, delete, error PIN, reset curs). Dispara `studentsUpdated` event en crear/eliminar usuaris. Passa `students` com a prop a `Login` |
 | `teacher/Courses.tsx` | (BUIT) | |
 | `teacher/Dashboard.tsx` | (BUIT) | |
 | `teacher/Exercises.tsx` | (BUIT) | |
@@ -247,7 +248,7 @@ TOTS ELS FITXERS estan BUITS (pendents d'implementar):
 
 | Fitxer | Exportacions | Colors |
 |--------|-------------|--------|
-| `theme.ts` | `getTheme(mode)` | **Dark**: primary `#8400ff` (porpra), secondary `#ec4899` (rosa), bg `#0a0a0a`; **Light**: primary `#8400ff`, secondary `#ec4899`, bg `#f5f5f5`. Font Inter, borderRadius 12px |
+| `theme.ts` | `getTheme(mode)` | **Dark**: primary `#8400ff` (porpra), secondary `#ec4899` (rosa), bg `#0a0a0a`; **Light**: primary `#8400ff`, secondary `#ec4899`, bg `white`. Font Inter, borderRadius 12px |
 
 ### Hooks (`src/hooks/`)
 
@@ -265,15 +266,25 @@ TOTS ELS FITXERS estan BUITS (pendents d'implementar):
 | `utils.ts` | `sx()` per composar estils MUI |
 | `validators.ts` | `validatePin(student, pin)`, `validateRequiredFields(fields)`, `isValidPin(pin)` (4-digit regex), `isValidEmail(email)`, `validateCodeSolution(userInput, expectedSolution)` (whitespace-normalized) |
 
+### Notificacions
+- `NotificationContext.tsx`: Context amb `NotificationProvider` i hook `useNotifications()`.
+- `NotificationHub.tsx` (`src/components/ui/NotificationHub.tsx`): Component UI separat que renderitza toasts amb:
+  - `useTransition` de react-spring per animació d'entrada/sortida (`translateX(100%)`)
+  - Barra de progrés animada amb `useSpring` (2000ms, gradient `#00f2ff → #00d4ff`)
+  - `Alert` de MUI amb `variant="filled"`, `bgcolor="#546067"`
+  - Botó de tancar amb `lucide-react X`
+- Durada de 2000ms amb neteja automàtica via `setTimeout` i tancament manual
+- Les notificacions estan traduïdes als 3 idiomes amb clau `notifications.*` (9 claus: progress_saved, progress_error, account_created, user_deleted, incorrect_pin, welcome, session_closed, course_reset, course_reset_error)
+- Usen interpolació d'i18next (`{{name}}`, `{{role}}`) per a missatges dinàmics
+
 ### Traduccions (`src/i18n/`)
 
 | Fitxer | Seccions |
 |--------|----------|
-| `ca.ts` (116 línies) | auth, dashboard, home (features, why_choose), hero (stats, subtitle, scroll_down), footer (brand_tagline, explore, community, connect, copyright), course (enroll, by), common (errors), lesson (syllabus, run, debug, objective, challenge, points, etc.) |
-| `es.ts` (122 línies) | Mateixes seccions en castellà |
-| `en.ts` (118 línies) | Mateixes seccions en anglès |
-| `index.ts` (24 línies) | Configuració i18next amb LanguageDetector, initReactI18next, fallback 'ca' |
-| `i18n.ts` (24 línies, arrel) | Duplicat de la configuració (punt d'entrada des de main.tsx) |
+| `ca.ts` (127 línies) | auth, dashboard, home (features, why_choose), hero (stats, subtitle, scroll_down), footer (brand_tagline, explore, community, connect, copyright), course (enroll, by), common (errors), **notifications (9 claus)**, lesson (syllabus, run, debug, objective, challenge, points, etc.) |
+| `es.ts` (133 línies) | Mateixes seccions en castellà |
+| `en.ts` (129 línies) | Mateixes seccions en anglès |
+| `index.ts` (24 línies) | Configuració i18next amb LanguageDetector, initReactI18next, fallback 'ca' (punt d'entrada des de main.tsx via `./i18n`) |
 
 ---
 
@@ -346,10 +357,11 @@ Login
 ## 5. Estat Actual del Projecte
 
 ### Implementat (Funcional)
-- ✅ Components UI (Header amb menú mòbil, Hero amb typewriter i lazy initializer, Footer, CourseCard amb motion, ParticlesBackground)
-- ✅ Context d'idioma (I18nContext) + suport multiidioma (CA/ES/EN)
+- ✅ Components UI (Header amb menú mòbil, Hero amb typewriter + stats dinàmiques via event `studentsUpdated`, Footer, CourseCard amb motion, ParticlesBackground)
+- ✅ Context d'idioma (I18nProvider) + suport multiidioma (CA/ES/EN) - Provider connectat a main.tsx
 - ✅ Context de tema (ThemeContext) + mode clar/fosc (persistit a localStorage)
-- ✅ Context d'autenticació (AuthContext) - Provider creat però NO connectat a main.tsx
+- ✅ Context de notificacions (NotificationContext) + toast notifications
+- ✅ Context d'autenticació (AuthContext) - Provider connectat a main.tsx
 - ✅ StudentDashboard complet (login/create-user, perfil, progrés, rànquing, cursos expansibles)
 - ✅ CourseLessons (layout 3 columnes amb syllabus accordion animat + contingut + anchor links, drawer mòbil)
 - ✅ LessonPage (editor codi amb 4 modes, tests per inclusió, confetti, submissions, localStorage)
@@ -357,7 +369,7 @@ Login
 - ✅ Serveis API amb fallback local (courseService) o sense (authService)
 - ✅ Dades estàtiques completes (courses.ts 13 lliçons Python, exercises.ts 17 exercicis, students.ts)
 - ✅ Utils (formatters, validators, sx compositor)
-- ✅ `main.tsx` i `App.tsx` - Connectats amb BrowserRouter (v7 flags), StyledEngineProvider, ThemeProvider
+- ✅ `main.tsx` i `App.tsx` - Connectats amb BrowserRouter (v7 flags), StyledEngineProvider, ThemeProvider, I18nProvider, AuthProvider, NotificationProvider
 - ✅ `MainLayout.tsx` - En ús com a layout route (Header + Outlet)
 - ✅ `vite.config.ts` - Configurat amb `@` alias, manualChunks, sourcemap, babel-plugin-react-compiler
 - ✅ Theme personalitzat (colors porpra #8400ff / rosa #ec4899) a `theme.ts`
@@ -369,22 +381,28 @@ Login
 ### Per Implementar
 - ❌ Pàgines de teacher (Courses, Dashboard, Exercises, Students)
 - ❌ Components de teacher (ChatWidget, CourseForm, ExerciseEditor, StatsCards, StudentFilters, StudentTable)
-- ❌ `middleware/`
 - ❌ `ProgressBar.tsx`, `SearchInput.tsx`
 - ❌ `useTeacherData.ts`, `teacherService.ts`, `TeacherLayout.tsx`
-- ❌ `AuthContext` no està connectat a l'app (main.tsx no l'importa)
 
 ### Observacions
-- `AuthContext` està creat però no s'usa (StudentDashboard i Header fan servir localStorage directament)
-- `authService.login()` ja no té fallback local (només API, llança error si no disponible)
-- `courseService.ts` encara té fallback a `data/courses.ts` quan l'API no respon
+- `AuthContext` connectat a main.tsx, però StudentDashboard i Header encara fan servir localStorage directament (no usen `useAuth()`)
+- `authService.login()` NO té fallback local (només API, llança error si no disponible); `getMe()` sí té fallback a localStorage
+- `courseService.ts` té fallback a `data/courses.ts` quan l'API no respon (excepte `submitChallenge()`)
 - `api.ts` té un sistema híbrid (localStorage + API) per al progrés
-- `main.tsx` no inclou `AuthProvider` ni `I18nProvider` (només BrowserRouter + StyledEngineProvider + ThemeProvider)
-- `i18n.ts` (arrel) i `i18n/index.ts` són duplicats (ambdós configuren i18next)
+- `main.tsx` ara inclou tots els providers: BrowserRouter + StyledEngineProvider + ThemeProvider + I18nProvider + AuthProvider + NotificationProvider
+- `src/i18n.ts` (arrel) eliminat — `I18nProvider` s'encarrega d'inicialitzar i18next (ja no cal `import './i18n'` a main.tsx)
 - Tots els components de StudentDashboard estan desacoblats a `features/student/`
 - El projecte utilitza Vite 6 amb `@` path alias
-- `ThemeContext` i `I18nContext` usen `use(Context)` de React 19 en lloc de `useContext(Context)`
+- `ThemeContext`, `I18nContext`, `AuthContext` i `NotificationContext` usen `use(Context)` de React 19 en lloc de `useContext(Context)`
 - `babel-plugin-react-compiler` està configurat a `vite.config.ts` amb `target: "19"`
+- `NotificationContext.tsx` i `NotificationHub.tsx` gestionen les toast notifications amb animacions react-spring, MUI Alert, i auto-remove 2000ms
+- Inconsistència de color de fons: MUI theme usa `#141414` en mode fosc, ParticlesBackground usa `#0a0a0a`
+- S'ha afegit `"react-is": "19.0.0"` com a override a `package.json` per compatibilitat MUI v9
+- `Hero.tsx` ara mostra recompte d'estudiants dinàmic (escolta event `studentsUpdated`), en lloc d'un valor estàtic
+- `Login.tsx` ja no gestiona internament la fusió d'estudiants — rep `students` com a prop des de `StudentDashboard`
+- `StudentDashboard.tsx` dispara `studentsUpdated` en crear/eliminar usuaris per mantenir sincronitzat el Hero
+- S'ha integrat `NotificationContext` a `LessonPage.tsx` i `StudentDashboard.tsx` per feedback visual d'usuari
+- Les notificacions del context ara estan traduïdes als 3 idiomes via `t('notifications.*')` amb interpolació
 
 ---
 
@@ -418,7 +436,8 @@ Login
 | **MUI (Material UI v9)** | Sistema de components (ThemeProvider, CssBaseline, Box, Card, Button, Accordion, etc.) |
 | **localStorage API** | Persistència de: progrés, codi, punts, usuaris, tema, idioma, submissions, IDs eliminats |
 | **Canvas API** | Fons interactiu de partícules (ParticlesBackground) |
-| **window.dispatchEvent** | Comunicació entre components (auth-state-change, lessonProgressUpdated) |
+| **window.dispatchEvent** | Comunicació entre components (auth-state-change, lessonProgressUpdated, studentsUpdated) |
+| **NotificationContext** | Toast notifications (LessonPage, StudentDashboard) |
 | **babel-plugin-react-compiler** | Optimització React 19 a nivell compilador |
 
 ---
@@ -452,6 +471,7 @@ npm run preview      # Previsualitzar producció
 | reportCompressedSize | `true` |
 | cssCodeSplit | `true` |
 | manualChunks | `vendor` (react, react-dom, react-router-dom), `ui-library` (MUI, Emotion), `animations` (framer-motion) |
+| Server port | `5173` |
 | watch.usePolling | `true` |
-| optimizeDeps.include | MUI, Emotion, framer-motion, react-resizable-panels |
+| optimizeDeps.include | @mui/material, @mui/material/styles, @emotion/react, @emotion/styled, framer-motion |
 | babel-plugin-react-compiler | `{ target: "19" }` |

@@ -1,4 +1,3 @@
-import {motion} from 'framer-motion';
 import {Box, Button, Stack, Typography} from '@mui/material';
 import {BookOpen, CheckCircle2, PlayCircle} from 'lucide-react';
 import {useTranslation} from 'react-i18next';
@@ -19,7 +18,7 @@ export function CourseExpandedContent({ course, activeTab, onTabChange, dbProgre
   const { t } = useTranslation();
 
   return (
-    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 50, marginTop: '8px' }} onClick={(e) => e.stopPropagation()}>
+    <Box sx={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 50, marginTop: '8px' }} onClick={(e) => e.stopPropagation()}>
       <Box sx={{ bgcolor: 'background.paper', borderRadius: { xs: 1, md: 0}, border: '1px solid', borderColor: 'primary.main' + '4D', maxHeight: '350px', overflowY: 'auto' }}>
         <Box sx={{ p: 0.5, bgcolor: 'action.hover', display: 'flex', borderRadius: '8px', m: 1, mb: 0 }}>
           <Button disableRipple onClick={() => onTabChange('syllabus')} sx={{ flex: 1, borderRadius: '6px', py: 0.75, fontWeight: 800, fontSize: '0.75rem', textTransform: 'none', color: activeTab === 'syllabus' ? '#fff' : 'text.secondary', bgcolor: activeTab === 'syllabus' ? 'primary.main' : 'transparent', '&:hover': { bgcolor: activeTab === 'syllabus' ? 'primary.main' : 'action.hover' } }}>{t('dashboard.syllabus')}</Button>
@@ -47,6 +46,6 @@ export function CourseExpandedContent({ course, activeTab, onTabChange, dbProgre
           </Stack>
         </Box>
       </Box>
-    </motion.div>
+    </Box>
   );
 }
